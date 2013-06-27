@@ -1,0 +1,1506 @@
+var properties = {
+
+	"mech": {
+		"name": "Mechanical Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":22,
+		"y":0,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":22,
+			"y":10,
+			"w":10,
+			"h":2,
+		},
+		  
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"isc": {
+		"name": "Information Superhighway Centre",
+		"type": "Miscellaneous",
+		"img_src": "basket.jpg",
+		"x":32,
+		"y":0,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":32,
+			"y":10,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"humanities": {
+		"name": "Humanities Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":42,
+		"y":12,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":42,
+			"y":10,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"physics": {
+		"name": "Physics Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":52,
+		"y":0,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":52,
+			"y":10,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"govind": {
+		"name": "Govind Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":62,
+		"y":0,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":62,
+			"y":10,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"hobbies_club": {
+		"name": "Hobbies Club",
+		"type": "Fun",
+		"img_src": "basket.jpg",
+		"x":72,
+		"y":12,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":70,
+			"y":12,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"chemistry": {
+		"name": "Chemistry Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":60,
+		"y":22,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":70,
+			"y":22,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"electronics": {
+		"name": "Eletronics Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":60,
+		"y":32,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":70,
+			"y":32,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"jawahar": {
+		"name": "Jawahar Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":10,
+		"y":32,
+		"w":12,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":10,
+			"y":42,
+			"w":12,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"archi": {
+		"name": "Architecture Department",
+		"type": "Department",
+		"img_src": "archi.jpg",
+		"x":24,
+		"y":32,
+		"w":8,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":22,
+			"y":32,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"op_jain": {
+		"name": "OP Jain Auditorium",
+		"type": "Miscellaneous",
+		"img_src": "basket.jpg",
+		"x":24,
+		"y":22,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":22,
+			"y":22,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"civil": {
+		"name": "Civil Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":24,
+		"y":12,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":22,
+			"y":12,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"nigam_house": {
+		"name": "NC Nigam House", 
+		"type": "Miscellaneous",
+		"img_src": "basket.jpg",
+		"x":22,
+		"y":44,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":22,
+			"y":42,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"earth_science": {
+		"name": "Earth Science Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":32,
+		"y":32,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":32,
+			"y":42,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"electrical": {
+		"name": "Electrical Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":42,
+		"y":32,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":42,
+			"y":42,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"culsoc": {
+		"name": "Cultural Society",
+		"type": "Fun",
+		"img_src": "basket.jpg",
+		"x":52,
+		"y":44,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":52,
+			"y":42,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"alpahar": {
+		"name": "Alpahar",
+		"type": "Fun",
+		"img_src": "basket.jpg",
+		"x":62,
+		"y":44,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":62,
+			"y":42,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"ug": {
+		"name": "Undergraduate Club",
+		"type": "Fun",
+		"img_src": "basket.jpg",
+		"x":72,
+		"y":32,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":72,
+			"y":42,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"nesci": {
+		"name": "Nesci",
+		"type": "Fun",
+		"img_src": "basket.jpg",
+		"x":82,
+		"y":32,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":82,
+			"y":42,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"bt": {
+		"name": "Biotechnology Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":92,
+		"y":32,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":92,
+			"y":42,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"industrial": {
+		"name": "Industrial Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":90,
+		"y":44,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":100,
+			"y":44,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"ravindra": {
+		"name": "Ravindra Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":90,
+		"y":54,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":100,
+			"y":54,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"azad": {
+		"name": "Azad Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":102,
+		"y":64,
+		"w":10,
+		"h":12,
+		"cost": 100,
+		"route": {
+			"x":100,
+			"y":64,
+			"w":2,
+			"h":12,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"church": {
+		"name": "Church",
+		"type": "Miscellaneous",
+		"img_src": "basket.jpg",
+		"x":90,
+		"y":76,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":100,
+			"y":76,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"placement": {
+		"name": "Placement Complex",
+		"type": "Academic",
+		"img_src": "basket.jpg",
+		"x":90,
+		"y":86,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":100,
+			"y":86,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+
+	"convo": {
+		"name": "Convocation Hall",
+		"type": "Miscellaneous",
+		"img_src": "basket.jpg",
+		"x":92,
+		"y":98,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":92,
+			"y":96,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"nih": {
+		"name": "National Institute of Hydrology",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":82,
+		"y":98,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":82,
+			"y":96,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"ahec": {
+		"name": "Alternate Hydro Energy Centre",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":72,
+		"y":98,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":72,
+			"y":96,
+			"w":10,
+			"h":2,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+
+	"doms": {
+		"name": "Department of Management Studies",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":74,
+		"y":44,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":72,
+			"y":44,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"library": {
+		"name": "Mahatma Gandhi Library",
+		"type": "Academic",
+		"img_src": "basket.jpg",
+		"x":74,
+		"y":54,
+		"w":10,
+		"h":12,
+		"cost": 100,
+		"route": {
+			"x":72,
+			"y":54,
+			"w":2,
+			"h":12,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"lbs": {
+		"name": "Lal Bahadur Shastri Stadium",
+		"type": "Sports",
+		"img_src": "basket.jpg",
+		"x":62,
+		"y":66,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":72,
+			"y":66,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+		"chemical": {
+		"name": "Chemical Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":74,
+		"y":76,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":72,
+			"y":76,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"meta": {
+		"name": "Metallurgical Department",
+		"type": "Department",
+		"img_src": "basket.jpg",
+		"x":74,
+		"y":86,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":72,
+			"y":86,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"rgb": {
+		"name": "Rajiv Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x": 62,
+		"y":98,
+		"w": 10,
+		"h": 10,
+		"cost": 100,
+		"route": {
+			"x":62,
+			"y":96,
+			"w": 10,
+			"h": 2
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"rjb": {
+		"name": "Rajendra Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":52,
+		"y":98,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":52,
+			"y":96,
+			"w":10,
+			"h":2
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"gb": {
+		"name": "Ganga Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x": 42,
+		"y":98,
+		"w": 10,
+		"h": 10,
+		"cost": 100,
+		"route": {
+			"x":42,
+			"y":96,
+			"w": 10,
+			"h": 2
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"rkb": {
+		"name": "Radhakrishnan Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":32,
+		"y":98,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":32,
+			"y":96,
+			"w":10,
+			"h":2
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"cautley": {
+		"name": "Cautley Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":22,
+		"y":98,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":22,
+			"y":96,
+			"w":10,
+			"h":2
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"football": {
+		"name": "Football  Ground",
+		"type": "Sports",
+		"img_src": "basket.jpg",
+		"x":10,
+		"y":98,
+		"w":12,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":10,
+			"y":96,
+			"w":12,
+			"h":2
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"hockey": {
+		"name": "Hockey  Ground",
+		"type": "Sports",
+		"img_src": "basket.jpg",
+		"x":12,
+		"y":86,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":10,
+			"y":86,
+			"w":2,
+			"h":10
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"badminton": {
+		"name": "Badminton Court",
+		"type": "Sports",
+		"img_src": "basket.jpg",
+		"x":12,
+		"y":76,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":10,
+			"y":76,
+			"w":2,
+			"h":10
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"kb": {
+		"name": "Kasturba Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":0,
+		"y":64,
+		"w":10,
+		"h":12,
+		"cost": 100,
+		"route": {
+			"x":10,
+			"y":64,
+			"w":2,
+			"h":12
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"earthquake": {
+		"name": "Indian Society of Earthquake Technology",
+		"type": "Academic",
+		"img_src": "basket.jpg",
+		"x":0,
+		"y":54,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":10,
+			"y":54,
+			"w":2,
+			"h":10
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+
+	"sb": {
+		"name": "Sarojini Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":12,
+		"y":44,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":10,
+			"y":44,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"sb": {
+		"name": "Sarojini Bhawan",
+		"type": "Bhawan",
+		"img_src": "basket.jpg",
+		"x":12,
+		"y":44,
+		"w":10,
+		"h":10,
+		"cost": 100,
+		"route": {
+			"x":10,
+			"y":44,
+			"w":2,
+			"h":10,
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+	"nih": {
+		"name": "National Institute of Hydrology",
+		"type": "Academic",
+		"img_src": "basket.jpg",
+		"x": 840,
+		"y":580,
+		"w": 120,
+		"h": 120,
+		"cost": 100,
+		"route": {
+			"x":840,
+			"y":540,
+			"w": 120,
+			"h": 40
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"convo": {
+		"name": "Convocation Hall",
+		"type": "Miscellaneous",
+		"img_src": "basket.jpg",
+		"x": 960,
+		"y":580,
+		"w": 120,
+		"h": 120,
+		"cost": 100,
+		"route": {
+			"x":960,
+			"y":540,
+			"w": 120,
+			"h": 40
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},
+
+	"placement": {
+		"name": "Placement Complex",
+		"type": "Academic",
+		"img_src": "basket.jpg",
+		"x": 1080,
+		"y":580,
+		"w": 120,
+		"h": 120,
+		"cost": 100,
+		"route": {
+			"x":1080,
+			"y":540,
+			"w": 120,
+			"h": 40
+		},
+		"levels": {
+			0:{
+				"rent": 5,
+				"upgrade":20,
+			},
+			1:{
+				"rent": 15,
+				"upgrade":20,
+			},
+			2:{
+				"rent": 30
+			}
+		}
+			
+	},*/
+}
