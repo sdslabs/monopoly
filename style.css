@@ -4,10 +4,32 @@
 	padding:0
 }
 
+body {
+	font-family: courier verdana;
+	color: white;
+}
+
 .stop-scrolling {
   height: 100%;
   overflow: hidden;
 }
 
 #canvas {
+}
+
+
+#popup {
+	border: 0.1em solid white;
+	position: absolute;
+	background-color: black;
+	padding: 0.3em 0.4em;
+	display: none;
+}
+
+#propertyName {
+	border-bottom: 1px solid white;
+	text-align: center;
+	color: red;
+	padding-bottom: 0.2em;
+	margin-bottom: 0.2em;
 }

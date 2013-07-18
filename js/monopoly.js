@@ -9,6 +9,27 @@ $(document).ready(function()
             var value = propertyObject[key];
             this[key] = value;
         }
+        this.owner = "Not owned";
+        this.upgradeLevel = 0;
+        this.maxLevel = false;
+    }
+
+    Property.prototype.displayPopup = function(x, y)
+    {
+        var propertyOwner = ($("#propertyOwner").text()).substr(0,10) + this.owner;
+        var propertyCost = ($("#propertyCost").text()).substr(0,6) + this.cost.toString();
+        var propertyLevel = ($("#propertyLevel").text()).substr(0,15) + this.upgradeLevel;
+
+        $("#propertyName").text(this.name);
+        $("#propertyOwner").text(propertyOwner);
+        $("#propertyCost").text(propertyCost);
+        $("#propertyLevel").text(propertyLevel);
+
+        $("#popup").css({
+            left: x + "px",
+            top: y + "px",
+            display: "block"
+        });
     }
 //-------------------------------------------------------------------------
 
@@ -24,7 +45,8 @@ $(document).ready(function()
         cHeight = canvas.height()
         clearStyle = "black",
         scaleX = 8,
-        scaleY = 7
+        scaleY = 7,
+        blockLineWidth = 0.1
 
     })()
 //----------------------------------------------------------------------------------------
@@ -44,7 +66,6 @@ monopoly.properties = (function()
             var property = properties[key];
             propertyObjects[key] = new Property(property);
         }
-        console.log(propertyObjects);
     }
 
     var getProperty = function(key)
@@ -52,9 +73,46 @@ monopoly.properties = (function()
         return propertyObjects[key];
     }
 
+    var getPropertyContaining = function(x, y) //Returns property containing point (x,y)
+    {
+        x = x/scaleX, y = y/scaleY;
+
+        for(var key in propertyObjects)
+        {
+            var property = propertyObjects[key];
+            if(property.x < x && property.y < y && property.x + property.w > x && property.y + property.h > y)
+                return property;
+        }
+
+        return false;
+    }
+
+    var displayPopup = function(property, x, y)
+    {
+        property.displayPopup(x, y);
+    }
+
+    var hidePopup = function(property)
+    {
+        $("#popup").css({display:"none"});
+    }
+
+    var highlightProperty = function(property)
+    {
+        ctx.save();
+        ctx.fillStyle = "red";
+        ctx.scale(scaleX, scaleY);
+        ctx.fillRect(property.route.x + blockLineWidth/2, property.route.y + blockLineWidth/2, property.route.w - blockLineWidth, property.route.h - blockLineWidth);
+        ctx.restore();
+    }
+
     return {
         initialise: initialise,
-        getProperty: getProperty
+        getProperty: getProperty,
+        getPropertyContaining: getPropertyContaining,
+        displayPopup: displayPopup,
+        hidePopup: hidePopup,
+        highlightProperty: highlightProperty,
     }
 })();
 
@@ -80,6 +138,39 @@ monopoly.player = (function()
         draw: draw
     }
 })();
+
+monopoly.input = (function()
+{
+    var currProperty = {}, lastProperty ={};
+
+    var initialise = function()
+    {
+        $('body').bind('mousemove', mousemove);
+    }
+
+    var mousemove = function(e)
+    {
+        lastProperty = currProperty;
+        if(currProperty = monopoly.properties.getPropertyContaining(e.pageX, e.pageY))
+        {
+            monopoly.properties.displayPopup(currProperty, e.pageX, e.pageY);
+            monopoly.properties.highlightProperty(currProperty);
+
+            if(currProperty.name != lastProperty.name && lastProperty.name != undefined) //Checks for property-to-property transitions
+                main();
+        }    
+
+        else if(!$.isEmptyObject(lastProperty)) //Checks for property-to-empty-space transitions
+        {
+            monopoly.properties.hidePopup(); 
+            main();
+        }        
+    }
+
+    return {
+        initialise: initialise,
+    }
+})();
 //------------------------------------------------------------------------------------------
 
 
@@ -87,7 +178,7 @@ monopoly.player = (function()
 
     var img = new Image();
     img.src = "images/random.jpg";
-    $(img).load(function()
+    main = function()
     {
 
         var clearScreen = function()
@@ -130,19 +221,23 @@ monopoly.player = (function()
                 ctx.fillStyle = "white";
                 ctx.fillRect(property.route.x, property.route.y, property.route.w, property.route.h);
                 ctx.strokeStyle = "black";
-                ctx.lineWidth = 0.1;
+                ctx.lineWidth = blockLineWidth;
                 ctx.strokeRect(property.route.x+ctx.lineWidth/2, property.route.y+ctx.lineWidth/2, property.route.w-ctx.lineWidth, property.route.h-ctx.lineWidth);
                 ctx.restore();
             }
 
         monopoly.properties.initialise();
+        monopoly.input.initialise();
         monopoly.player.draw();
-        $('body').mousedown(function(e)
+
+        $('body').mousemove(function(e)
         {
-            console.log(e.pageX, e.pageY);
-            console.log(properties);
+            // console.log(e.pageX, e.pageY);
         });
-    })
+    }
+
+
+    $(img).load(main);
 
 //--------------------------------------------------------------------------------------------
 
