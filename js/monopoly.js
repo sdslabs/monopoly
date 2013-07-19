@@ -2,7 +2,7 @@ $(document).ready(function()
 {
 
 //JS Constructors------------------------------------------------------------
-    function Property(propertyObject)
+    function Property(propertyObject, id)
     {
         for(var key in propertyObject)   
         {
@@ -12,13 +12,14 @@ $(document).ready(function()
         this.owner = "Not owned";
         this.upgradeLevel = 0;
         this.maxLevel = false;
+        this.id = id;
     }
 
     Property.prototype.displayPopup = function(x, y)
     {
-        var propertyOwner = ($("#propertyOwner").text()).substr(0,10) + this.owner;
-        var propertyCost = ($("#propertyCost").text()).substr(0,6) + this.cost.toString();
-        var propertyLevel = ($("#propertyLevel").text()).substr(0,15) + this.upgradeLevel;
+        var propertyOwner = "Owned by: " + this.owner;
+        var propertyCost = "Cost: " + this.cost.toString();
+        var propertyLevel = "Upgrade Level: " + this.upgradeLevel;
 
         $("#propertyName").text(this.name);
         $("#propertyOwner").text(propertyOwner);
@@ -64,7 +65,7 @@ monopoly.properties = (function()
         for(var key in properties)
         {
             var property = properties[key];
-            propertyObjects[key] = new Property(property);
+            propertyObjects[key] = new Property(property, key);
         }
     }
 
@@ -106,6 +107,11 @@ monopoly.properties = (function()
         ctx.restore();
     }
 
+    var getNextProperty = function(property)
+    {
+          return getProperty(property.next);
+    }
+
     return {
         initialise: initialise,
         getProperty: getProperty,
@@ -113,6 +119,7 @@ monopoly.properties = (function()
         displayPopup: displayPopup,
         hidePopup: hidePopup,
         highlightProperty: highlightProperty,
+        getNextProperty: getNextProperty
     }
 })();
 
@@ -134,8 +141,20 @@ monopoly.player = (function()
         ctx.restore();
     }
 
+    var moveBy = function(number)
+    {
+        var nextProperty = {}, currProperty = monopoly.properties.getProperty(currPropertyKey);
+        for(var i = 1; i <= number; i++)
+        {
+            nextProperty = monopoly.properties.getNextProperty(currProperty);
+            currProperty = nextProperty;
+        }
+        currPropertyKey = nextProperty.id;
+    }
+
     return {
-        draw: draw
+        draw: draw,
+        moveBy: moveBy
     }
 })();
 
@@ -146,6 +165,8 @@ monopoly.input = (function()
     var initialise = function()
     {
         $('body').bind('mousemove', mousemove);
+        $('#play').bind('mousedown', onPlayClick)
+        $('body').bind('mousedown', onCanvasClick)
     }
 
     var mousemove = function(e)
@@ -166,6 +187,39 @@ monopoly.input = (function()
             main();
         }        
     }
+
+    var onCanvasClick = function(e)
+    {
+        console.log(monopoly.properties.getPropertyContaining(e.pageX, e.pageY));
+    }
+    var onPlayClick = function(e)
+    {
+        $('#play').unbind(); //So that further clicks on Play button cannot be made until current action is complete
+
+        var frameCount = 0, finalNumber = 0, animWait = false;
+        var animFunction = function()
+        {
+
+                finalNumber = Math.ceil(Math.random()*6);
+                $("#randomNumber").text(finalNumber);
+                frameCount++;
+                if(frameCount == 20)
+                {
+                    animWait = true;
+                    monopoly.player.moveBy(finalNumber);
+                    $('#play').bind('mousedown', onPlayClick)
+                    main();
+                    clearTimeout(animInt);
+                }
+                else
+                    setTimeout(animFunction, 100);
+        };
+
+        var animInt = setTimeout(animFunction, 0);
+
+
+    }
+
 
     return {
         initialise: initialise,
@@ -226,8 +280,7 @@ monopoly.input = (function()
                 ctx.restore();
             }
 
-        monopoly.properties.initialise();
-        monopoly.input.initialise();
+
         monopoly.player.draw();
 
         $('body').mousemove(function(e)
@@ -236,7 +289,8 @@ monopoly.input = (function()
         });
     }
 
-
+    monopoly.properties.initialise();
+    monopoly.input.initialise();
     $(img).load(main);
 
 //--------------------------------------------------------------------------------------------
