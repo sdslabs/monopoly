@@ -1,0 +1,9 @@
+{
+     "name": "monopoly",
+     "description": "A Monopoly Board Game based on IITR",
+     "version": "0.0.1",
+     "dependencies": {
+        "express": "",
+        "socket.io": ""
+     }
+}
