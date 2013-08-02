@@ -5,6 +5,7 @@
      "dependencies": {
         "express": "",
         "socket.io": "",
-        "node-fs": ""
+        "node-fs": "",
+        "xml2js":""
      }
 }
