@@ -14,7 +14,10 @@ app.get('/', function (request, response)
 });
 
 //Constants
-const G_MAX_PLAYERS_PER_GAME;
+
+var constants = require('./constants.json');
+const G_MAX_PLAYERS_PER_GAME = parseInt(constants.G_MAX_PLAYERS_PER_GAME);
+console.log(G_MAX_PLAYERS_PER_GAME);
 //Runtime Variables
 
 var ggames = {};	//Active Games
@@ -49,4 +52,5 @@ io.sockets.on('connection', function (socket){
 		socket.emit('exitGameSuccess', 'Exited from game: '+socket.game);
 		socket.game = "";
 	});
+
 });

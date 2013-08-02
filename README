@@ -26,3 +26,4 @@
 11. If a player leaves mid-game, a basic AI takes control of the player (This AI isn't meant to be very good, it is just to provide an option 		for the opponent to continue the game, if he wishes)
 
 12. Every win/loss contributes to the leaderboard rating of the player. If a player leaves, the opponent has an option to continue with an AI, 		or count it as his victory.
+
