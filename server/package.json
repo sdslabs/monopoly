@@ -6,7 +6,6 @@
         "express": "",
         "socket.io": "",
         "node-fs": "",
-        "xml2js":"",
-        "connect":""
+        "xml2js":""
      }
 }
