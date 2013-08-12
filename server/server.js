@@ -1,3 +1,11 @@
+//Constants
+
+var constants = require('./constants.json');
+const G_MAX_PLAYERS_PER_GAME = parseInt(constants.G_MAX_PLAYERS_PER_GAME);
+const G_SERVER_PORT          = parseInt(constants.G_SERVER_PORT);
+
+//Server
+
 var express = require('express');
 var http = require('http')
 
@@ -5,19 +13,14 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
-server.listen(8080);
+server.listen(G_SERVER_PORT);
 
 // All routing goes here.
-app.get('/', function (request, response) 
+app.get('/', function (req, res) 
 {
 	res.sendfile(__dirname + '/index.html');
 });
 
-//Constants
-
-var constants = require('./constants.json');
-const G_MAX_PLAYERS_PER_GAME = parseInt(constants.G_MAX_PLAYERS_PER_GAME);
-console.log(G_MAX_PLAYERS_PER_GAME);
 //Runtime Variables
 
 var ggames = {};	//Active Games
