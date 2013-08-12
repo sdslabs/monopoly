@@ -1,1 +1,20 @@
-This is an empty HTTP document.
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<script>
+
+var socket = io.connect('http://localhost:8080');
+
+	// on connection to server, ask for user's name with an anonymous callback
+	socket.on('connect', function(){
+		// call the server-side function 'adduser' and send one parameter (value of prompt)
+		alert("Conected to server. Sending bogus");
+
+		socket.emit('bogus', prompt("What's your name?"));
+	});
+
+	socket.on('alert', function(text){
+		alert(text);
+	});
+
+</script>
