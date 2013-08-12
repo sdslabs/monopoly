@@ -29,6 +29,9 @@ app.get('/favicon.ico', function(req, res){
 var ggames = {};	//Active Games
 var gplayers = {}; //Global Player List
 
+ggames['game1'] = {};
+ggames['game1'].players = 0;
+
 //Authenication Needed
 io.sockets.on('connection', function (socket){
 	socket.on('addNewPlayer', function(userName){
@@ -37,19 +40,42 @@ io.sockets.on('connection', function (socket){
 		socket.emit('addNewPlayerSuccess', userName)	
 	});
 
-	socket.on('addToGame'function(game){
-		if(ggames[game].players<G_MAX_PLAYERS_PER_GAME)
+	socket.on('createGame', function(game){
+		if(gplayers[socket.userName]==''){
+			socket.emit('createGameError', 'Unauthorized access');
+			console.log('Illegal request to '+ game);
+		}
+		else
 		{
+			ggames[game] = {};
 			socket.game = game;
 			ggames[game].players+=1;	
 			gplayers[userName] = userName;
-			socket.join(ggames[game]);
+			socket.join(game);
 			socket.emit('addToGameSuccess', 'Connected to game: '+game);
-			socket.broadcast.to(ggames[game]).emit('newPlayerAdded', userName);
+			socket.broadcast.to(game).emit('newPlayerAdded', socket.userName);
+			console.log('New player ' + socket.userName +' has connected to game: ' + game);
+		}
+	});
+
+	socket.on('addToGame', function(game){
+		if(gplayers[socket.userName]=={}){
+			socket.emit('addToGameError', 'Unauthorized access');
+			console.log('Illegal request to '+ game);
+		}
+		else if(ggames[game].players<G_MAX_PLAYERS_PER_GAME)
+		{
+			socket.game = game;
+			ggames[game].players+=1;	
+			socket.join(game);
+			socket.emit('addToGameSuccess', 'Connected to game: '+game);
+			socket.broadcast.to(game).emit('newPlayerAdded', socket.userName, ggames[game].players);
+			console.log('New player ' + socket.userName +' has connected to game: ' + game);
 		}	
-		else
+		else{	
 			socket.emit('addToGameError', 'This game is full!!!');
-		console.log('New player ' + socket.userName +' has connected to game: ' + game);
+			console.log(ggames[game] + ' '+ ggames[game].players);
+		}
 	});
 
 	socket.on('exitFromGame', function(){

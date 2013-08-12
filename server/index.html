@@ -3,18 +3,21 @@
 
 <script>
 
-var socket = io.connect('http://localhost:8080');
+var socket = io.connect('http://192.168.208.14:8080');
 
 	// on connection to server, ask for user's name with an anonymous callback
 	socket.on('connect', function(){
 		// call the server-side function 'adduser' and send one parameter (value of prompt)
-		alert("Conected to server. Sending bogus");
-
-		socket.emit('bogus', prompt("What's your name?"));
+		
+		socket.emit('addNewPlayer', prompt("What's your name?"));
+		socket.emit('addToGame', prompt("Enter game name: "));
 	});
 
-	socket.on('alert', function(text){
-		alert(text);
+	socket.on('newPlayerAdded', function(userName, totalPlayers){
+		alert(userName + ' has connected!' + ' '+ totalPlayers + 'players are now in this game!!!');
 	});
 
+	socket.on('addToGameError', function(err){
+		alert(err);
+	});
 </script>
