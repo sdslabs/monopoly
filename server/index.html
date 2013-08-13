@@ -10,9 +10,11 @@ var socket = io.connect('http://192.168.208.14:8080');
 		// call the server-side function 'adduser' and send one parameter (value of prompt)
 		
 		socket.emit('addNewPlayer', prompt("What's your name?"));
-		socket.emit('addToGame', prompt("Enter game name: "));
+		socket.emit('queryPlayerList');
+		socket.emit('queryGameList');
 	});
 
+	
 	socket.on('newPlayerAdded', function(userName, totalPlayers){
 		alert(userName + ' has connected!' + ' '+ totalPlayers + 'players are now in this game!!!');
 	});

@@ -4,6 +4,7 @@ var constants = require('./constants.json');
 const G_MAX_PLAYERS_PER_GAME = parseInt(constants.G_MAX_PLAYERS_PER_GAME);
 const G_SERVER_PORT = parseInt(constants.G_SERVER_PORT);
 
+
 //Server
 
 var express = require('express');
@@ -13,24 +14,17 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
+var router = require('./router.js');
+
 server.listen(G_SERVER_PORT);
 
-// All routing goes here.
-app.get('/', function (req, res) {
-	res.sendfile(__dirname + '/index.html');
-});
-
-app.get('/favicon.ico', function(req, res){
-	res.sendfile(__dirname + '/index.html');
-})
+//Routing start.
+router.initialize(app);
 
 //Runtime Variables
 
 var ggames = {};	//Active Games
 var gplayers = {}; //Global Player List
-
-ggames['game1'] = {};
-ggames['game1'].players = 0;
 
 //Authenication Needed
 io.sockets.on('connection', function (socket){
@@ -78,6 +72,14 @@ io.sockets.on('connection', function (socket){
 		}
 	});
 
+	socket.on('queryPlayerList', function(){
+		if(gplayers[socket.userName]=={}){
+			socket.emit('addToGameError', 'Unauthorized access');
+			console.log('Illegal request to '+ game);
+		}
+		else
+			socket.emit('updateUserList', JSON.stringify(gplayers));
+	});
 	socket.on('exitFromGame', function(){
 		console.log(socket.userName +' has left the game: ' + socket.game);
 		socket.leave(socket.game);
