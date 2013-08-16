@@ -1,50 +1,69 @@
-//Constants
+//Load Constants
+var CONST = require('./constants.js');
 
-var constants = require('./constants.json');
-const G_MAX_PLAYERS_PER_GAME = parseInt(constants.G_MAX_PLAYERS_PER_GAME);
-const G_SERVER_PORT = parseInt(constants.G_SERVER_PORT);
-
-
-//Server
 
 var express = require('express');
 var http = require('http')
-
 var app = express();
+MySQLSessionStore = require('connect-mysql-session')(express, {log:false});
+
+//Initialize Server 
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, {log: CONST.G_LOG_REQUESTS});
+server.listen(CONST.G_SERVER_PORT);
 
+app.use(express.cookieParser());
+app.use(express.session({
+	store: new MySQLSessionStore(
+		CONST.G_MYSQL_USERNAME,
+		CONST.G_MYSQL_PASSWORD,
+		CONST.G_MYSQL_DB,
+		{
+			logging: CONST.G_LOG_REQUESTS
+		}),
+	secret: CONST.G_EXPRESS_SESSION_SECRET
+}));
+
+
+//Initialize Router
 var router = require('./router.js');
-
-server.listen(G_SERVER_PORT);
-
-//Routing start.
 router.initialize(app);
 
 //Runtime Variables
-
 var ggames = {};	//Active Games
 var gplayers = {}; //Global Player List
+
+ggames['game'] = {};
+ggames['game'].players = 0;
 
 //Authenication Needed
 io.sockets.on('connection', function (socket){
 	socket.on('addNewPlayer', function(userName){
 		socket.userName = userName;
-		gplayers[userName] = userName;
-		socket.emit('addNewPlayerSuccess', userName)	
+		
+		gplayers[userName] = {};
+		gplayers[userName].lastActivity = new Date();
+		gplayers[userName].currentGame = '';
+		gplayers[userName].isAuth = true;
+
+		socket.emit('addNewPlayerSuccess', userName);
 	});
 
 	socket.on('createGame', function(game){
-		if(gplayers[socket.userName]==''){
+		if(gplayers[socket.userName].isAuth == false){
 			socket.emit('createGameError', 'Unauthorized access');
-			console.log('Illegal request to '+ game);
+			console.log('Illegal request to create '+ game + ' by '+socket.userName);
 		}
 		else
 		{
-			ggames[game] = {};
 			socket.game = game;
-			ggames[game].players+=1;	
-			gplayers[userName] = userName;
+
+			ggames[game] = {};
+			ggames[game].players+=1;
+			
+			gplayers[socket.userName].currentGame = 'game';
+				
+			//gplayers[userName] = userName;
 			socket.join(game);
 			socket.emit('addToGameSuccess', 'Connected to game: '+game);
 			socket.broadcast.to(game).emit('newPlayerAdded', socket.userName);
@@ -53,11 +72,11 @@ io.sockets.on('connection', function (socket){
 	});
 
 	socket.on('addToGame', function(game){
-		if(gplayers[socket.userName]=={}){
-			socket.emit('addToGameError', 'Unauthorized access');
-			console.log('Illegal request to '+ game);
+		if(gplayers[socket.userName].isAuth == false){
+			socket.emit('createGameError', 'Unauthorized access');
+			console.log('Illegal request to create '+ game + ' by '+socket.userName);
 		}
-		else if(ggames[game].players<G_MAX_PLAYERS_PER_GAME)
+		else if(ggames[game].players<CONST.G_MAX_PLAYERS_PER_GAME)
 		{
 			socket.game = game;
 			ggames[game].players+=1;	
@@ -73,26 +92,33 @@ io.sockets.on('connection', function (socket){
 	});
 
 	socket.on('queryPlayerList', function(){
-		if(gplayers[socket.userName]=={}){
-			socket.emit('addToGameError', 'Unauthorized access');
-			console.log('Illegal request to '+ game);
+		if(gplayers[socket.userName].isAuth == false){
+			socket.emit('createGameError', 'Unauthorized access');
+			console.log('Illegal request to create '+ game + ' by '+socket.userName);
 		}
 		else
 			socket.emit('updateUserList', JSON.stringify(gplayers));
 	});
 	socket.on('exitFromGame', function(){
-		console.log(socket.userName +' has left the game: ' + socket.game);
-		socket.leave(socket.game);
-		
-		if(ggames['game'].players<=1)
-		{
-			delete ggames[socket.game];
-			console.log('Game: ' + game + 'has been destroyed');
+		if(gplayers[socket.userName].isAuth == false){
+			socket.emit('createGameError', 'Unauthorized access');
+			console.log('Illegal request to create '+ game + ' by '+socket.userName);
 		}
-		else
-			socket.broadcast.to(socket.game).emit('playerExited', socket.userName);
-		socket.emit('exitFromGameSuccess', 'socket.game');
-		socket.game = "";
+		else{
+			ggames[socket.game].players -= 1;
+			socket.leave(socket.game);
+			console.log(socket.userName +' has left the game: ' + socket.game);
+			
+			if(ggames['game'].players<1)
+			{
+				delete ggames[socket.game];
+				console.log('Game: ' + game + 'has been destroyed');
+			}
+			else{	
+				socket.broadcast.to(socket.game).emit('playerExited', socket.userName);
+				socket.emit('exitFromGameSuccess', 'socket.game');
+				socket.game = "";
+			}
+		}
 	});
-
 });
