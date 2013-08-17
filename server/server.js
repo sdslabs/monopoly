@@ -5,7 +5,7 @@ var CONST = require('./constants.js');
 var express = require('express');
 var http = require('http')
 var app = express();
-MySQLSessionStore = require('connect-mysql-session')(express, {log:false});
+var MySQLSessionStore = require('connect-mysql-session')(express, {log:false});
 
 //Initialize Server 
 var server = http.createServer(app);
@@ -15,11 +15,11 @@ server.listen(CONST.G_SERVER_PORT);
 app.use(express.cookieParser());
 app.use(express.session({
 	store: new MySQLSessionStore(
+		CONST.G_MYSQL_DB,
 		CONST.G_MYSQL_USERNAME,
 		CONST.G_MYSQL_PASSWORD,
-		CONST.G_MYSQL_DB,
 		{
-			logging: CONST.G_LOG_REQUESTS
+			logging: false//CONST.G_LOG_REQUESTS
 		}),
 	secret: CONST.G_EXPRESS_SESSION_SECRET
 }));
@@ -37,7 +37,26 @@ ggames['game'] = {};
 ggames['game'].players = 0;
 
 //Authenication Needed
+
+io.set('authorization', function (data, accept) {
+    // check if there's a cookie header
+    console.log(data);
+    if (data.headers.cookie) {
+        // if there is, parse the cookie
+        data.cookie = express.cookieParser(data.headers.cookie);
+        // note that you will need to use the same key the
+        data.sessionID = data.cookie['connect.sid'];
+    } else {
+       // if there isn't, turn down the connection with a message
+       // and leave the function.
+       return accept('No cookie transmitted.', false);
+    }
+    // accept the incoming connection
+    accept(null, true);
+});
+
 io.sockets.on('connection', function (socket){
+
 	socket.on('addNewPlayer', function(userName){
 		socket.userName = userName;
 		
