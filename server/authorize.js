@@ -13,11 +13,11 @@ function initialize(io, express){
 
 	io.set('authorization', function (data, accept) {
    		// check if there's a cookie header
-    	console.log(data);
+ 
     	if (data.headers.cookie) {
         	// if there is, parse the cookie
         	data.cookie = express.cookieParser(data.headers.cookie);
-        	// note that you will need to use the same key the
+        	// retri
         	data.sessionID = data.cookie['connect.sid'];
     	} else {
        	// if there isn't, turn down the connection with a message
