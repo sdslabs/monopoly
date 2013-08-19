@@ -1,3 +1,4 @@
 *.log
 *.npmignore
 currentapi
+password.json

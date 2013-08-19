@@ -1,3 +1,6 @@
+
+**NOTE**: The file server/JSON/password.json contains passwords. This needs to be created after git clone with MySQL passwords
+
 1. The objective of the game is to have maximum net worth at the end of the game.
 
 2. The game ends after a certain number of turns, or a certain duration of time, which is determined by the players at the start of the game.

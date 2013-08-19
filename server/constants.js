@@ -1,11 +1,12 @@
 
-var constant = require('./constants.json');
+var constant = require('./JSON/constants.json');
+var constantPWD = require('./JSON/password.json');
 
 const G_MAX_PLAYERS_PER_GAME = parseInt(constant.G_MAX_PLAYERS_PER_GAME);
 const G_SERVER_PORT = parseInt(constant.G_SERVER_PORT);
 const G_LOG_REQUESTS = parseInt(constant.G_LOG_REQUESTS)==0?false:true;
-const G_MYSQL_USERNAME = constant.G_MYSQL_USERNAME;
-const G_MYSQL_PASSWORD = constant.G_MYSQL_PASSWORD 
+const G_MYSQL_USERNAME = constantPWD.G_MYSQL_USERNAME;
+const G_MYSQL_PASSWORD = constantPWD.G_MYSQL_PASSWORD 
 const G_MYSQL_DB = constant.G_MYSQL_DB
 const G_EXPRESS_SESSION_SECRET = constant.G_EXPRESS_SESSION_SECRET
 
