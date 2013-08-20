@@ -5,6 +5,7 @@ var CONST = require('./constants.js');
 var games = {};	//Active Games
 var Players = {}; //Global Player List
 
+//Protoypes of Functions affecting Games ===== START =======
 function Game(){
 	this.creator = null;
 	this.createdAt = null;
@@ -13,10 +14,12 @@ function Game(){
 }
 
 function doesGameExist(game){
-	return game.hasOwnProperty(game);
+	return games.hasOwnProperty(game);
 }
+//Protoypes of Functions affecting Players ===== END =======
 
-//Protoypes of functions affecting Players ===== START =====
+
+//Functions affecting Players ===== START =====
 function Player(){
 	this.playerName = null;
 	this.lastActivity = null;
@@ -28,17 +31,11 @@ function doesPlayerExist(playerName){
 	return Players.hasOwnProperty(playerName);
 }
 
-// Player.prototype.isAuth = function(socket){
-// 	if(this.sessionID == socket.handshake.sessionID)
-// 		return true;
-// 	else
-// 		return false;
-// }
 //Protoypes of functions affecting Players =====END==========
 
 
 function initialize(io, express){
-	games['game'] = {};
+	games['game'] = new Game();
 	games['game'].totalPlayers = 0;
 
 	//Authenication Needed
@@ -80,6 +77,7 @@ function initialize(io, express){
 
 			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)){
 				games[game] = new Game();
+				games[game].players[socket.playerName] = '';
 				games[game].totalPlayers++;
 				
 				Players[socket.playerName].currentGame = game;
@@ -96,14 +94,14 @@ function initialize(io, express){
 		});
 
 		socket.on('addToGame', function(game){
-		//	if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
-				if(doesPlayerExist(socket.playerName)){
+			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
 				if(games[game].totalPlayers<CONST.G_MAX_PLAYERS_PER_GAME)
 				{
 					socket.join(game);
 
 					Players[socket.playerName].currentGame = game;
 					games[game].totalPlayers++;	
+					games[game].players[socket.playerName] = '';
 					
 					socket.emit('addToGameSuccess', 'Connected to game: '+game);
 					socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, games[game].players);
@@ -119,19 +117,30 @@ function initialize(io, express){
 			}
 		});
 
-		// socket.on('queryPlayerList', function(){
-		// 	socket.emit('updateUserList', JSON.stringify(Players));
-		// });
+	 	socket.on('queryPlayerList', function(){
+		 	playerList = {};
+		 	for(var key in Players)
+		 		if(doesPlayerExist(key))
+		 			playerList[key] = '';
+		 	socket.emit('updatePlayerList', JSON.stringify(playerList));
+		});
+
+		socket.on('queryGameList', function(){
+			socket.emit('updateGameList', JSON.stringify(games))
+		});
 		
 		socket.on('exitFromGame', function(){
 			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
 				socket.leave(socket.game);
+
 				games[socket.game].totalPlayers--;
+				delete games[game].players[socket.playerName];
+
 				Players[socket.planerName].currentGame = null;
 				
 				console.log('[' + new Date()+ '] '+ socket.playerName +' has left the game: ' + socket.game);
 					
-				if(games['game'].players<1){
+				if(games['game'].totalPlayers<1){
 					delete games[socket.game];
 					console.log('[' + new Date()+ '] '+ 'Game: ' + game + 'has been destroyed');
 				}

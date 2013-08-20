@@ -5,14 +5,11 @@
 
 var socket = io.connect('http://192.168.208.14:8080');
 
-	// on connection to server, ask for user's name with an anonymous callback
 	socket.on('connect', function(){
-		// call the server-side function 'adduser' and send one parameter (value of prompt)
-		socket.emit('requestFullAccess');
 		socket.emit('addNewPlayer', prompt("What's your name?"));
 		socket.emit('addToGame', prompt('Enter game name'));
 		socket.emit('queryPlayerList');
-		socket.emit('queryGameList');
+		//socket.emit('queryGameList');
 	});
 
 	
@@ -22,5 +19,13 @@ var socket = io.connect('http://192.168.208.14:8080');
 
 	socket.on('addToGameError', function(err){
 		alert(err);
+	});
+
+	socket.on('updatePlayerList', function(playerList){
+		console.log(playerList);
+	});
+
+	socket.on('updateGameList', function(gameList){
+		console.log(gameList);
 	});
 </script>

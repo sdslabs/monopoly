@@ -28,5 +28,5 @@ router.initialize(app);
 authorize.initialize(io, express);
 
 //Pop out a success notification
-console.log("Server socketarted on \033[1m"+CONST.G_DOMAIN_NAME + '\033[0m\033[1;31m:' + CONST.G_SERVER_PORT + '\033[0m' + ' ['+new Date()+']');
+console.log("Server started on \033[1m"+CONST.G_DOMAIN_NAME + '\033[0m\033[1;31m:' + CONST.G_SERVER_PORT + '\033[0m' + ' ['+new Date()+']');
 
