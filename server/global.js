@@ -44,7 +44,6 @@ function log(lvl, text){
 		hh = '0' + hh;
 
 		winston.log(lvl, '[' + hh + ':' + mm + ':' + ss +':' + ml + ' ' + dd +'/'+ mm+ '] ' + text);
-	
 }
 
 module.exports.log = log;

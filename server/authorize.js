@@ -4,27 +4,16 @@ var CONST = require('./constants.js');
 //Load the Global Function Module
 var global = require('./global.js');
 
+//Load the game module
+var objects = require('./objects.js');
+
 //Global Objects containing current game and player info
 var Games = {};	//Active Games
 var Players = {}; //Global Player List
 
 
-function Game(){
-	this.creator = null;
-	this.createdAt = null;
-	this.players = {};
-	this.totalPlayers = 0;
-}
-
 function doesGameExist(game){
 	return Games.hasOwnProperty(game);
-}
-
-function Player(){
-	this.playerName = null;
-	this.lastActivity = null;
-	this.currentGame = null;
-	this.sessionID = null;
 }
 
 function doesPlayerExist(playerName){
@@ -41,7 +30,7 @@ function getPlayerList(){
 
 
 function initialize(io, express){
-	Games['game'] = new Game();
+	Games['game'] = new objects.Game();
 	Games['game'].totalPlayers = 0;
 
 	//Authenication Needed
@@ -64,10 +53,11 @@ function initialize(io, express){
 	io.sockets.on('connection', function (socket){
 
 		socket.on('addNewPlayer', function(playerName){
-			if(!doesPlayerExist(playerName)&&playerName!=null){
+			if(!doesPlayerExist(playerName)&&playerName.replace(/\s/g, '')!=''&&!socket.hasOwnProperty('playerName')){
+
 				socket.playerName = playerName;
 			
-				Players[playerName] = new Player();
+				Players[playerName] = new objects.Player();
 				Players[playerName].playerName = playerName;
 				Players[playerName].lastActivity = new Date();
 				Players[playerName].sessionID = socket.handshake.sessionID;
@@ -83,8 +73,8 @@ function initialize(io, express){
 		
 		socket.on('createGame', function(game){
 
-			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)){
-				Games[game] = new Game();
+			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName&&Players[socket.currentGame]==null)){
+				Games[game] = new objects.Game();
 				Games[game].players[socket.playerName] = '';
 				Games[game].totalPlayers++;
 				
@@ -96,13 +86,13 @@ function initialize(io, express){
 				global.log('info', socket.playerName +' connected to game: ' + game);
 			}
 			else{
-				socket.emit('addToGameError', game + 'already exists');
+				socket.emit('addToGameError', 'Not authorized to create game');
 				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
 			}
 		});
 
 		socket.on('addToGame', function(game){
-			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
+			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null){
 				if(Games[game].totalPlayers<CONST.G_MAX_PLAYERS_PER_GAME)
 				{
 					socket.join(game);
@@ -126,16 +116,21 @@ function initialize(io, express){
 		});
 
 	 	socket.on('queryPlayerList', function(){
-		 	playerList = {};
-		 	for(var key in Players)
-		 		if(doesPlayerExist(key))
-		 			playerList[key] = '';
-		 	socket.emit('updatePlayerList', JSON.stringify(playerList));
-		 	global.log('info', 'Player list sent to player: ' + socket.playerName);
+		 	if(doesPlayerExist(socket.playerName)){
+		 		playerList = {};
+		 		for(var key in Players)
+		 			if(doesPlayerExist(key))
+		 				playerList[key] = '';
+		 		socket.emit('updatePlayerList', JSON.stringify(playerList));
+		 		global.log('info', 'Player list sent to player: ' + socket.playerName);
+		 	}
+		 	else{
+		 		global.log('warn', 'Player list not sent to:' + socket.playerName)
+		 	}
 		});
 
 		socket.on('queryGameList', function(){
-			f(doesPlayerExist(socket.playerName){
+			if(doesPlayerExist(socket.playerName)){
 				gameList = {};
 		 		for(var key in Games)
 		 			if(doesGameExist(key))
@@ -143,27 +138,30 @@ function initialize(io, express){
 				socket.emit('updateGameList', JSON.stringify(gameList));
 				global.log('info', 'Game list sent to player: ' + socket.playerName);
 			}
+			else{
+		 		global.log('warn', 'Game list not sent to:' + socket.playerName)
+		 	}
 		});
 		
 		socket.on('exitFromGame', function(){
+			game = Players[socket.playerName].currentGame;
 			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
-				socket.leave(socket.game);
+				socket.leave(game);
 
-				Games[socket.game].totalPlayers--;
+				Games[game].totalPlayers--;
 				delete Games[game].players[socket.playerName];
 
-				Players[socket.planerName].currentGame = null;
+				Players[socket.playerName].currentGame = null;
 				
 				global.log('info', socket.playerName +' has left the game: ' + socket.game);
 					
 				if(Games['game'].totalPlayers<1){
-					delete Games[socket.game];
-					global.log('info', 'Game: ' + game + 'has been destroyed');
+					delete Games[game];
+					global.log('info', 'Game: ' + game + ' has been destroyed');
 				}
 				else{	
-					socket.broadcast.to(socket.game).emit('playerExited', socket.playerName);
+					socket.broadcast.to(game).emit('playerExited', socket.playerName);
 					socket.emit('exitFromGameSuccess', 'socket.game');
-					socket.game = "";
 					global.log('info', 'Player' + socket.playerName + ' has left the game');
 				}
 			}
