@@ -1,6 +1,9 @@
 //Load Constants
 var CONST = require('./constants.js');
 
+//Load the Global Function Module
+var global = require('./global.js');
+
 //Load the Authorization Module  
 var authorize = require('./authorize.js');
 
@@ -16,6 +19,7 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server, {log: CONST.G_LOG_REQUESTS});
 server.listen(CONST.G_SERVER_PORT);
+console.log("\nCurrent server time is "+ new Date()+'\n');
 
 //Open up connection to database
 db.connect(express, app);
@@ -28,5 +32,4 @@ router.initialize(app);
 authorize.initialize(io, express);
 
 //Pop out a success notification
-console.log("Server started on \033[1m"+CONST.G_DOMAIN_NAME + '\033[0m\033[1;31m:' + CONST.G_SERVER_PORT + '\033[0m' + ' ['+new Date()+']');
-
+global.log('info', "Server running on \033[1m"+CONST.G_DOMAIN_NAME + '\033[0m\033[1;31m:' + CONST.G_SERVER_PORT + '\033[0m');

@@ -1,11 +1,14 @@
 //Load Constants
 var CONST = require('./constants.js');
 
-//Runtime Variables
-var games = {};	//Active Games
+//Load the Global Function Module
+var global = require('./global.js');
+
+//Global Objects containing current game and player info
+var Games = {};	//Active Games
 var Players = {}; //Global Player List
 
-//Protoypes of Functions affecting Games ===== START =======
+
 function Game(){
 	this.creator = null;
 	this.createdAt = null;
@@ -14,12 +17,9 @@ function Game(){
 }
 
 function doesGameExist(game){
-	return games.hasOwnProperty(game);
+	return Games.hasOwnProperty(game);
 }
-//Protoypes of Functions affecting Players ===== END =======
 
-
-//Functions affecting Players ===== START =====
 function Player(){
 	this.playerName = null;
 	this.lastActivity = null;
@@ -31,12 +31,18 @@ function doesPlayerExist(playerName){
 	return Players.hasOwnProperty(playerName);
 }
 
-//Protoypes of functions affecting Players =====END==========
+function getGameList(){
+	return Games;
+}
+
+function getPlayerList(){
+	return Players;
+}
 
 
 function initialize(io, express){
-	games['game'] = new Game();
-	games['game'].totalPlayers = 0;
+	Games['game'] = new Game();
+	Games['game'].totalPlayers = 0;
 
 	//Authenication Needed
 	io.set('authorization', function (data, accept) {
@@ -67,53 +73,55 @@ function initialize(io, express){
 				Players[playerName].sessionID = socket.handshake.sessionID;
 
 				socket.emit('addNewPlayerSuccess');
-				console.log('[' + new Date()+ '] '+ 'Player: ' + socket.playerName + ' logged in.');
+				global.log('info', 'Player: ' + socket.playerName + ' logged in.');
 			}
-			else
+			else{
 				socket.emit('addNewPlayerFailed', playerName + 'already exists or illegal name');
+				global.log('warn', playerName + ' was refused connection. Already exists.');
+			}
 		});
 		
 		socket.on('createGame', function(game){
 
 			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)){
-				games[game] = new Game();
-				games[game].players[socket.playerName] = '';
-				games[game].totalPlayers++;
+				Games[game] = new Game();
+				Games[game].players[socket.playerName] = '';
+				Games[game].totalPlayers++;
 				
 				Players[socket.playerName].currentGame = game;
 				socket.join(game);
 
 				socket.emit('addToGameSuccess', 'Connected to game: '+game);
 				socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
-				console.log('[' + new Date()+ '] '+ socket.playerName +' connected to game: ' + game);
+				global.log('info', socket.playerName +' connected to game: ' + game);
 			}
 			else{
 				socket.emit('addToGameError', game + 'already exists');
-				console.log('[' + new Date()+ '] '+ 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
+				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
 			}
 		});
 
 		socket.on('addToGame', function(game){
 			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
-				if(games[game].totalPlayers<CONST.G_MAX_PLAYERS_PER_GAME)
+				if(Games[game].totalPlayers<CONST.G_MAX_PLAYERS_PER_GAME)
 				{
 					socket.join(game);
 
 					Players[socket.playerName].currentGame = game;
-					games[game].totalPlayers++;	
-					games[game].players[socket.playerName] = '';
+					Games[game].totalPlayers++;	
+					Games[game].players[socket.playerName] = '';
 					
 					socket.emit('addToGameSuccess', 'Connected to game: '+game);
-					socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, games[game].players);
-					console.log('[' + new Date()+ '] '+ 'Player ' + socket.playerName +' has connected to game: ' + game);
+					socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
+					global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 				}	
 				else{	
 					socket.emit('addToGameError', 'This game is full!!!');
-					console.log('[' + new Date()+ '] '+ 'Player ' + socket.playerName + ' refused access to '+ game + '.This game is full.');
+					global.log('warn', 'Player ' + socket.playerName + ' refused access to '+ game + '.This game is full.');
 				}
 			}
 			else{
-				console.log('[' + new Date()+ '] '+ 'Player ' + socket.playerName + ' not allowed to join game: '+game);
+				global.log('warn', 'Player ' + socket.playerName + ' not allowed to join game: '+game);
 			}
 		});
 
@@ -123,35 +131,49 @@ function initialize(io, express){
 		 		if(doesPlayerExist(key))
 		 			playerList[key] = '';
 		 	socket.emit('updatePlayerList', JSON.stringify(playerList));
+		 	global.log('info', 'Player list sent to player: ' + socket.playerName);
 		});
 
 		socket.on('queryGameList', function(){
-			socket.emit('updateGameList', JSON.stringify(games))
+			f(doesPlayerExist(socket.playerName){
+				gameList = {};
+		 		for(var key in Games)
+		 			if(doesGameExist(key))
+		 				gameList[key] = '';
+				socket.emit('updateGameList', JSON.stringify(gameList));
+				global.log('info', 'Game list sent to player: ' + socket.playerName);
+			}
 		});
 		
 		socket.on('exitFromGame', function(){
 			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
 				socket.leave(socket.game);
 
-				games[socket.game].totalPlayers--;
-				delete games[game].players[socket.playerName];
+				Games[socket.game].totalPlayers--;
+				delete Games[game].players[socket.playerName];
 
 				Players[socket.planerName].currentGame = null;
 				
-				console.log('[' + new Date()+ '] '+ socket.playerName +' has left the game: ' + socket.game);
+				global.log('info', socket.playerName +' has left the game: ' + socket.game);
 					
-				if(games['game'].totalPlayers<1){
-					delete games[socket.game];
-					console.log('[' + new Date()+ '] '+ 'Game: ' + game + 'has been destroyed');
+				if(Games['game'].totalPlayers<1){
+					delete Games[socket.game];
+					global.log('info', 'Game: ' + game + 'has been destroyed');
 				}
 				else{	
 					socket.broadcast.to(socket.game).emit('playerExited', socket.playerName);
 					socket.emit('exitFromGameSuccess', 'socket.game');
 					socket.game = "";
+					global.log('info', 'Player' + socket.playerName + ' has left the game');
 				}
+			}
+			else{
+				global.log('warn', 'Illegal request to exit game from player: '+ socket.playerName);
 			}
 		});	
 	});
 }
 
 module.exports.initialize = initialize;
+module.exports.getGameList = getGameList;
+module.exports.getPlayerList = getPlayerList;

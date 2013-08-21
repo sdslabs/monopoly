@@ -6,6 +6,7 @@
         "express": "",
         "socket.io": "",
         "node-fs": "",
-        "connect-mysql-session":""
+        "connect-mysql-session":"",
+        "winston":""
      }
 }
