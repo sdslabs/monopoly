@@ -7,6 +7,18 @@ var global = require('./global.js');
 //Load the game module
 var objects = require('./objects.js');
 
+//Load the MySQL Driver
+var mysql = require('mysql');
+
+var db = mysql.createConnection({
+	host:      CONST.G_MYSQL_HOST,
+	user:      CONST.G_MYSQL_USERNAME,
+	password : CONST.G_MYSQL_PASSWORD,
+	database : CONST.G_MYSQL_DB
+});
+
+db.connect();
+
 //Global Objects containing current game and player info
 var Games = {};	//Active Games
 var Players = {}; //Global Player List
@@ -38,9 +50,18 @@ function initialize(io, express){
    		// check if there's a cookie header
     	if (data.headers.cookie) {
         	// if there is, parse the cookie
-        	data.cookie = express.cookieParser(data.headers.cookie);
+        	data.cookie = express.utils.parseCookie(data.headers.cookie);
         	// retrive the cookie
         	data.sessionID = data.cookie['connect.sid'];
+        	console.log(data.sessionID);
+        	// db.query('SELECT player FROM sktio WHERE session = \''+data.sessionID+'\'',
+        	// 	function(err, row, fields){
+        	// 		if(err)
+        	// 			throw err;
+        	// 		if(row[0])
+        	// 			if(row[0].hasOwnProperty('player'))
+        	// 		 		data.playerName = row[0].player;
+        	// 	});
     	} else {
        	// if there isn't, turn down the connection with a message
        	// and leave the function.
@@ -55,8 +76,16 @@ function initialize(io, express){
 		socket.on('addNewPlayer', function(playerName){
 			if(!doesPlayerExist(playerName)&&playerName.replace(/\s/g, '')!=''&&!socket.hasOwnProperty('playerName')){
 
+				var Query = 'INSERT into sktio (session, player) VALUES '+'(\"'
+					+socket.handshake.sessionID+'\"'+', \"'+playerName+'\")';
+				db.query(Query,
+					function(err, row, fields){
+						if(err)
+							throw err;
+
+					});
+
 				socket.playerName = playerName;
-			
 				Players[playerName] = new objects.Player();
 				Players[playerName].playerName = playerName;
 				Players[playerName].lastActivity = new Date();
@@ -75,7 +104,7 @@ function initialize(io, express){
 
 			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName&&Players[socket.currentGame]==null)){
 				Games[game] = new objects.Game();
-				Games[game].players[socket.playerName] = '';
+				Games[game].players[socket.playerName] = Players[socket.playerName];
 				Games[game].totalPlayers++;
 				
 				Players[socket.playerName].currentGame = game;
@@ -99,7 +128,7 @@ function initialize(io, express){
 
 					Players[socket.playerName].currentGame = game;
 					Games[game].totalPlayers++;	
-					Games[game].players[socket.playerName] = '';
+					Games[game].players[socket.playerName] = Players[socket.PlayerName];
 					
 					socket.emit('addToGameSuccess', 'Connected to game: '+game);
 					socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);

@@ -7,6 +7,7 @@
         "socket.io": "",
         "node-fs": "",
         "connect-mysql-session":"",
+        "mysql": "",
         "winston":""
      }
 }
