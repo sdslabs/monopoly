@@ -17,4 +17,16 @@ function connect(express, app){
 	}));
 }
 
+var mysql = require('mysql');
+
+var conn = mysql.createConnection({
+	host:      CONST.G_MYSQL_HOST,
+	user:      CONST.G_MYSQL_USERNAME,
+	password : CONST.G_MYSQL_PASSWORD,
+	database : CONST.G_MYSQL_DB
+});
+
+conn.connect();
+
 module.exports.connect= connect;
+module.exports.conn = conn;
