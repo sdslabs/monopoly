@@ -10,16 +10,30 @@ var authorize = require('./authorize.js');
 //Load the database module
 var db = require('./db');
 
+//Load the filesystem module
+var fs = require('fs');
+
+//Load the cryptography module
+var crypto = require('crypto');
+
 //Load the node framework modules
 var express = require('express');
-var http = require('http')
+var https = require('https');
 var app = express();
 
 //Initialize Server 
-var server = http.createServer(app);
+var options = {
+	key: fs.readFileSync('./ssl/cakey.pem'),
+  	cert: fs.readFileSync('./ssl/cacert.pem'),
+  	requestCert: true,
+  	rejectUnauthorized: false,
+  	passphrase: CONST.G_SSL_CERT_PASSPHRASE
+};
+var server = https.createServer(options, app);
+
 var io = require('socket.io').listen(server, {log: CONST.G_LOG_REQUESTS});
-server.listen(CONST.G_SERVER_PORT);
-console.log("\nCurrent server time is "+ new Date()+'\n');
+
+server.listen(CONST.G_SERVER_PORT, console.log("\nCurrent server time is "+ new Date()+'\n'));
 
 //Open up connection to database
 db.connect(express, app);

@@ -2,3 +2,6 @@
 *.npmignore
 currentapi
 password.json
+*.pem
+openssl.cnf
+

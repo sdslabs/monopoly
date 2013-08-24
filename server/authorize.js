@@ -118,13 +118,13 @@ function initialize(io, express){
 		
 		socket.on('createGame', function(game){
 
-			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName&&Players[socket.currentGame]==null)){
+			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null){
 					db.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
         					function(err, row, fields){
         					if(err)
         						throw err;
         					if(row[0]){
-        						if(row[0].game!=null)){
+        						if(row[0].game!=null){
         							Players[socket.playerName].currentGame = row[0].game;
         			 				global.log("info", "Player " + socket.playerName + " has reconected to game: "+ row[0].game);
         			 			}
@@ -152,6 +152,7 @@ function initialize(io, express){
 			else{
 				socket.emit('addToGameError', 'Not authorized to create game');
 				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
+				global.log('error', doesGameExist(game) + ' ' + doesPlayerExist(socket.playerName) + ' ' + Players[socket.currentGame] );
 			}
 		});
 
