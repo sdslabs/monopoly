@@ -1,7 +1,7 @@
 {
 	"G_MAX_PLAYERS_PER_GAME" : "4",
 	
-	"G_SERVER_PORT" : "8080",
+	"G_SERVER_PORT" : "443",
 	"G_LOG_REQUESTS": "0",
 	"G_LOG_LEVEL": "",
 	

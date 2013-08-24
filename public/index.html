@@ -3,7 +3,7 @@
 
 <script>
 
-var socket = io.connect('https://127.0.0.1:8080');
+var socket = io.connect('https://127.0.0.1:443');
 
 	socket.on('connect', function(){
 		socket.emit('addNewPlayer', prompt("What's your name?"));
