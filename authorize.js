@@ -10,6 +10,8 @@ var objects = require('./objects.js');
 //Load the cookie module
 var cookie = require('cookie');
 
+var parseSignedCookies = require('express/node_modules/connect/lib/utils').parseSignedCookies;
+
 //Load the MySQL Driver
 var db = require('./db.js');
 var dbConnect = db.connection;
@@ -46,8 +48,16 @@ function initialize(io, express){
     	if (data.headers.cookie) {
         	// if there is, parse the cookie
         	data.cookie = cookie.parse(data.headers.cookie);
+
+        	var parsedCookie = data.cookie['connect.sid'].substring(2,26); 
+
+        	if( parsedCookie != parseSignedCookies(data.cookie,
+        								 CONST.G_EXPRESS_SESSION_SECRET)['connect.sid']){
+        		accept('Cookie signature check failed', false);
+        		global.log('warn', 'Cookie signature check failed. Connection terminated.');
+        	}
         	// retrive the cookie
-        	data.sessionID = data.cookie['connect.sid'];
+        	data.sessionID = parsedCookie;
         	data.initialized = false;
     	} else {
        	// if there isn't, turn down the connection with a message
@@ -267,7 +277,7 @@ function initialize(io, express){
 
 		socket.on('logout', function(){
 			if(socket.handshake.initialized){
-				db.SessionStore.get ( socket.handshake.sessionID.substring(2,26), function(err, session){
+				db.SessionStore.get ( socket.handshake.sessionID, function(err, session){
 					if (err || !session) {
                 		global.log('error', " could not load the Session Store.");
                 		socket.emit('logoutFail', 'Internal Server error occured');
@@ -279,7 +289,7 @@ function initialize(io, express){
 									if(err)
 										throw err;
 										});	
-						var Query = 'DELETE FROM Sessions WHERE sid = \"'+Players[socket.playerName].sessionID.substring(2,26)+'\"';
+						var Query = 'DELETE FROM Sessions WHERE sid = \"'+Players[socket.playerName].sessionID+'\"';
 							dbConnect.query(Query, 
 								function(err, row, fields){
 									if(err)
