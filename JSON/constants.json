@@ -9,8 +9,9 @@
 	"G_MYSQL_HOST": "localhost",
 	"G_EXPRESS_SESSION_SECRET": "AABCDEFGHIJKLMNOP",
 
-	"G_DOMAIN_NAME": "192.168.208.14" 
+	"G_DOMAIN_NAME": "192.168.208.14",
+
+	"G_SSL_KEY_FILE": "cakey.pem",
+	"G_SSL_CERT_FILE": "cacert.pem"
 	
-
-
 }

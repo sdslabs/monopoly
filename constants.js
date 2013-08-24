@@ -10,6 +10,9 @@ const G_MYSQL_HOST = constant.G_MYSQL_HOST;
 const G_EXPRESS_SESSION_SECRET = constant.G_EXPRESS_SESSION_SECRET;
 const G_DOMAIN_NAME = constant.G_DOMAIN_NAME;
 const G_LOG_FILE = constant.G_LOG_FILE;
+const G_SSL_KEY_FILE = constant.G_SSL_KEY_FILE;
+const G_SSL_CERT_FILE = constant.G_SSL_CERT_FILE;
+
 const G_MYSQL_USERNAME = constantPWD.G_MYSQL_USERNAME;
 const G_MYSQL_PASSWORD = constantPWD.G_MYSQL_PASSWORD; 
 const G_SSL_CERT_PASSPHRASE = constantPWD.G_SSL_CERT_PASSPHRASE;
@@ -25,3 +28,5 @@ module.exports.G_DOMAIN_NAME = G_DOMAIN_NAME;
 module.exports.G_LOG_FILE = G_LOG_FILE;
 module.exports.G_MYSQL_HOST = G_MYSQL_HOST;
 module.exports.G_SSL_CERT_PASSPHRASE = G_SSL_CERT_PASSPHRASE;
+module.exports.G_SSL_KEY_FILE = G_SSL_KEY_FILE;
+module.exports.G_SSL_CERT_FILE = G_SSL_CERT_FILE;

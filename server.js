@@ -20,8 +20,8 @@ var app = express();
 
 //Initialize Server 
 var options = {
-	key                : fs.readFileSync('./ssl/cakey.pem'),
-  	cert               : fs.readFileSync('./ssl/cacert.pem'),
+	key                : fs.readFileSync('./ssl/'+CONST.G_SSL_KEY_FILE),
+  	cert               : fs.readFileSync('./ssl/'+CONST.G_SSL_CERT_FILE),
   	requestCert        : true,
   	rejectUnauthorized : false,
   	passphrase         : CONST.G_SSL_CERT_PASSPHRASE
