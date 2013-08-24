@@ -267,7 +267,7 @@ function initialize(io, express){
 
 		socket.on('logout', function(){
 			if(socket.handshake.initialized){
-				db.SessionStore.get(socket.handshake.sessionID.substring(2,26)	, function(err, session){
+				db.SessionStore.get ( socket.handshake.sessionID.substring(2,26), function(err, session){
 					if (err || !session) {
                 		global.log('error', " could not load the Session Store.");
                 		socket.emit('logoutFail', 'Internal Server error occured');
@@ -277,19 +277,20 @@ function initialize(io, express){
 							dbConnect.query(Query, 
 								function(err, row, fields){
 									if(err)
-										throw err;	
-						var Query = 'DELETE FROM Sessions WHERE session = \"'+Players[socket.playerName].sessionID.substring(2,26)+'\"';
+										throw err;
+										});	
+						var Query = 'DELETE FROM Sessions WHERE sid = \"'+Players[socket.playerName].sessionID.substring(2,26)+'\"';
 							dbConnect.query(Query, 
 								function(err, row, fields){
 									if(err)
 										throw err;	
-					});
+									});
                 		global.log('info', "Player: " + socket.playerName + " has logged out.");
                 		delete Players[socket.playerName];
                 		delete socket.playerName;
                 		socket.emit('logoutSuccess');
-                	}
-				});
+					}
+				}); 
 			}
 			else{
 				global.log('warn', " Illegal logut request detected.");
