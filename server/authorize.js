@@ -12,8 +12,7 @@ var cookie = require('cookie');
 
 //Load the MySQL Driver
 var db = require('./db.js');
-
-var db = db.conn;
+var dbConnect = db.connection;
 
 //Global Objects containing current game and player info
 var Games = {};	//Active Games
@@ -49,6 +48,7 @@ function initialize(io, express){
         	data.cookie = cookie.parse(data.headers.cookie);
         	// retrive the cookie
         	data.sessionID = data.cookie['connect.sid'];
+        	data.initialized = false;
     	} else {
        	// if there isn't, turn down the connection with a message
        	// and leave the function.
@@ -64,15 +64,16 @@ function initialize(io, express){
 			if(playerName!=null){
 				if(!doesPlayerExist(playerName)&&
 					playerName.replace(/\s/g, '')!=''
-					&&!socket.hasOwnProperty('playerName')){
+					&&!socket.hasOwnProperty(playerName)){
 
-						db.query('SELECT player, game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
+						dbConnect.query('SELECT player, game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
         					function(err, row, fields){
         					if(err)
         						throw err;
         					if(row[0]){
         						if(row[0].hasOwnProperty('player')){
         			 				socket.playerName = row[0].player;
+        			 				socket.handshake.initialized = true;
 
         			 				if(playerName!=socket.playerName)
         			 					global.log("warn", "Player: "+ socket.playerName +" tried to reconnect with alias: "+ playerName + ". Denied");
@@ -88,13 +89,15 @@ function initialize(io, express){
         			 		else{
         			 			var Query = 'INSERT into sktio (session, player) VALUES '+'(\"'
 									+socket.handshake.sessionID+'\"'+', \"'+playerName+'\")';
-								db.query(Query,
+								dbConnect.query(Query,
 									function(err, row, fields){
 										if(err)
 											throw err;	
 								});
 									
 								socket.playerName = playerName;
+								socket.handshake.initialized = true;
+
 								Players[playerName] = new objects.Player();
 								Players[playerName].playerName = playerName;
 								Players[playerName].lastActivity = new Date();
@@ -119,7 +122,7 @@ function initialize(io, express){
 		socket.on('createGame', function(game){
 
 			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null){
-					db.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
+					dbConnect.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
         					function(err, row, fields){
         					if(err)
         						throw err;
@@ -130,7 +133,7 @@ function initialize(io, express){
         			 			}
         			 			else{
 									var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+Players[socket.playerName].sessionID+'\"';
-									db.query(Query,
+									dbConnect.query(Query,
 										function(err, row, fields){
 											if(err)
 												throw err;	
@@ -161,7 +164,7 @@ function initialize(io, express){
 				if(Games[game].totalPlayers<CONST.G_MAX_PLAYERS_PER_GAME)
 				{
 								
-					db.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
+					dbConnect.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
         					function(err, row, fields){
         					if(err)
         						throw err;
@@ -172,7 +175,7 @@ function initialize(io, express){
         			 			}
         			 			else{
 									var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+Players[socket.playerName].sessionID+'\"';
-									db.query(Query,
+									dbConnect.query(Query,
 										function(err, row, fields){
 											if(err)
 												throw err;	
@@ -237,6 +240,13 @@ function initialize(io, express){
 				delete Games[game].players[socket.playerName];
 
 				Players[socket.playerName].currentGame = null;
+
+				var Query = 'UPDATE sktio SET game = '+'\"\" WHERE session = \"'+Players[socket.playerName].sessionID+'\"';
+				dbConnect.query(Query, 
+					function(err, row, fields){
+						if(err)
+							throw err;	
+					});
 				
 				global.log('info', socket.playerName +' has left the game: ' + socket.game);
 					
@@ -252,6 +262,38 @@ function initialize(io, express){
 			}
 			else{
 				global.log('warn', 'Illegal request to exit game from player: '+ socket.playerName);
+			}
+		});
+
+		socket.on('logout', function(){
+			if(socket.handshake.initialized){
+				db.SessionStore.get(socket.handshake.sessionID.substring(2,26)	, function(err, session){
+					if (err || !session) {
+                		global.log('error', " could not load the Session Store.");
+                		socket.emit('logoutFail', 'Internal Server error occured');
+                	}
+                	else{
+                		var Query = 'DELETE FROM sktio WHERE session = \"'+Players[socket.playerName].sessionID+'\"';
+							dbConnect.query(Query, 
+								function(err, row, fields){
+									if(err)
+										throw err;	
+						var Query = 'DELETE FROM Sessions WHERE session = \"'+Players[socket.playerName].sessionID.substring(2,26)+'\"';
+							dbConnect.query(Query, 
+								function(err, row, fields){
+									if(err)
+										throw err;	
+					});
+                		global.log('info', "Player: " + socket.playerName + " has logged out.");
+                		delete Players[socket.playerName];
+                		delete socket.playerName;
+                		socket.emit('logoutSuccess');
+                	}
+				});
+			}
+			else{
+				global.log('warn', " Illegal logut request detected.");
+                socket.emit('logoutFail', 'Not logged into server');
 			}
 		});	
 	});
