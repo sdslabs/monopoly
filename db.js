@@ -10,7 +10,7 @@ function connect(express, app){
 			CONST.G_MYSQL_USERNAME,
 			CONST.G_MYSQL_PASSWORD,
 			{
-				logging: CONST.G_LOG_REQUESTS
+				logging: CONST.G_LOG_CONNECTION_MESSAGES
 			})
 
 	app.use(express.cookieParser());

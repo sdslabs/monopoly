@@ -7,6 +7,7 @@ var winston = require('winston');
 winston.remove(winston.transports.Console);
 winston.add(winston.transports.Console, {
 	//silent: !CONST.G_LOG_REQUESTS,
+	level: CONST.G_SERVER_LOG_LEVEL,
 	colorize: true,
 	timestamp: false});
 
@@ -14,6 +15,7 @@ if(CONST.G_LOG_FILE!=null)
 	winston.add(winston.transports.File, {
 		filename: CONST.G_LOG_FILE,
 	//	silent: !CONST.G_LOG_REQUESTS,
+		level: CONST.G_SERVER_LOG_LEVEL,
 		colorize: true,
 		timestamp: false
 	});

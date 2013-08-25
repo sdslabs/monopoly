@@ -2,8 +2,9 @@
 	"G_MAX_PLAYERS_PER_GAME" : "4",
 	
 	"G_SERVER_PORT" : "443",
-	"G_LOG_REQUESTS": "0",
-	"G_LOG_LEVEL": "",
+	
+	"G_LOG_CONNECTION_MESSAGES": "0",
+	"G_SERVER_LOG_LEVEL": "warn",
 	
 	"G_MYSQL_DB": "db",
 	"G_MYSQL_HOST": "localhost",

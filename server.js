@@ -29,7 +29,7 @@ var options = {
 var server = https.createServer(options, app);
 
 //Initialize the socketio module
-options.log = CONST.G_LOG_REQUESTS;
+options.log = CONST.G_LOG_CONNECTION_MESSAGES;
 var io = require('socket.io').listen(server, options);
 
 //Set the server port
