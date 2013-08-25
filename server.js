@@ -29,7 +29,8 @@ var options = {
 var server = https.createServer(options, app);
 
 //Initialize the socketio module
-var io = require('socket.io').listen(server, {log: CONST.G_LOG_REQUESTS});
+options.log = CONST.G_LOG_REQUESTS;
+var io = require('socket.io').listen(server, options);
 
 //Set the server port
 server.listen(CONST.G_SERVER_PORT, console.log("\nCurrent server time is "+ new Date()+'\n'));
