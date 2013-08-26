@@ -32,5 +32,29 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
+function synchronize(){
+	var sid = {};
+	var Query ="SELECT sktio.id FROM sktio, Sessions where sktio.session=Sessions.sid";
+	connection.query(Query, function(err, rows, fields){
+		if(err)
+			throw err;
+
+		if(rows[0]!=null){
+			Query = "DELETE FROM sktio WHERE NOT (id = \'"+rows[0].id+'\'';
+			for(var i = 1; rows[i]!=null; i++){			
+				Query+=(" OR id = \'"+rows[i].id+'\'');
+			}
+		 	Query += ')';
+		
+			connection.query(Query, function(err, rows, fields){
+				if(err)
+					throw err;				
+				});
+		}
+	});
+}
+synchronize();
+
+module.exports.synchronize = synchronize;
 module.exports.connection = connection;
 module.exports.connect = connect;
