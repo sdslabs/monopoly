@@ -4,7 +4,7 @@
 	"G_SERVER_PORT" : "443",
 	
 	"G_LOG_CONNECTION_MESSAGES": "0",
-	"G_SERVER_LOG_LEVEL": "warn",
+	"G_SERVER_LOG_LEVEL": "info",
 	
 	"G_MYSQL_DB": "db",
 	"G_MYSQL_HOST": "localhost",
@@ -12,7 +12,7 @@
 
 	"G_DOMAIN_NAME": "127.0.0.1",
 
-	"G_SSL_KEY_FILE": "cakey.pem",
-	"G_SSL_CERT_FILE": "cacert.pem"
+	"G_SSL_KEY_FILE": "serverKey.pem",
+	"G_SSL_CERT_FILE": "serverCert.pem"
 	
 }

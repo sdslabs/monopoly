@@ -3,5 +3,9 @@
 currentapi
 password.json
 *.pem
+*.crt
+*.csr
+*.der
+*.key
 openssl.cnf
 
