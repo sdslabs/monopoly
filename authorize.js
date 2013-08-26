@@ -37,6 +37,31 @@ function getPlayerList(){
 	return Players;
 }
 
+function removePlayerFromGame(socket){
+	game = Players[socket.playerName].currentGame;
+	if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
+		socket.leave(game);
+
+		Games[game].totalPlayers--;
+		delete Games[game].players[socket.playerName];
+
+		Players[socket.playerName].currentGame = null;
+
+		if(Games['game'].totalPlayers<1){
+			delete Games[game];
+			global.log('info', 'Game: ' + game + ' has been destroyed');
+		}
+		else{	
+			socket.broadcast.to(game).emit('playerExited', socket.playerName);
+			socket.emit('exitFromGameSuccess', 'socket.game');
+			global.log('info', 'Player' + socket.playerName + ' has left the game');
+		}
+		global.log('info', socket.playerName +' has left the game: ' + socket.game);	
+		return true;
+	}
+	else
+		return false;
+}
 
 function initialize(io, express){
 	Games['game'] = new objects.Game();
@@ -165,7 +190,6 @@ function initialize(io, express){
 			else{
 				socket.emit('addToGameError', 'Not authorized to create game');
 				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
-				global.log('error', doesGameExist(game) + ' ' + doesPlayerExist(socket.playerName) + ' ' + Players[socket.currentGame] );
 			}
 		});
 
@@ -223,7 +247,7 @@ function initialize(io, express){
 		 		global.log('info', 'Player list sent to player: ' + socket.playerName);
 		 	}
 		 	else{
-		 		global.log('warn', 'Player list not sent to:' + socket.playerName)
+		 		global.log('warn', 'Player list not sent to: ' + socket.playerName)
 		 	}
 		});
 
@@ -237,42 +261,13 @@ function initialize(io, express){
 				global.log('info', 'Game list sent to player: ' + socket.playerName);
 			}
 			else{
-		 		global.log('warn', 'Game list not sent to:' + socket.playerName)
+		 		global.log('warn', 'Game list not sent to: ' + socket.playerName)
 		 	}
 		});
 		
 		socket.on('exitFromGame', function(){
-			game = Players[socket.playerName].currentGame;
-			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
-				socket.leave(game);
-
-				Games[game].totalPlayers--;
-				delete Games[game].players[socket.playerName];
-
-				Players[socket.playerName].currentGame = null;
-
-				var Query = 'UPDATE sktio SET game = '+'\"\" WHERE session = \"'+Players[socket.playerName].sessionID+'\"';
-				dbConnect.query(Query, 
-					function(err, row, fields){
-						if(err)
-							throw err;	
-					});
-				
-				global.log('info', socket.playerName +' has left the game: ' + socket.game);
-					
-				if(Games['game'].totalPlayers<1){
-					delete Games[game];
-					global.log('info', 'Game: ' + game + ' has been destroyed');
-				}
-				else{	
-					socket.broadcast.to(game).emit('playerExited', socket.playerName);
-					socket.emit('exitFromGameSuccess', 'socket.game');
-					global.log('info', 'Player' + socket.playerName + ' has left the game');
-				}
-			}
-			else{
+			if(!removePlayerFromGame(socket))
 				global.log('warn', 'Illegal request to exit game from player: '+ socket.playerName);
-			}
 		});
 
 		socket.on('logout', function(){
@@ -295,10 +290,13 @@ function initialize(io, express){
 									if(err)
 										throw err;	
 									});
+
+						removePlayerFromGame(socket);
                 		global.log('info', "Player: " + socket.playerName + " has logged out.");
                 		delete Players[socket.playerName];
                 		delete socket.playerName;
                 		socket.emit('logoutSuccess');
+                		socket.disconnect();
 					}
 				}); 
 			}
