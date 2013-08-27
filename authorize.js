@@ -154,7 +154,7 @@ function initialize(io, express){
 			}
 		});
 		
-		socket.on('createGame', function(game){
+		socket.on('createNewGame', function(game){
 
 			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null){
 					dbConnect.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
@@ -180,7 +180,7 @@ function initialize(io, express){
 									Players[socket.playerName].currentGame = game;
 									socket.join(game);
 
-									socket.emit('addToGameSuccess', 'Connected to game: '+game);
+									socket.emit('createNewGameSuccess', 'Connected to game: '+game);
 									socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
 									global.log('info', socket.playerName +' connected to game: ' + game);
 								}

@@ -5,8 +5,8 @@
      "dependencies": {
         "express": "",
         "socket.io": "",
-        "node-fs": "",
         "connect-mysql-session":"",
+        "jade": "",
         "mysql": "",
         "cookie": "",
         "winston":""

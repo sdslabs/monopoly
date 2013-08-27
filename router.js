@@ -11,6 +11,11 @@ function initialize (app){
 		res.setHeader('Content-Type', 'application/x-pem-file');
 		res.sendfile(__dirname + '/ssl/root/rootCA.pem');
 		global.log('info', 'Sent X.509 root CA certificate: to client: ' + req.connection.remoteAddress);
+	});
+
+	app.get('/public/icons/lightbulb_icon48.png', function(req, res){
+		res.sendfile(__dirname + '/public/icons/lightbulb_icon48.png');
+		global.log('info', 'Sent file: /public/icons/lightbulb_icon48.png to client: ' + req.connection.remoteAddress);
 	})
 
 	// app.get('/favicon.ico', function(req, res){

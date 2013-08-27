@@ -1,6 +1,9 @@
 //Load Constants
 var CONST = require('./constants.js');
 
+//Load the Global Function Module
+var global = require('./global.js');
+
 var SessionStore = null;
 
 function connect(express, app){
@@ -37,7 +40,7 @@ function synchronize(){
 	var Query ="SELECT sktio.id FROM sktio, Sessions where sktio.session=Sessions.sid";
 	connection.query(Query, function(err, rows, fields){
 		if(err)
-			throw err;
+			global.log('error', 'Failed to synchronize tables in MySql');;
 
 		if(rows[0]!=null){
 			Query = "DELETE FROM sktio WHERE NOT (id = \'"+rows[0].id+'\'';
@@ -50,10 +53,12 @@ function synchronize(){
 				if(err)
 					throw err;				
 				});
+			global.log('info', 'Synchronized tables in MySQL. Next synchronization in 30 mins');
 		}
 	});
 }
-synchronize();
+
+setTimeout(synchronize(), 1800000);
 
 module.exports.synchronize = synchronize;
 module.exports.connection = connection;

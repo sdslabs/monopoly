@@ -24,8 +24,9 @@ var options = {
   	cert               : fs.readFileSync('./ssl/'+CONST.G_SSL_CERT_FILE),
   	requestCert        : true,
   	rejectUnauthorized : false,
-  	passphrase         : CONST.G_SSL_CERT_PASSPHRASE
-};
+  	passphrase         : CONST.G_SSL_CERT_PASSPHRASE,
+  	ciphers            : 'AES256-SHA'
+ };
 var server = https.createServer(options, app);
 
 //Initialize the socketio module
