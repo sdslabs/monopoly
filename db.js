@@ -58,8 +58,6 @@ function synchronize(){
 	});
 }
 
-setTimeout(synchronize(), 1800000);
-
 module.exports.synchronize = synchronize;
 module.exports.connection = connection;
 module.exports.connect = connect;
