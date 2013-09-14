@@ -18,6 +18,9 @@ var express = require('express');
 var https = require('https');
 var app = express();
 
+app.set('views', __dirname + '/public');
+app.set('view engine', 'jade');
+
 //Initialize Server 
 var options = {
 	key                : fs.readFileSync('./ssl/'+CONST.G_SSL_KEY_FILE),

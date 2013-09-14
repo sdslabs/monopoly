@@ -1,9 +1,35 @@
 //Load the Global Function Module
 var global = require('./global.js');
 
+var events = require('events');
+
+
+// function deleteSocket(err){
+// 	events.EventEmitter.call(this);
+// }
+
+// deleteSocket.super_ = events.EventEmitter;
+
+// deleteSocket.prototype = Object.create(events.EventEmitter.prototype, {
+//     constructor: {
+//         value: deleteSocket,
+//         enumerable: false
+//     }
+// });
+
+// deleteSocket.prototype.erase = function(SocketID) {
+// 	this.erase = erase;
+// 	erase(SocketID, function(SocketID){
+// 		this.emit('expiredSession', SocketID);
+// 	});
+// }
+
+
+
 function initialize (app){
 	app.get('/', function (req, res) {
-		res.sendfile(__dirname + '/public/index.html');
+		// res.sendfile(__dirname + '/public/index.html');
+		res.render('index');
 		global.log('info', 'Sent file: /public/index.html to client: ' + req.connection.remoteAddress);
 	});
 
@@ -18,9 +44,10 @@ function initialize (app){
 		global.log('info', 'Sent file: /public/icons/lightbulb_icon48.png to client: ' + req.connection.remoteAddress);
 	})
 
-	// app.get('/favicon.ico', function(req, res){
-	// 	res.sendfile(__dirname + '/favicon.ico');
+	// res.session.destroy(function(){
+
 	// });
+
 }
 
 module.exports.initialize = initialize;
