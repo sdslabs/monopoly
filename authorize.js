@@ -305,6 +305,13 @@ function initialize(io, express){
                 socket.emit('logoutFail', 'Not logged into server');
 			}
 		});	
+
+		socket.on('disconnect', function(){
+			removePlayerFromGame(socket);
+			delete Players[socket.playerName];
+            delete socket.playerName;
+            console.log(socket.playerName + 'has timed out. Removing from server.');
+		});
 	});
 }
 

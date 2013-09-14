@@ -3,29 +3,6 @@ var global = require('./global.js');
 
 var events = require('events');
 
-
-// function deleteSocket(err){
-// 	events.EventEmitter.call(this);
-// }
-
-// deleteSocket.super_ = events.EventEmitter;
-
-// deleteSocket.prototype = Object.create(events.EventEmitter.prototype, {
-//     constructor: {
-//         value: deleteSocket,
-//         enumerable: false
-//     }
-// });
-
-// deleteSocket.prototype.erase = function(SocketID) {
-// 	this.erase = erase;
-// 	erase(SocketID, function(SocketID){
-// 		this.emit('expiredSession', SocketID);
-// 	});
-// }
-
-
-
 function initialize (app){
 	app.get('/', function (req, res) {
 		// res.sendfile(__dirname + '/public/index.html');
@@ -42,11 +19,7 @@ function initialize (app){
 	app.get('/public/icons/lightbulb_icon48.png', function(req, res){
 		res.sendfile(__dirname + '/public/icons/lightbulb_icon48.png');
 		global.log('info', 'Sent file: /public/icons/lightbulb_icon48.png to client: ' + req.connection.remoteAddress);
-	})
-
-	// res.session.destroy(function(){
-
-	// });
+	});
 
 }
 
