@@ -34,15 +34,19 @@ function log(lvl, text){
 	var mi = today.getMinutes();
 	var hh = today.getHours();
 
-	if(dd <10)
+	if(ml < 10)
+		ml = '00' + ml;
+	else if(ml <100)
+		ml = '0' + ml;
+	if(dd < 10)
 		dd = '0' + dd;
-	if(mm<10)
+	if(mm < 10)
 		mm = '0' + mm;
-	if(ss<10)
+	if(ss < 10)
 		ss = '0' + ss;
-	if(mi<10)
+	if(mi < 10)
 		mi = '0' + mi;
-	if(hh<10)
+	if(hh < 10)
 		hh = '0' + hh;
 
 		winston.log(lvl, '[' + hh + ':' + mi + ':' + ss +':' + ml + ' ' + dd +'/'+ mm+ '] ' + text);
