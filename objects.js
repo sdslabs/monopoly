@@ -1,19 +1,28 @@
 //Load Constants
 var CONST = require('./constants.js');
 
-function Player(){
+//Load Game Specific Constants
+var M_CONST = require('./game/m_constants.json');
+
+//Load the game module
+var mp = require('./game/mp.js');
+
+function Player(socket){
 	this.playerName = null;
 	this.sessionID = null;
 	this.lastActivity = null;
 	this.currentGame = null;
+	this.socket = socket;
+
 }
 
 function Player(playerName, sessionID,
-		currentGame){
+		currentGame, socket){
 	this.playerName = playerName;
 	this.sessionID = sessionID;
 	this.lastActivity = new Date();
 	this.currentGame = currentGame;
+	this.socket = socket;
 }
 
 Player.prototype.getPlayerName = function(){
@@ -47,20 +56,24 @@ Player.prototype.setCurrentGame = function(currentGame){
 	lastActivity = new Date();
 }
 
-function Game(){
+function Game(socket){
 	this.creator = null;
 	this.createdAt = null;
 	this.lastActivity = null;
 	this.players = {};
 	this.totalPlayers = 0;
+	this.socket = socket;
+	this.mp = new mp.game(this, socket);
 }
 
-function Game(creator){
+function Game(creator, socket){
 	this.creator = creator;
 	this.createdAt = new Date();
 	this.lastActivity = this.createdAt;
 	this.players = {};
 	this.totalPlayers = 0;
+	this.socket = socket;
+	this.mp = new mp.Mp(this, socket);
 }
 
 Game.prototype.getCreator = function(){
@@ -94,13 +107,9 @@ Game.prototype.setcreatedAt = function(createdAt){
 }
 
 Game.prototype.addPlayer = function(playerName){
-	if(this.totalPlayers<CONST.G_MAX_PLAYERS_PER_GAME){
-		this.players.playerName = '';
-		this.lastActivity = new Date();
-		this.totalPlayers++;
-		return true;
-	}
-	return false;
+	this.players.playerName = '';
+	this.lastActivity = new Date();
+	this.totalPlayers++;
 }
 
 Game.prototype.removePlayer = function(playerName){
@@ -111,7 +120,8 @@ Game.prototype.removePlayer = function(playerName){
 }
 
 Game.prototype.morePlayersAllowed = function(){
-	return this.totalPlayers <= CONST.G_MAX_PLAYERS_PER_GAME;
+	rethis.totalPlayers <= M_CONST.MAX_PLAYERS_PER_GAME)
+
 }
 
 module.exports.Game = Game;

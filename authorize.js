@@ -42,22 +42,21 @@ function removePlayerFromGame(socket){
 		game = Players[socket.playerName].getCurrentGame();
 
 		if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
-			socket.leave(game);
-
-			Games[game].removePlayer(socket.playerName);
-
-			Players[socket.playerName].currentGame = null;
 			global.log('info', socket.playerName +' has left the game: ' + game);
 
-			if(Games['game'].totalPlayers<1){
+			if(Games[game].getTotalPlayers()<1){
 				delete Games[game];
 				global.log('info', 'Game: ' + game + ' has been destroyed');
 			}
 			else{	
+				Games[game].removePlayer(socket.playerName);
 				socket.broadcast.to(game).emit('playerExited', socket.playerName);
 				socket.emit('exitFromGameSuccess', 'socket.game');
 				global.log('info', 'Player' + socket.playerName + ' has left the game');
 			}	
+
+			socket.leave(game);
+			Players[socket.playerName].setCurrentGame(null);
 			return true;
 		}
 		else
@@ -66,9 +65,6 @@ function removePlayerFromGame(socket){
 }
 
 function initialize(io, express){
-	Games['game'] = new objects.Game();
-	Games['game'].totalPlayers = 0;
-
 	//Authenication Needed
 	io.set('authorization', function (data, accept) {
    		// check if there's a cookie header
@@ -131,7 +127,7 @@ function initialize(io, express){
 								socket.handshake.initialized = true;
 
         			 			Players[socket.playerName] = new objects.Player(socket.playerName,
-        			 				socket.handshake.sessionID, '');
+        			 				socket.handshake.sessionID, '', socket);
         			 				
 								socket.emit('addNewPlayerSuccess');
 								global.log('info', 'Player: ' + socket.playerName + ' logged in.');
@@ -168,13 +164,14 @@ function initialize(io, express){
 												throw err;	
 									});
 									socket.join(game);
-									Games[game] = new objects.Game(socket.playerName);
+									Games[game] = new objects.Game(socket.playerName, socket);
 									Games[game].addPlayer(socket.playerName);
 									Players[socket.playerName].setCurrentGame(game);
 
 									socket.emit('createNewGameSuccess', 'Connected to game: '+game);
 									socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
 									global.log('info', socket.playerName +' connected to game: ' + game);
+									console.log(Games);
 								}
 							}
 						});
@@ -183,6 +180,7 @@ function initialize(io, express){
 				socket.emit('addToGameError', 'Not authorized to create game');
 				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
 			}
+			console.log(Players);
 		});
 
 		socket.on('addToGame', function(game){
@@ -311,6 +309,10 @@ function initialize(io, express){
         	    delete socket.playerName;
     	    }
 		});
+
+		socket.on('PING', function(){
+			console.log(Games[Players[socket.playerName].getCurrentGame()]);
+		})
 	});
 }
 

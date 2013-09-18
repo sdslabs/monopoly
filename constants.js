@@ -2,7 +2,7 @@
 var constant = require('./JSON/constants.json');
 var constantPWD = require('./JSON/password.json');
 
-const G_MAX_PLAYERS_PER_GAME    = parseInt(constant.G_MAX_PLAYERS_PER_GAME);
+// const G_MAX_PLAYERS_PER_GAME    = parseInt(constant.G_MAX_PLAYERS_PER_GAME);
 const G_SERVER_PORT             = parseInt(constant.G_SERVER_PORT);
 const G_DOMAIN_NAME             = constant.G_DOMAIN_NAME;
 const G_EXPRESS_SESSION_SECRET  = constant.G_EXPRESS_SESSION_SECRET;
@@ -19,7 +19,7 @@ const G_MYSQL_HOST              = constant.G_MYSQL_HOST;
 const G_MYSQL_USERNAME          = constantPWD.G_MYSQL_USERNAME;
 const G_MYSQL_PASSWORD          = constantPWD.G_MYSQL_PASSWORD; 
 
-module.exports.G_MAX_PLAYERS_PER_GAME    = G_MAX_PLAYERS_PER_GAME;
+// module.exports.G_MAX_PLAYERS_PER_GAME    = G_MAX_PLAYERS_PER_GAME;
 module.exports.G_SERVER_PORT             = G_SERVER_PORT;
 module.exports.G_LOG_CONNECTION_MESSAGES = G_LOG_CONNECTION_MESSAGES;
 module.exports.G_MYSQL_USERNAME          = G_MYSQL_USERNAME;
