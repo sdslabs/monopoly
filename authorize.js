@@ -38,29 +38,31 @@ function getPlayerList(){
 }
 
 function removePlayerFromGame(socket){
-	game = Players[socket.playerName].currentGame;
-	if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
-		socket.leave(game);
+	if(Players.hasOwnProperty(socket.playerName)){
+		game = Players[socket.playerName].getCurrentGame();
 
-		Games[game].totalPlayers--;
-		delete Games[game].players[socket.playerName];
+		if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
+			socket.leave(game);
 
-		Players[socket.playerName].currentGame = null;
+			Games[game].removePlayer(socket.playerName);
 
-		if(Games['game'].totalPlayers<1){
-			delete Games[game];
-			global.log('info', 'Game: ' + game + ' has been destroyed');
+			Players[socket.playerName].currentGame = null;
+			global.log('info', socket.playerName +' has left the game: ' + game);
+
+			if(Games['game'].totalPlayers<1){
+				delete Games[game];
+				global.log('info', 'Game: ' + game + ' has been destroyed');
+			}
+			else{	
+				socket.broadcast.to(game).emit('playerExited', socket.playerName);
+				socket.emit('exitFromGameSuccess', 'socket.game');
+				global.log('info', 'Player' + socket.playerName + ' has left the game');
+			}	
+			return true;
 		}
-		else{	
-			socket.broadcast.to(game).emit('playerExited', socket.playerName);
-			socket.emit('exitFromGameSuccess', 'socket.game');
-			global.log('info', 'Player' + socket.playerName + ' has left the game');
-		}
-		global.log('info', socket.playerName +' has left the game: ' + socket.game);	
-		return true;
+		else
+			return false;
 	}
-	else
-		return false;
 }
 
 function initialize(io, express){
@@ -114,11 +116,6 @@ function initialize(io, express){
         			 					global.log("warn", "Player: "+ socket.playerName +" tried to reconnect with alias: "+ playerName + ". Denied");
 
         			 				global.log("info", "Player " + socket.playerName + " has reconected to server");
-        			 				
-        			 				Players[socket.playerName] = new objects.Player();
-        			 				Players[socket.playerName].playerName = socket.playerName;
-        			 				Players[socket.playerName].lastActivity = new Date();
-        			 				Players[socket.playerName].sessionID = socket.handshake.sessionID;
         			 			}
         			 		}
         			 		else{
@@ -133,11 +130,9 @@ function initialize(io, express){
 								socket.playerName = playerName;
 								socket.handshake.initialized = true;
 
-								Players[playerName] = new objects.Player();
-								Players[playerName].playerName = playerName;
-								Players[playerName].lastActivity = new Date();
-								Players[playerName].sessionID = socket.handshake.sessionID;
-
+        			 			Players[socket.playerName] = new objects.Player(socket.playerName,
+        			 				socket.handshake.sessionID, '');
+        			 				
 								socket.emit('addNewPlayerSuccess');
 								global.log('info', 'Player: ' + socket.playerName + ' logged in.');
         			 		} 	
@@ -155,8 +150,7 @@ function initialize(io, express){
 		});
 		
 		socket.on('createNewGame', function(game){
-
-			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null){
+			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null&&game!=''){
 					dbConnect.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
         					function(err, row, fields){
         					if(err)
@@ -167,18 +161,16 @@ function initialize(io, express){
         			 				global.log("info", "Player " + socket.playerName + " has reconected to game: "+ row[0].game);
         			 			}
         			 			else{
-									var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+Players[socket.playerName].sessionID+'\"';
+									var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
 									dbConnect.query(Query,
 										function(err, row, fields){
 											if(err)
 												throw err;	
 									});
-									Games[game] = new objects.Game();
-									Games[game].players[socket.playerName] = Players[socket.playerName];
-									Games[game].totalPlayers++;
-					
-									Players[socket.playerName].currentGame = game;
 									socket.join(game);
+									Games[game] = new objects.Game(socket.playerName);
+									Games[game].addPlayer(socket.playerName);
+									Players[socket.playerName].setCurrentGame(game);
 
 									socket.emit('createNewGameSuccess', 'Connected to game: '+game);
 									socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
@@ -194,9 +186,8 @@ function initialize(io, express){
 		});
 
 		socket.on('addToGame', function(game){
-			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null){
-				if(Games[game].totalPlayers<CONST.G_MAX_PLAYERS_PER_GAME)
-				{
+			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null&&game!=''){
+				if(Games[game].morePlayersAllowed()){
 								
 					dbConnect.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
         					function(err, row, fields){
@@ -208,19 +199,18 @@ function initialize(io, express){
         			 				global.log("info", "Player " + socket.playerName + " has reconected to game: "+ row[0].game);
         			 			}
         			 			else{
-									var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+Players[socket.playerName].sessionID+'\"';
+									var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
 									dbConnect.query(Query,
 										function(err, row, fields){
 											if(err)
 												throw err;	
 									});
 									socket.join(game);
-
-									Players[socket.playerName].currentGame = game;
-									Games[game].totalPlayers++;	
-									Games[game].players[socket.playerName] = Players[socket.PlayerName];
+									Games[game] = new objects.Game(socket.playerName);
+									Games[game].addPlayer(socket.playerName);
+									Players[socket.playerName].setCurrentGame(game);
 						
-									socket.emit('addToGameSuccess', 'Connected to game: '+game);
+									socket.emit('addToGameSuccess');
 									socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
 									global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 								}
@@ -266,7 +256,14 @@ function initialize(io, express){
 		});
 		
 		socket.on('exitFromGame', function(){
-			if(!removePlayerFromGame(socket))
+			if(removePlayerFromGame(socket)){
+				var Query = 'UPDATE sktio SET game = '+'null WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
+				dbConnect.query(Query, function(err, row, fields){
+					if(err)
+						throw err;	
+				});
+			}
+			else
 				global.log('warn', 'Illegal request to exit game from player: '+ socket.playerName);
 		});
 
@@ -278,13 +275,13 @@ function initialize(io, express){
                 		socket.emit('logoutFail', 'Internal Server error occured');
                 	}
                 	else{
-                		var Query = 'DELETE FROM sktio WHERE session = \"'+Players[socket.playerName].sessionID+'\"';
+                		var Query = 'DELETE FROM sktio WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
 							dbConnect.query(Query, 
 								function(err, row, fields){
 									if(err)
 										throw err;
 										});	
-						var Query = 'DELETE FROM Sessions WHERE sid = \"'+Players[socket.playerName].sessionID+'\"';
+						var Query = 'DELETE FROM Sessions WHERE sid = \"'+Players[socket.playerName].getSessionID()+'\"';
 							dbConnect.query(Query, 
 								function(err, row, fields){
 									if(err)
@@ -307,10 +304,12 @@ function initialize(io, express){
 		});	
 
 		socket.on('disconnect', function(){
-			removePlayerFromGame(socket);
-			delete Players[socket.playerName];
-            delete socket.playerName;
-            console.log(socket.playerName + 'has timed out. Removing from server.');
+			if(socket.handshake.initialized){
+				global.log('info', 'Player: ' + socket.playerName + ' has timed out (removing from server)');
+				removePlayerFromGame(socket);
+				delete Players[socket.playerName];
+        	    delete socket.playerName;
+    	    }
 		});
 	});
 }
