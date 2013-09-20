@@ -1,11 +1,11 @@
 //Load Constants
-var CONST = require('./constants.js');
+var CONST = require('../constants.js');
 
 //Load Game Specific Constants
-var M_CONST = require('./game/m_constants.json');
+var M_CONST = require('./m_constants.json');
 
 //Load the game module
-var mp = require('./game/mp.js');
+var MP = require('./mp.js');
 
 function Player(socket){
 	this.playerName = null;
@@ -63,7 +63,7 @@ function Game(socket){
 	this.players = {};
 	this.totalPlayers = 0;
 	this.socket = socket;
-	this.mp = new mp.game(this, socket);
+	this.MP = new MP.MP(this, socket);
 }
 
 function Game(creator, socket){
@@ -73,7 +73,9 @@ function Game(creator, socket){
 	this.players = {};
 	this.totalPlayers = 0;
 	this.socket = socket;
-	this.mp = new mp.Mp(this, socket);
+	this.mp = new MP.MP(this, socket);
+
+
 }
 
 Game.prototype.getCreator = function(){
@@ -107,22 +109,24 @@ Game.prototype.setcreatedAt = function(createdAt){
 }
 
 Game.prototype.addPlayer = function(playerName){
-	this.players.playerName = '';
+	this.players[playerName] = '';
 	this.lastActivity = new Date();
 	this.totalPlayers++;
 }
 
 Game.prototype.removePlayer = function(playerName){
 	if(this.players.hasOwnProperty(playerName)){
-		delete this.players.playerName;
+		console.log(this);
+		delete this.players[playerName];
 		this.totalPlayers--;
+		this.lastActivity = new Date();
 	}
 }
 
 Game.prototype.morePlayersAllowed = function(){
-	rethis.totalPlayers <= M_CONST.MAX_PLAYERS_PER_GAME)
-
+	return this.totalPlayers <= M_CONST.MAX_PLAYERS_PER_GAME;
 }
 
 module.exports.Game = Game;
-module.exports.Player = Player
+module.exports.Player = Player;
+module.exports.init = MP.init;

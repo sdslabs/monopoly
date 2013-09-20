@@ -5,7 +5,7 @@ var CONST = require('../constants.js');
 var properties = require('./properties.json');
 
 //Load Paths
-var paths = require('./paths.json')
+var paths = require('./paths.json');
 
 // var Location(){
 // 	this.x = 0;

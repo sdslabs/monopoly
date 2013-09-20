@@ -5,7 +5,7 @@ var CONST = require('./constants.js');
 var global = require('./global.js');
 
 //Load the game module
-var objects = require('./objects.js');
+var objects = require('./game/objects.js');
 
 //Load the cookie module
 var cookie = require('cookie');
@@ -38,10 +38,10 @@ function getPlayerList(){
 }
 
 function removePlayerFromGame(socket){
-	if(Players.hasOwnProperty(socket.playerName)){
+	if(doesPlayerExist(socket.playerName)){
 		game = Players[socket.playerName].getCurrentGame();
-
-		if(doesGameExist(game)&&doesPlayerExist(socket.playerName)){
+		if(doesGameExist(game)){
+			Games[game].removePlayer(socket.playerName);
 			global.log('info', socket.playerName +' has left the game: ' + game);
 
 			if(Games[game].getTotalPlayers()<1){
@@ -49,10 +49,8 @@ function removePlayerFromGame(socket){
 				global.log('info', 'Game: ' + game + ' has been destroyed');
 			}
 			else{	
-				Games[game].removePlayer(socket.playerName);
 				socket.broadcast.to(game).emit('playerExited', socket.playerName);
 				socket.emit('exitFromGameSuccess', 'socket.game');
-				global.log('info', 'Player' + socket.playerName + ' has left the game');
 			}	
 
 			socket.leave(game);
@@ -171,7 +169,6 @@ function initialize(io, express){
 									socket.emit('createNewGameSuccess', 'Connected to game: '+game);
 									socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
 									global.log('info', socket.playerName +' connected to game: ' + game);
-									console.log(Games);
 								}
 							}
 						});
@@ -180,7 +177,6 @@ function initialize(io, express){
 				socket.emit('addToGameError', 'Not authorized to create game');
 				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
 			}
-			console.log(Players);
 		});
 
 		socket.on('addToGame', function(game){
@@ -204,7 +200,7 @@ function initialize(io, express){
 												throw err;	
 									});
 									socket.join(game);
-									Games[game] = new objects.Game(socket.playerName);
+
 									Games[game].addPlayer(socket.playerName);
 									Players[socket.playerName].setCurrentGame(game);
 						
