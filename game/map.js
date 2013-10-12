@@ -7,66 +7,39 @@ var properties = require('./properties.json');
 //Load Paths
 var paths = require('./paths.json');
 
-// var Location(){
-// 	this.x = 0;
-// 	this.y = 0;
-// 	this.z = 0;
-// }
+function Location(){
+	this.x = 0;
+	this.y = 0;
+	this.z = 0;
+}
 
-// var Size(){
-// 	this.width = 0;
-// 	this.height = 0;
-// }
+function Size(){
+	this.width = 0;
+	this.height = 0;
+}
 
-// var Level(){
-// 	var rent;
-// 	var upgrade;
-// }
+function Level(){
+	var rent;
+	var upgrade;
+}
 
-// function Properties(){
+function Property(){
 
-// 	this. id = null;
+	this. id = null;
 
-// 	this.name = null;
-// 	this.owner = null;
-// 	this.type = null;
+	this.name = null;
+	this.owner = null;
+	this.type = null;
 
-// 	this.level = null;
-// 	this.maxLevel = null;
+	this.level = null;
+	this.maxLevel = null;
 	
-// 	this.basePrice = 0;
+	this.basePrice = 0;
 
-// 	this.Size = new Size();
-// 	this.Location = new Location();
+	this.Size = new Size();
+	this.Location = new Location();
 
-// }
-// var Size(){
-// 	this.width = 0;
-// 	this.height = 0;
-// }
-
-// var Level(){
-// 	var rent;
-// 	var upgrade;
-// }
-
-// function Properties(){
-
-// 	this. id = null;
-
-// 	this.name = null;
-// 	this.owner = null;
-// 	this.type = null;
-
-// 	this.level = null;
-// 	this.maxLevel = null;
-	
-// 	this.basePrice = 0;
-
-// 	this.Size = new Size();
-// 	this.Location = new Location();
-
-// }
+}
 
 function Map(){
 	this.properties = properties;

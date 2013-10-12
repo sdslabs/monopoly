@@ -6,6 +6,7 @@ var map = require('./map.js');
 
 var Games = null;
 var Players = null;
+var game = null;
 
 function MP(game, socket){
 	this.map = new map.Map();
@@ -32,6 +33,10 @@ MP.prototype.getCurrentPlayer = function(){
 	return this.currentPlayer;
 }
 
+MP.prototype.getNextMove = function(){
+
+}
+
 function verify(game, playerName){
 	return Games.hasOwnProperty(game) && socket.hasOwnProperty(playerName);
 }
@@ -45,9 +50,22 @@ function init(G_ames, P_layers, socket){
 	Players = P_layers; 
 
 	socket.on('getCurrentPlayer', function(){
-		game = findGame(socket);
-		socket.emit('ret_currentPlayer', game.MP.get)
-	})
+		socket.emit('ret_currentPlayer', findGame(socket).MP.getCurrentPlayer());
+	});
+
+	socket.on('getNextMove', function(){
+		socket.emit('ret_NextMove', findGame(socket).MP.getNextMove());
+	});
+
+	socket.on('')
+
+	// socket.on('getPropertyInfo', function(propertyID){
+	// 	socket.emit('ret_PropertyInfo', findGame(socket).Map.getPropertyInfo());
+	// });
+
+	// socket.on('applyMove', function(){
+	// 	socket.emit
+	// });
 }
 
 module.exports.MP = MP;

@@ -1,4 +1,4 @@
-//Load Constants
+	//Load Constants
 var CONST = require('./constants.js');
 
 //Load the Global Function Module
@@ -18,8 +18,22 @@ var express = require('express');
 var https = require('https');
 var app = express();
 
+//Load the stylus module
+var stylus = require('stylus');
+
+//Configure Express to use Jade
 app.set('views', __dirname + '/public');
 app.set('view engine', 'jade');
+app.locals.pretty = true;
+
+app.use(stylus.middleware({
+	debug: true,
+	force: true,
+	src: __dirname + '/public/views',
+	dest: __dirname + '/public/css/',
+	compress: true
+}));
+// app.use(express.static(__dirname + '/public'));
 
 //Initialize Server 
 var options = {

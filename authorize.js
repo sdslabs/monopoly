@@ -307,7 +307,8 @@ function initialize(io, express){
 		});
 
 		socket.on('PING', function(){
-			console.log(Games[Players[socket.playerName].getCurrentGame()]);
+			// console.log(Games[Players[socket.playerName].getCurrentGame()]);
+			console.log('PING RECEIVED');
 		})
 	});
 }

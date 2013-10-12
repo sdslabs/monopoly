@@ -49,7 +49,8 @@ function log(lvl, text){
 	if(hh < 10)
 		hh = '0' + hh;
 
-		winston.log(lvl, '[' + hh + ':' + mi + ':' + ss +':' + ml + ' ' + dd +'/'+ mm+ '] ' + text);
+		// winston.log(lvl, '[' + hh + ':' + mi + ':' + ss +':' + ml + ' ' + dd +'/'+ mm+ '] ' + text);
+		winston.log(lvl, '[' + hh + ':' + mi + '] ' + text);
 }
 
 module.exports.log = log;

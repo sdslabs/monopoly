@@ -116,7 +116,6 @@ Game.prototype.addPlayer = function(playerName){
 
 Game.prototype.removePlayer = function(playerName){
 	if(this.players.hasOwnProperty(playerName)){
-		console.log(this);
 		delete this.players[playerName];
 		this.totalPlayers--;
 		this.lastActivity = new Date();
