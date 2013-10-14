@@ -5,11 +5,11 @@ html(lang='en')
 
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
 		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css')
+		link(rel ='stylesheet', type='text/css', href='/css/bootstrap/bootstrap.min.css')
 		link(rel ='stylesheet', type='text/css', href='/css/custom.css')
-		
+
 		script(src='/socket.io/socket.io.js')
 		script(src='/scripts/jquery.js')
-		script(src='/scripts/init.js');
 		script(src='https://sdslabs.co.in/api/public/api.js')
 		script(type='text/javascript').
 			$('body').ready(function(){
@@ -18,6 +18,8 @@ html(lang='en')
 					topbar.showTopbar();
 				}
 			});
+		
 	body
 		h1 Client Side for Monopoly
 		p  Currently only javascript exists. Created using a jade template
+		script(src='/scripts/init.js');

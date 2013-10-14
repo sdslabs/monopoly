@@ -35,6 +35,14 @@ function initialize (app){
 		res.sendfile(__dirname + '/public/css/custom.css');
 		global.log('info', 'Sent file: /public/css/custom.css to client: ' + req.connection.remoteAddress);
 	});
+
+	app.get('/css/bootstrap/bootstrap.min.css', function(req, res){
+		res.sendfile(__dirname + '/public/css/bootstrap/bootstrap.min.css');
+		global.log('info', 'Sent file: /public/css/bootstrap/bootstrap.min.css to client: ' + req.connection.remoteAddress);
+	});
+
+
+
 }
 
 module.exports.initialize = initialize;

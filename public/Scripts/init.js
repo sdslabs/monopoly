@@ -26,7 +26,7 @@ function init(){
 				return c_value;
 			}
 
-			var socket = io.connect('https://127.0.0.1:443');
+			var socket = io.connect('http://127.0.0.1:8080');
 
 			var playerName, game;
 

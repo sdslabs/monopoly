@@ -13,9 +13,6 @@ var db = require('./db');
 //Load the filesystem module
 var fs = require('fs');
 
-//Load the https module
-var https = require('https');
-
 //Load the node framework modules
 var express = require('express');
 var app = express();
@@ -34,23 +31,40 @@ app.use(stylus.middleware({
 	force: true,
 	src: __dirname + '/public/views/',
 	dest: __dirname + '/public/css/',
-	compress: true,
+	// compress: true
 }));
 
-//Initialize Server 
-var options = {
-	key                : fs.readFileSync('./ssl/'+CONST.G_SSL_KEY_FILE),
-  	cert               : fs.readFileSync('./ssl/'+CONST.G_SSL_CERT_FILE),
-  	requestCert        : true,
-  	rejectUnauthorized : false,
-  	passphrase         : CONST.G_SSL_CERT_PASSPHRASE,
-  	ciphers            : 'AES256-SHA'
- };
-var server = https.createServer(options, app);
+//Production
+
+// // Load the https module
+// var https = require('https');
+
+// //Initialize Server 
+// var options = {
+// 	key                : fs.readFileSync('./ssl/'+CONST.G_SSL_KEY_FILE),
+//   	cert               : fs.readFileSync('./ssl/'+CONST.G_SSL_CERT_FILE),
+//   	requestCert        : true,
+//   	rejectUnauthorized : false,
+//   	passphrase         : CONST.G_SSL_CERT_PASSPHRASE,
+//   	ciphers            : 'AES256-SHA'
+//  };
+// var server = https.createServer(options, app);
+
+// // Initialize the socketio module
+// options.log = CONST.G_LOG_CONNECTION_MESSAGES;
+// var io = require('socket.io').listen(server, options);
+
+
+//Development
+//Load the http module
+var http = require ('http');
+
+//Initialize server
+var server = http.createServer(app);
 
 //Initialize the socketio module
-options.log = CONST.G_LOG_CONNECTION_MESSAGES;
-var io = require('socket.io').listen(server, options);
+var io = require('socket.io').listen(server, {log: CONST.G_LOG_CONNECTION_MESSAGES});
+
 
 //Set the server port
 server.listen(CONST.G_SERVER_PORT, console.log("\nCurrent server time is "+ new Date()+'\n'));
