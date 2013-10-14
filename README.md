@@ -11,7 +11,7 @@ Setting up the server
 2. Create a SSL folder
     
        $ mkdir ssl 
-Put SSL key and certificate (.pem) in this (ssl) folder
+Put SSL key and certificate (.pem) in this (ssl) folder (**not necessary for development**).
 
 3. Update the SSL key and certificate filenames in the constants file
        

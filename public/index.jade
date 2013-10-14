@@ -1,25 +1,31 @@
-doctype 5
+!!! 5
 html(lang='en')
 	head
 		title = Monopoly
 
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
+
+		meta(name = 'viewport', content = 'width=device-width, initial-scale=1.0')  
+		link(rel ='stylesheet', type='text/css', href='/css/bootstrap/bootstrap.min.css', media = 'screen')
 		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css')
-		link(rel ='stylesheet', type='text/css', href='/css/bootstrap/bootstrap.min.css')
 		link(rel ='stylesheet', type='text/css', href='/css/custom.css')
 
 		script(src='/socket.io/socket.io.js')
 		script(src='/scripts/jquery.js')
+		script(src='/scripts/bootstrap/bootstrap.min.js')
 		script(src='https://sdslabs.co.in/api/public/api.js')
+		
+	body
+		div(class = 'container')
+			div(class = 'row' id = 'button-row')
+				div(class = 'span12') 
+					button(id = 'main-button', type = 'button', class = 'btn-default') Start a new Game
+
+		script(src='/scripts/init.js');
 		script(type='text/javascript').
-			$('body').ready(function(){
-				init();
+			$(document).ready(function(){
+			init();
 				if(typeof topbar != 'undefined' && topbar != null){
 					topbar.showTopbar();
 				}
 			});
-		
-	body
-		h1 Client Side for Monopoly
-		p  Currently only javascript exists. Created using a jade template
-		script(src='/scripts/init.js');

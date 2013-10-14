@@ -67,7 +67,7 @@ function init(){
 			});
 
 			socket.on('updatePlayerList', function(playerList){
-				$('body').text($('body').html() + playerList);
+				$('body').text(playerList);
 			});
 
 			socket.on('updateGameList', function(gameList){

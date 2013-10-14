@@ -17,13 +17,18 @@ function initialize (app){
 	});
 
 	app.get('/scripts/jquery.js', function(req, res){
-		res.sendfile(__dirname + '/public/Scripts/jquery.js');
-		global.log('info', 'Sent file: /public/Scripts/jquery.js to client: ' + req.connection.remoteAddress);
+		res.sendfile(__dirname + '/public/scripts/jquery.js');
+		global.log('info', 'Sent file: /public/scripts/jquery.js to client: ' + req.connection.remoteAddress);
 	});
 
 	app.get('/scripts/init.js', function(req, res){
-		res.sendfile(__dirname + '/public/Scripts/init.js');
-		global.log('info', 'Sent file: /public/Scripts/init.js to client: ' + req.connection.remoteAddress);
+		res.sendfile(__dirname + '/public/scripts/init.js');
+		global.log('info', 'Sent file: /public/scripts/init.js to client: ' + req.connection.remoteAddress);
+	});
+
+	app.get('/scripts/bootstrap/bootstrap.min.js', function(req, res){
+		res.sendfile(__dirname + '/public/scripts/bootstrap/bootstrap.min.js');
+		global.log('info', 'Sent file: /public/scripts/bootstrap/bootstrap.min.js to client: ' + req.connection.remoteAddress);
 	});
 
 	app.get('/icons/lightbulb_icon48.png', function(req, res){
@@ -39,6 +44,11 @@ function initialize (app){
 	app.get('/css/bootstrap/bootstrap.min.css', function(req, res){
 		res.sendfile(__dirname + '/public/css/bootstrap/bootstrap.min.css');
 		global.log('info', 'Sent file: /public/css/bootstrap/bootstrap.min.css to client: ' + req.connection.remoteAddress);
+	});
+
+	app.get('/images/main-bg.jpg', function(req, res){
+		res.sendfile(__dirname + '/public//images/main-bg.jpg');
+		global.log('info', 'Sent file: /public//images/main-bg.jpg to client: ' + req.connection.remoteAddress);
 	});
 
 
