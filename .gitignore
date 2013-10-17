@@ -8,5 +8,5 @@ password.json
 *.der
 *.key
 openssl.cnf
-custom.css
+*/custom.css
 
