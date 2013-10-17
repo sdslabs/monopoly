@@ -6,25 +6,25 @@ html(lang='en')
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
 
 		meta(name = 'viewport', content = 'width=device-width, initial-scale=1.0')  
-		link(rel ='stylesheet', type='text/css', href='/css/bootstrap/bootstrap.min.css', media = 'screen')
+		link(rel ='stylesheet', type='text/css', href='/css/bootstrap.min.css', media = 'screen')
 		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css')
 		link(rel ='stylesheet', type='text/css', href='/css/custom.css')
 
 		script(src='/socket.io/socket.io.js')
 		script(src='/scripts/jquery.js')
-		script(src='/scripts/bootstrap/bootstrap.min.js')
+		script(src='/scripts/bootstrap.min.js')
 		script(src='https://sdslabs.co.in/api/public/api.js')
 		
 	body
 		div(class = 'container')
-			div(class = 'row' id = 'button-row')
-				div(class = 'span12') 
-					button(id = 'main-button', type = 'button', class = 'btn-default') Start a new Game
+			div(class = 'row')
+				div(class = 'span12 text-center')
+					button(type = 'button', class = 'btn-default splash-button') Start a new Game
 
 		script(src='/scripts/init.js');
 		script(type='text/javascript').
 			$(document).ready(function(){
-			init();
+			//init();
 				if(typeof topbar != 'undefined' && topbar != null){
 					topbar.showTopbar();
 				}
