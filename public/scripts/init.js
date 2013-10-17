@@ -56,6 +56,7 @@ function init(){
 
 			socket.on('createNewGameSuccess', function(){
 				setCookie('game', game);
+				alert("Connected to game: " + game);
 			});
 		
 			socket.on('newPlayerAdded', function(userName, totalPlayers){
@@ -68,11 +69,12 @@ function init(){
 
 			socket.on('updatePlayerList', function(playerList){
 				$('body').text(playerList);
+				console.log(playerList);
 			});
 
 			socket.on('updateGameList', function(gameList){
 			//	console.log(gameList);
-				$('body').html($('body').html() + '<p>'+  gameList + '</p>');
+			//	$('body').html($('body').html() + '<p>'+  gameList + '</p>');
 			});
 
 			socket.on('createNewGameSuccess', function(){
