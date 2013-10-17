@@ -10,23 +10,29 @@ function send(req, res, file){
 
 function initialize (app){
 
-	app.get('/', function (req, res) {
-		res.render('index');
-		global.log('info', 'Sent file: index.html to client: ' + req.connection.remoteAddress);
+	app.use(function (req, res, next) {
+		res.header('X-powered-by', 'PSWS');
+  		next();
 	});
 
-	// app.get('/rootCA', function(req, res){
-	// 	res.setHeader('Content-Type', 'application/x-pem-file');
-	// 	res.sendfile(__dirname + '/ssl/root/rootCA.pem');
-	// 	global.log('info', 'Sent X.509 root CA certificate: to client: ' + req.connection.remoteAddress);
-	// });
+	app.get('/', function (req, res) {
+		res.render('index');
+		global.log('info', 'Sent homepage to client: ' + req.connection.remoteAddress);
+	});
 
 	app.get('/:folder/:file', function(req, res){
 		send(req, res, req.params.folder+'/'+req.params.file);
 	});
 
 	app.get('*', function(req, res){
-  		res.send('what???', 404);
+		require('fs').readFile(
+			__dirname + '/public/' + '404.html',
+			{encoding: 'utf8'},
+			function (err, data){
+				if(err)
+					throw err;
+				res.send(data, 404);
+		});
 	});
 }
 
