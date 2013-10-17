@@ -12,7 +12,7 @@ function send(req, res, file){
 				send404(res);
 			else{
 				res.sendfile(path);
-				global.log('info', 'Sent file: ' + file + ' to client: ' + req.connection.remoteAddress);
+				global.log('verbose', 'Sent file: ' + file + ' to client: ' + req.connection.remoteAddress);
 			}
 	});
 }
@@ -37,7 +37,7 @@ function initialize (app){
 
 	app.get('/', function (req, res) {
 		res.render('index');
-		global.log('info', 'Sent homepage to client: ' + req.connection.remoteAddress);
+		global.log('verbose', 'Sent homepage to client: ' + req.connection.remoteAddress);
 	});
 
 	app.get('/:folder/:file', function(req, res){

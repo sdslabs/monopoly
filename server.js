@@ -29,7 +29,7 @@ app.locals.pretty = true;
 app.use(stylus.middleware({
 	debug: true,
 	force: true,
-	src: __dirname + '/public/views/',
+	src: __dirname + '/views/',
 	dest: __dirname + '/public/css/',
 	// compress: true
 }));
