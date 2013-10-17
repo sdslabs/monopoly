@@ -21,16 +21,12 @@ function initialize (app){
 	// 	global.log('info', 'Sent X.509 root CA certificate: to client: ' + req.connection.remoteAddress);
 	// });
 
-	app.get('/scripts/:file', function(req, res){
-		send(req, res, 'scripts/' + req.params.file);
+	app.get('/:folder/:file', function(req, res){
+		send(req, res, req.params.folder+'/'+req.params.file);
 	});
 
-	app.get('/css/:file', function(req, res){
-		send(req, res, 'css/' + req.params.file);
-	});
-
-	app.get('/images/:file', function(req, res){
-		send(req, res, 'images/' + req.params.file);
+	app.get('*', function(req, res){
+  		res.send('what???', 404);
 	});
 }
 
