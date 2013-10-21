@@ -32,7 +32,10 @@ function initialize (app){
 
 
 	app.get('/', function (req, res) {
-		res.render('index');
+		res.render('index',
+		{
+			ip: global.getIP()
+		})
 		global.log('verbose', 'Sent homepage to client: ' + req.connection.remoteAddress);
 	});
 

@@ -53,4 +53,14 @@ function log(lvl, text){
 		winston.log(lvl, '[' + hh + ':' + mi + '] ' + text);
 }
 
+
+
+function getIP(){
+	var ifaces = require('os').networkInterfaces();
+	var ipaddress = '';
+	if(ifaces[CONST.G_IFACE] != null)
+		return ifaces[CONST.G_IFACE][0].address;		
+}
+
 module.exports.log = log;
+module.exports.getIP = getIP;

@@ -1,7 +1,7 @@
 !!! 5
 html(lang='en')
 	head
-		title Monopoly
+		title #{locals.ip}
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
 
 		meta(name = 'viewport', content = 'width=device-width, initial-scale=1.0')  
@@ -26,7 +26,7 @@ html(lang='en')
 		script(src='/scripts/init.js');
 		script(type='text/javascript').
 			$(document).ready(function(){
-			//init();
+			init('http://#{locals.ip}:8080');
 				if(typeof topbar != 'undefined' && topbar != null){
 					topbar.showTopbar();
 				}

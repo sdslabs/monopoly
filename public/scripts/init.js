@@ -1,4 +1,4 @@
-function init(){
+function init(url){
 		function setCookie(c_name,value,exdays){	
 			var exdate=new Date();
 				exdate.setDate(exdate.getDate() + exdays);
@@ -26,7 +26,7 @@ function init(){
 				return c_value;
 			}
 
-			var socket = io.connect('http://127.0.0.1:8080');
+			var socket = io.connect(url);
 
 			var playerName, game;
 
