@@ -55,6 +55,11 @@ function removePlayerFromGame(socket){
 
 			socket.leave(game);
 			Players[socket.playerName].setCurrentGame(null);
+			var Query = 'UPDATE sktio SET game = '+'null WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
+				dbConnect.query(Query, function(err, row, fields){
+					if(err)
+						throw err;	
+				});
 			return true;
 		}
 		else
@@ -250,14 +255,7 @@ function initialize(io, express){
 		});
 		
 		socket.on('exitFromGame', function(){
-			if(removePlayerFromGame(socket)){
-				var Query = 'UPDATE sktio SET game = '+'null WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
-				dbConnect.query(Query, function(err, row, fields){
-					if(err)
-						throw err;	
-				});
-			}
-			else
+			if(!removePlayerFromGame(socket))
 				global.log('warn', 'Illegal request to exit game from player: '+ socket.playerName);
 		});
 
@@ -300,6 +298,7 @@ function initialize(io, express){
 		socket.on('disconnect', function(){
 			if(socket.handshake.initialized){
 				global.log('info', 'Player: ' + socket.playerName + ' has timed out (removing from server)');
+
 				removePlayerFromGame(socket);
 				delete Players[socket.playerName];
         	    delete socket.playerName;
