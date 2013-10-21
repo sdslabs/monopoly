@@ -4,6 +4,8 @@ function init(url){
 				exdate.setDate(exdate.getDate() + exdays);
 				var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
 				document.cookie=c_name + "=" + c_value;
+				console.log(document.cookie);
+
 			}
 
 			function getCookie(c_name){
@@ -33,10 +35,10 @@ function init(url){
 			socket.on('connect', function(){
 				playerName=getCookie('playerName');
 				game=getCookie('game');
-
+				console.log(playerName, game);
 				if(playerName && game){
 					socket.emit('addNewPlayer', playerName);
-					socket.emit('createNewGame', game);
+					// socket.emit('createNewGame', game);
 				}
 				else{
 					playerName = prompt("What's your name?");
