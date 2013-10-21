@@ -1,7 +1,7 @@
 !!! 5
 html(lang='en')
 	head
-		title #{locals.ip}
+		title Monopoly
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
 
 		meta(name = 'viewport', content = 'width=device-width, initial-scale=1.0')  
@@ -20,7 +20,7 @@ html(lang='en')
 	body
 		div(class = 'container splash-container')
 			div(class = 'row')
-				div(class = 'span12 text-center splash-column')
+				div(id = 'start-game', class = 'span12 text-center splash-column')
 					button(type = 'button', class = 'btn-default splash-button') Start a new Game
 
 		script(src='/scripts/init.js');

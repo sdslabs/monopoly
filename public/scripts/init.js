@@ -34,26 +34,22 @@ function init(url){
 
 			socket.on('connect', function(){
 				playerName=getCookie('playerName');
-				game=getCookie('game');
-				console.log(playerName, game);
-				if(playerName && game){
-					socket.emit('addNewPlayer', playerName);
-					// socket.emit('createNewGame', game);
-				}
-				else{
+
+				if(playerName == '' || playerName == null){
 					playerName = prompt("What's your name?");
-					game = prompt("Create a new game:")
-					socket.emit('addNewPlayer', playerName);
+
+					if(playerName=='')
+						window.location = 'https://sdslabs.co.in';
 				}
+				console.log(playerName);
+				socket.emit('addNewPlayer', playerName);
 
 			});
 
 
 			socket.on('addNewPlayerSuccess', function(){
 				setCookie('playerName', playerName, 1);
-				socket.emit('createNewGame', game);
-			// 	socket.emit('queryPlayerList');
-			// 	socket.emit('queryGameList');
+
 			});
 
 			socket.on('createNewGameSuccess', function(){
@@ -82,4 +78,10 @@ function init(url){
 			socket.on('createNewGameSuccess', function(){
 				socket.emit('queryGameList');
 			});
-		}
+
+			$('#start-game').click(function(){
+				game = prompt ("Enter a new id for your game:");
+				if(game != '')
+					socket.emit('createNewGame', game);
+			})
+		}	
