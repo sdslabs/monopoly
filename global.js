@@ -56,10 +56,11 @@ function log(lvl, text){
 
 
 function getIP(){
-	var ifaces = require('os').networkInterfaces();
-	var ipaddress = '';
-	if(ifaces[CONST.G_IFACE] != null)
-		return ifaces[CONST.G_IFACE][0].address;		
+	// var ifaces = require('os').networkInterfaces();
+	// var ipaddress = '';
+	// if(ifaces[CONST.G_IFACE] != null)
+	// 	return ifaces[CONST.G_IFACE][0].address;
+	return "sdslabs.local";		
 }
 
 module.exports.log = log;

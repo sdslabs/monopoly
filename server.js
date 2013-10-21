@@ -34,17 +34,6 @@ app.use(stylus.middleware({
 	// compress: true
 }));
 
-
-app.use(function (req, res, next) {
-	res.header('X-powered-by', 'PSWS');
-  	next();
-	});
-
-//The account authorization goes here
-app.use(function (req, res, next){
-	next();
-});
-
 //Production
 
 // // Load the https module

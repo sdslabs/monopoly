@@ -30,6 +30,19 @@ function send404(res){
 
 function initialize (app){
 
+	app.use(function (req, res, next) {
+	res.header('X-powered-by', 'PSWS');
+  	next();
+	});
+
+	//The account authorization goes here
+	app.use(function (req, res, next){
+		require('./sds_auth.js').user._check_login(req, function(uid, req){
+			if(uid == null || uid == 0)
+				res.redirect('http://sdslabs.local/login');
+		});
+		next();
+	});
 
 	app.get('/', function (req, res) {
 		res.render('index',
@@ -39,9 +52,14 @@ function initialize (app){
 		global.log('verbose', 'Sent homepage to client: ' + req.connection.remoteAddress);
 	});
 
+	app.get('/req', function(req, res){
+		
+	});
+
 	app.get('/:folder/:file', function(req, res){
 		send(req, res, req.params.folder+'/'+req.params.file);
 	});
+
 
 	app.get('*', function(req, res){
 		send404(res);

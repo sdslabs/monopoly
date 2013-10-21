@@ -10,6 +10,7 @@
         "stylus": "",
         "mysql": "",
         "cookie": "",
-        "winston":""
+        "winston":"",
+        "request":""
      }
 }

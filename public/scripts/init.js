@@ -4,8 +4,6 @@ function init(url){
 				exdate.setDate(exdate.getDate() + exdays);
 				var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
 				document.cookie=c_name + "=" + c_value;
-				console.log(document.cookie);
-
 			}
 
 			function getCookie(c_name){
@@ -41,15 +39,13 @@ function init(url){
 					if(playerName=='')
 						window.location = 'https://sdslabs.co.in';
 				}
-				console.log(playerName);
+				
 				socket.emit('addNewPlayer', playerName);
-
 			});
 
 
 			socket.on('addNewPlayerSuccess', function(){
-				setCookie('playerName', playerName, 1);
-
+				setCookie('playerName', playerName, 1);	
 			});
 
 			socket.on('createNewGameSuccess', function(){
@@ -63,20 +59,6 @@ function init(url){
 
 			socket.on('addToGameError', function(err){
 				alert(err);
-			});
-
-			socket.on('updatePlayerList', function(playerList){
-				$('body').text(playerList);
-				console.log(playerList);
-			});
-
-			socket.on('updateGameList', function(gameList){
-			//	console.log(gameList);
-			//	$('body').html($('body').html() + '<p>'+  gameList + '</p>');
-			});
-
-			socket.on('createNewGameSuccess', function(){
-				socket.emit('queryGameList');
 			});
 
 			$('#start-game').click(function(){
