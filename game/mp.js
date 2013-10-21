@@ -8,7 +8,7 @@ var Games = null;
 var Players = null;
 var game = null;
 
-function MP(game, socket){
+function mp(game, socket){
 	this.map = new map.Map();
 	this.startedAt = new Date();
 	this.game = game;
@@ -20,7 +20,7 @@ function MP(game, socket){
 		key.money = M_CONST.INITIAL_AMOUNT;
 }
 
-MP.prototype.begin = function(){
+mp.prototype.begin = function(){
 	var i = ~~(Math.rand()%this.game.totalPlayers), j = 0;
 	for(var key in this.game.players)
 		if(j++ == i){
@@ -29,11 +29,11 @@ MP.prototype.begin = function(){
 		}
 }
 
-MP.prototype.getCurrentPlayer = function(){
+mp.prototype.getCurrentPlayer = function(){
 	return this.currentPlayer;
 }
 
-MP.prototype.getNextMove = function(){
+mp.prototype.getNextMove = function(){
 
 }
 
@@ -50,11 +50,11 @@ function init(G_ames, P_layers, socket){
 	Players = P_layers; 
 
 	socket.on('getCurrentPlayer', function(){
-		socket.emit('ret_currentPlayer', findGame(socket).MP.getCurrentPlayer());
+		socket.emit('ret_currentPlayer', findGame(socket).mp.getCurrentPlayer());
 	});
 
 	socket.on('getNextMove', function(){
-		socket.emit('ret_NextMove', findGame(socket).MP.getNextMove());
+		socket.emit('ret_NextMove', findGame(socket).mp.getNextMove());
 	});
 
 	socket.on('')
@@ -68,7 +68,7 @@ function init(G_ames, P_layers, socket){
 	// });
 }
 
-module.exports.MP = MP;
+module.exports.mp = mp;
 module.exports.init = init;
 
 

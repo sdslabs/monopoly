@@ -5,7 +5,7 @@ var CONST = require('../constants.js');
 var M_CONST = require('./m_constants.json');
 
 //Load the game module
-var MP = require('./mp.js');
+var mp = require('./mp.js');
 
 function Player(socket){
 	this.playerName = null;
@@ -63,7 +63,7 @@ function Game(socket){
 	this.players = {};
 	this.totalPlayers = 0;
 	this.socket = socket;
-	this.MP = new MP.MP(this, socket);
+	this.mp = new mp.mp(this, socket);
 }
 
 function Game(creator, socket){
@@ -73,9 +73,7 @@ function Game(creator, socket){
 	this.players = {};
 	this.totalPlayers = 0;
 	this.socket = socket;
-	this.mp = new MP.MP(this, socket);
-
-
+	this.mp = new mp.mp(this, socket);
 }
 
 Game.prototype.getCreator = function(){
@@ -128,4 +126,4 @@ Game.prototype.morePlayersAllowed = function(){
 
 module.exports.Game = Game;
 module.exports.Player = Player;
-module.exports.init = MP.init;
+module.exports.init = mp.init;

@@ -1,13 +1,15 @@
 !!! 5
 html(lang='en')
 	head
-		title = Monopoly
-
+		title Monopoly
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
 
 		meta(name = 'viewport', content = 'width=device-width, initial-scale=1.0')  
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap.min.css', media = 'screen')
+		link(rel ='stylesheet', type='text/css', href='/css/bootstrap-responsive.min.css', media = 'screen')
+
 		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css')
+
 		link(rel ='stylesheet', type='text/css', href='/css/custom.css')
 
 		script(src='/socket.io/socket.io.js')
@@ -16,9 +18,9 @@ html(lang='en')
 		script(src='https://sdslabs.co.in/api/public/api.js')
 		
 	body
-		div(class = 'container')
+		div(class = 'container splash-container')
 			div(class = 'row')
-				div(class = 'span12 text-center')
+				div(class = 'span12 text-center splash-column')
 					button(type = 'button', class = 'btn-default splash-button') Start a new Game
 
 		script(src='/scripts/init.js');

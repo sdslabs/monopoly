@@ -30,10 +30,6 @@ function send404(res){
 
 function initialize (app){
 
-	app.use(function (req, res, next) {
-		res.header('X-powered-by', 'PSWS');
-  		next();
-	});
 
 	app.get('/', function (req, res) {
 		res.render('index');

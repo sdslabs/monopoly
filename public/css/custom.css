@@ -3,9 +3,8 @@ body {
   background: url("/images/main-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;
 }
-.container {
+.splash-container {
   margin-top: 40%;
 }
 .splash-button {
