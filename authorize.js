@@ -73,11 +73,12 @@ function initialize(io, express){
    		// check if there's a cookie header
     	if (data.headers.cookie) {
 
-    		//check for authentication
-    		require('./sds_auth.js').user.check_login(data.headers.cookie['sds_login'], function(uid){
-				if(uid == null || uid == 0)
-					accept("Auth failed", false);
-			});
+    		// Production
+    		// check for authentication
+			// require('./sds_auth.js').user.check_login(data.headers.cookie['sds_login'], function(uid){
+			// 	if(uid == null || uid == 0)
+			// 		accept("Auth failed", false);
+			// });
 
         	// if there is, parse the cookie
         	data.cookie = cookie.parse(data.headers.cookie);

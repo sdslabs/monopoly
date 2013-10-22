@@ -37,10 +37,11 @@ function initialize (app){
 
 	//The account authorization goes here
 	app.use(function (req, res, next){
-		require('./sds_auth.js').user._check_login(req, function(uid, req){
-			if(uid == null || uid == 0)
-				res.redirect('http://sdslabs.local/login');
-		});
+		// Production
+		// require('./sds_auth.js').user._check_login(req, function(uid, req){
+		// 	if(uid == null || uid == 0)
+		// 		res.redirect('http://sdslabs.local/login');
+		// });
 		next();
 	});
 
