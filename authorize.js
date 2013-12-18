@@ -126,6 +126,11 @@ function initialize(io, express){
         			 					global.log("warn", "Player: "+ socket.playerName +" tried to reconnect with alias: "+ playerName + ". Denied");
 
         			 				global.log("info", "Player " + socket.playerName + " has reconected to server");
+
+        			 				if(!doesPlayerExist(socket.playerName))
+        			 					Players[socket.playerName] = new objects.Player(socket.playerName,
+		        			 				socket.handshake.sessionID, '', socket);
+
         			 			}
         			 		}
         			 		else{
@@ -160,7 +165,7 @@ function initialize(io, express){
 		});
 		
 		socket.on('createNewGame', function(game){
-			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null&&game!=''){
+			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.playerName].currentGame==''&&game!=''){
 					dbConnect.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
         					function(err, row, fields){
         					if(err)
