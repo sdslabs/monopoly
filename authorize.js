@@ -224,7 +224,7 @@ function initialize(io, express){
 									Games[game].addPlayer(socket.playerName);
 									Players[socket.playerName].setCurrentGame(game);
 						
-									socket.emit('addToGameSuccess');
+									socket.emit('addToGameSuccess', game);
 									socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
 									global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 								}

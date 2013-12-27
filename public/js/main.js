@@ -10,6 +10,8 @@ var monopoly = (function()
 		$('#start-btn').click(onStartClick);
 		$('#create-btn').click(onCreateClick);
 		$('#back-btn').click(onBackClick);
+		$('.join-btn').on('click', onJoinClick);
+
 	};
 
 	var onStartClick = function()
@@ -26,7 +28,10 @@ var monopoly = (function()
 	{
 		showScreen('#start-screen');
 	}
-
+	var onJoinClick = function()
+	{
+		socketio.joinGame($(this).attr('id'))
+	}
 	var showGameList = function(gameList)
 	{
 		console.log(gameList);
@@ -37,9 +42,11 @@ var monopoly = (function()
 			var game = gameList[key];
 			console.log(gameList[key])
 			var gameStatus = game['numPlayers'] == 1 ? 'Waiting' : game['numPlayers'] == 2 ? 'Ongoing' : 'Complete';
-			$('div#lobby-screen tbody').append('<tr><td>'+(parseInt(key)+1)+'</td><td>'+game['name']+'</td><td>'+game['creator']+'</td><td>'+gameStatus+'</td></tr>')
+			$('div#lobby-screen tbody').append('<tr><td>'+(parseInt(key)+1)+'</td><td>'+game['name']+'</td><td>'
+												+game['creator']+'</td><td>'+gameStatus+'</td><td><button type="button" id="'+game['name']
+												+'"class="btn btn-primary join-btn">Join</button></td></tr>');
 		}
-
+		addButtonHandlers()
 	}
 
 	return {
@@ -64,8 +71,10 @@ var socketio = (function()
 		socket = io.connect('http://localhost:8081');
 		socket.on('connect', onConnect);
 		socket.on('addNewPlayerSuccess', addNewPlayerSuccess); 
+		socket.on('addToGameSuccess', addToGameSuccess); 
 		socket.on('updateGameList', monopoly.showGameList)
 		socket.on('createNewGameSuccess', createNewGameSuccess)
+		socket.on('newPlayerAdded', newPlayerAdded)
 	}	
 
 	var setCookie = function(c_name,value,exdays){	
@@ -109,8 +118,14 @@ var socketio = (function()
 	var addNewPlayerSuccess = function(){
 		setCookie('playerName', playerName, 1);	
 	};
+	var addToGameSuccess = function(data){
+		console.log("Successfully joined game " + data)
+	};
 	var createNewGameSuccess = function(data){
 		console.log(data);
+	};
+	var newPlayerAdded = function(data){
+		console.log("Player "+data+" has joined the game!");
 	};
 	var getGameList = function()
 	{
@@ -120,10 +135,15 @@ var socketio = (function()
 	{
 		socket.emit('createNewGame', gameName)
 	}
+	var joinGame = function(gameName)
+	{
+		socket.emit('addToGame', gameName)
+	}
 
 	return {
 		init: init,
 		getGameList:getGameList,
-		createGame:createGame
+		createGame:createGame,
+		joinGame:joinGame
 	}
 })();
