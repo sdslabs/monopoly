@@ -25,7 +25,7 @@ module.exports = {
                 callback(false);
             }
             else{
-                callback(JSON.parse(body));
+                // callback(JSON.parse(body));
             }
         });
     },
