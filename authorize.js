@@ -6,7 +6,6 @@ var global = require('./global.js');
 
 //Load the game module
 var objects = require('./game/objects.js');
-
 //Load the cookie module
 var cookie = require('cookie');
 
@@ -258,10 +257,12 @@ function initialize(io, express){
 
 		socket.on('queryGameList', function(){
 			if(doesPlayerExist(socket.playerName)){
-				gameList = {};
+				// global.log('info', JSON.stringify(Games));
+				var gameList = [];
 		 		for(var key in Games)
 		 			if(doesGameExist(key))
-		 				gameList[key] = '';
+		 				gameList.push({'name':key, 'creator':Games[key].creator, 'numPlayers':Games[key].totalPlayers});
+				global.log('info', JSON.stringify(gameList));
 				socket.emit('updateGameList', JSON.stringify(gameList));
 				global.log('info', 'Game list sent to player: ' + socket.playerName);
 			}

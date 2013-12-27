@@ -7,19 +7,51 @@ var monopoly = (function()
 	};
 	var addButtonHandlers = function()
 	{
-		$('#start-btn').click('lobby-screen', showScreen);
+		$('#start-btn').click(onStartClick);
+		$('#create-btn').click(onCreateClick);
+		$('#back-btn').click(onBackClick);
 	};
+
+	var onStartClick = function()
+	{
+		showScreen('#lobby-screen');
+		socketio.getGameList();
+	}
+	var onCreateClick = function()
+	{
+		var gameName = prompt("Enter a game name");
+		socketio.createGame(gameName);
+	}
+	var onBackClick = function()
+	{
+		showScreen('#start-screen');
+	}
+
+	var showGameList = function(gameList)
+	{
+		console.log(gameList);
+		gameList = JSON.parse(gameList);
+		$('div#lobby-screen td').remove()
+		for(var key in gameList)
+		{
+			var game = gameList[key];
+			console.log(gameList[key])
+			var gameStatus = game['numPlayers'] == 1 ? 'Waiting' : game['numPlayers'] == 2 ? 'Ongoing' : 'Complete';
+			$('div#lobby-screen tbody').append('<tr><td>'+(parseInt(key)+1)+'</td><td>'+game['name']+'</td><td>'+game['creator']+'</td><td>'+gameStatus+'</td></tr>')
+		}
+
+	}
 
 	return {
 		init:function() 
 		{
-			$('.game-layer').hide();
-			$('#start-screen').show();
+			showScreen('#start-screen')
 			addButtonHandlers();
 			socketio.init();
 			// monopoly.canvas = $('#gamecanvas')[0];
 			// monopoly.context = monopoly.canvas.getContext('2d');
 		},
+		showGameList:showGameList
 	}
 })();
 
@@ -29,10 +61,11 @@ var socketio = (function()
 
 	var init = function()
 	{	
-		socket = io.connect('http://localhost:8080');
+		socket = io.connect('http://localhost:8081');
 		socket.on('connect', onConnect);
 		socket.on('addNewPlayerSuccess', addNewPlayerSuccess); 
-		console.log('bound');
+		socket.on('updateGameList', monopoly.showGameList)
+		socket.on('createNewGameSuccess', createNewGameSuccess)
 	}	
 
 	var setCookie = function(c_name,value,exdays){	
@@ -74,11 +107,23 @@ var socketio = (function()
 		socket.emit('addNewPlayer', playerName);
 	};
 	var addNewPlayerSuccess = function(){
-		console.log(22)
 		setCookie('playerName', playerName, 1);	
 	};
+	var createNewGameSuccess = function(data){
+		console.log(data);
+	};
+	var getGameList = function()
+	{
+		socket.emit('queryGameList');
+	}
+	var createGame = function(gameName)
+	{
+		socket.emit('createNewGame', gameName)
+	}
 
 	return {
-		init: init
+		init: init,
+		getGameList:getGameList,
+		createGame:createGame
 	}
 })();
