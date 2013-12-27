@@ -23,10 +23,21 @@ html(lang='en')
 				div(id = 'start-game', class = 'span12 text-center splash-column')
 					button(type = 'button', class = 'btn btn-primary btn-lg', id='start-btn') Start
 		div(class = 'container game-layer' id='lobby-screen')
-			div(class = 'row')
+			div(class = 'row span12 text-center')
+				table(class = 'table')			
+					tr
+						th #
+						th Name
+						th Created By
+						th Game Status
+				button(type = 'button', class = 'btn btn-primary btn-lg', id='create-btn') Create
+				button(type = 'button', class = 'btn btn-primary btn-lg', id='back-btn') Back
+									
 
 		script(src='/js/main.js')
 		$(document).ready(function(){
+		script(type='text/javascript').
+			$(window).load(function(){
 			//init('http://#{locals.ip}:8080');
 			monopoly.init();
 				if(typeof topbar != 'undefined' && topbar != null){

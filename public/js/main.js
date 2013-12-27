@@ -25,7 +25,7 @@ var monopoly = (function()
 
 var socketio = (function()
 {
-	var socket;
+	// var socket;
 
 	var init = function()
 	{	
