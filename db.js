@@ -53,11 +53,12 @@ function synchronize(){
 				if(err)
 					throw err;				
 				});
-			global.log('info', 'Synchronized tables in MySQL. Next synchronization in 30 mins');
+			global.log('info', 'Synchronized tables in MySQL.');
 		}
 	});
 }
 
-module.exports.synchronize = synchronize;
+synchronize();
+
 module.exports.connection = connection;
 module.exports.connect = connect;
