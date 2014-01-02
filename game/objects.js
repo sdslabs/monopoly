@@ -7,14 +7,13 @@ var M_CONST = require('./m_constants.json');
 //Load the game module
 var mp = require('./mp.js');
 
-function Player(socket){
-	this.playerName = null;
-	this.sessionID = null;
-	this.lastActivity = null;
-	this.currentGame = null;
-	this.socket = socket;
-
-}
+// function Player(socket){
+// 	this.playerName = null;
+// 	this.sessionID = null;
+// 	this.lastActivity = null;
+// 	this.currentGame = null;
+// 	this.socket = socket;
+// }
 
 function Player(playerName, sessionID,
 		currentGame, socket){
@@ -23,6 +22,10 @@ function Player(playerName, sessionID,
 	this.lastActivity = new Date();
 	this.currentGame = currentGame;
 	this.socket = socket;
+
+
+	this.money = null;
+	this.location = new Location();
 }
 
 Player.prototype.getPlayerName = function(){
@@ -56,15 +59,16 @@ Player.prototype.setCurrentGame = function(currentGame){
 	lastActivity = new Date();
 }
 
-function Game(socket){
-	this.creator = null;
-	this.createdAt = null;
-	this.lastActivity = null;
-	this.players = {};
-	this.totalPlayers = 0;
-	this.socket = socket;
-	this.mp = new mp.mp(this, socket);
-}
+// function Game(socket){
+// 	this.creator = null;
+// 	this.createdAt = null;
+// 	this.lastActivity = null;
+// 	this.players = {};
+// 	this.totalPlayers = 0;
+// 	this.socket = socket;
+// 	this.map = map;
+// 	this.mp = new mp.mp(game, socket);
+// }
 
 function Game(creator, game, socket){
 	this.creator = creator;
@@ -73,8 +77,8 @@ function Game(creator, game, socket){
 	this.players = {};
 	this.totalPlayers = 0;
 	this.socket = socket;
-	this.map = new Map();
-	this.mp = new mp.mp(game, socket);
+	this.map = require('./map.json');
+	this.mp = new mp.mp(map, game, socket);
 }
 
 Game.prototype.getCreator = function(){
@@ -125,19 +129,28 @@ Game.prototype.morePlayersAllowed = function(){
 	return this.totalPlayers <= M_CONST.MAX_PLAYERS_PER_GAME;
 }
 
-//Load Properties
-var properties = require('./properties.json');
+function Location(){
+	this.x = 0;
+	this.y = 0;
+}
 
-//Load Paths
-var paths = require('./paths.json');
+Location.prototype.setX = function(x){
+	this.x = x;
+}
+
+Location.prototype.setY = function(y){
+	this.y = y;
+}
+
+Location.prototype.getX = function(){
+	return this.x;
+}
+
+Location.prototype.getY = function(){
+	return this.y;
+}
 
 // OBJECT DESCRIPTION 
-
-// function Location(){
-// 	this.x = 0;
-// 	this.y = 0;
-// 	this.z = 0;
-// }
 
 // function Property(){
 // 	this. id = null;
@@ -147,14 +160,13 @@ var paths = require('./paths.json');
 // 	this.maxLevel = null;
 // 	this.basePrice = 0;
 // 	this.Location = new Location();
+//  this.path = null;
 // }
 
 // function Map(){
 // 	this.properties = properties;
-// 	this.paths = paths;
-// }
+ // }
 
-module.exports.Map = Map;
 module.exports.Game = Game;
 module.exports.Player = Player;
 module.exports.init = mp.init;
