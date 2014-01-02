@@ -20,52 +20,59 @@ function mp(game, socket){
 		key.money = M_CONST.INITIAL_AMOUNT;
 }
 
-mp.prototype.begin = function(){
-	var i = ~~(Math.rand()%this.game.totalPlayers), j = 0;
-	for(var key in this.game.players)
-		if(j++ == i){
-			this.currentPlayer = key;
-			break;
-		}
-}
+// mp.prototype.begin = function(){
+// 	var i = ~~(Math.rand()%this.game.totalPlayers), j = 0;
+// 	for(var key in this.game.players)
+// 		if(j++ == i){
+// 			this.currentPlayer = key;
+// 			break;
+// 		}
+// }
 
-mp.prototype.getCurrentPlayer = function(){
-	return this.currentPlayer;
-}
+// mp.prototype.getCurrentPlayer = function(){
+// 	return this.currentPlayer;
+// }
 
 mp.prototype.getNextMove = function(){
 
 }
 
-function verify(game, playerName){
-	return Games.hasOwnProperty(game) && socket.hasOwnProperty(playerName);
+function verify(socket){
+	if(socket.hasOwnProperty('playerName')){
+		if(Players.hasOwnProperty(socket.playerName))
+			return Games.hasOwnProperty(Players[socket.playerName].getCurrentGame());
+			//console.log(Games);
+	}else
+		return false;
 }
 
 function findGame(socket){
-	return Games[Players[socket.PlayerName].getCurrentGame()];
+	if(verify(socket))
+		return Games[Players[socket.playerName].getCurrentGame()];
+	else
+		return null;
 }
 
 function init(G_ames, P_layers, socket){
 	Games = G_ames;
 	Players = P_layers; 
 
-	socket.on('getCurrentPlayer', function(){
-		socket.emit('ret_currentPlayer', findGame(socket).mp.getCurrentPlayer());
+	socket.on('mpCurrentPlayers', function(){
+		var players = findGame(socket).getPlayers();
+		if(players){
+			socket.emit('mpCurrentPlayers_cb', players);
+			console.log(players);
+		}
 	});
 
 	socket.on('getNextMove', function(){
 		socket.emit('ret_NextMove', findGame(socket).mp.getNextMove());
 	});
 
-	socket.on('')
 
-	// socket.on('getPropertyInfo', function(propertyID){
-	// 	socket.emit('ret_PropertyInfo', findGame(socket).Map.getPropertyInfo());
-	// });
-
-	// socket.on('applyMove', function(){
-	// 	socket.emit
-	// });
+	socket.on('PING2', function(){
+		console.log('PING2 RECEIVED');
+	});
 }
 
 module.exports.mp = mp;

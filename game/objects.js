@@ -66,14 +66,14 @@ function Game(socket){
 	this.mp = new mp.mp(this, socket);
 }
 
-function Game(creator, socket){
+function Game(creator, game, socket){
 	this.creator = creator;
 	this.createdAt = new Date();
 	this.lastActivity = this.createdAt;
 	this.players = {};
 	this.totalPlayers = 0;
 	this.socket = socket;
-	this.mp = new mp.mp(this, socket);
+	this.mp = new mp.mp(game, socket);
 }
 
 Game.prototype.getCreator = function(){

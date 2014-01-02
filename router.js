@@ -1,11 +1,11 @@
 //Load the Global Function Module
+
 var global = require('./global.js');
 // var events = require('events');
 
 var fs = require('fs');
 
 function send(req, res, file){
-	// res.sendfile(__dirname + '/public/' + file);
 	path = __dirname + '/public/' + file;
 	fs.exists(path, function (exists){
 			if(!exists)
@@ -31,8 +31,8 @@ function send404(res){
 function initialize (app){
 
 	app.use(function (req, res, next) {
-	res.header('X-powered-by', 'PSWS');
-  	next();
+		res.header('X-powered-by', 'PSWS');
+  		next();
 	});
 
 	//The account authorization goes here
@@ -53,9 +53,6 @@ function initialize (app){
 		global.log('verbose', 'Sent homepage to client: ' + req.connection.remoteAddress);
 	});
 
-	app.get('/req', function(req, res){
-		
-	});
 
 	app.get('/:folder/:file', function(req, res){
 		send(req, res, req.params.folder+'/'+req.params.file);
