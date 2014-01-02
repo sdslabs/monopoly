@@ -1,16 +1,12 @@
 //Load Game Specific Constants
 var M_CONST = require('./m_constants.json');
 
-//Load Map
-var map = require('./map.js');
-
 var Games = null;
 var Players = null;
 var game = null;
 
 function mp(game, socket){
-	this.map = new map.Map();
-	this.startedAt = new Date();
+	// this.startedAt = new Date();
 	this.game = game;
 	this.socket = socket;
 
@@ -20,19 +16,6 @@ function mp(game, socket){
 		key.money = M_CONST.INITIAL_AMOUNT;
 }
 
-// mp.prototype.begin = function(){
-// 	var i = ~~(Math.rand()%this.game.totalPlayers), j = 0;
-// 	for(var key in this.game.players)
-// 		if(j++ == i){
-// 			this.currentPlayer = key;
-// 			break;
-// 		}
-// }
-
-// mp.prototype.getCurrentPlayer = function(){
-// 	return this.currentPlayer;
-// }
-
 mp.prototype.getNextMove = function(){
 
 }
@@ -41,7 +24,6 @@ function verify(socket){
 	if(socket.hasOwnProperty('playerName')){
 		if(Players.hasOwnProperty(socket.playerName))
 			return Games.hasOwnProperty(Players[socket.playerName].getCurrentGame());
-			//console.log(Games);
 	}else
 		return false;
 }
