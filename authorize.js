@@ -257,7 +257,6 @@ function initialize(io, express){
 
 		socket.on('queryGameList', function(){
 			if(doesPlayerExist(socket.playerName)){
-				// global.log('info', JSON.stringify(Games));
 				var gameList = [];
 		 		for(var key in Games)
 		 			if(doesGameExist(key))
@@ -312,6 +311,7 @@ function initialize(io, express){
 			}
 		});	
 
+		// Fires when client abruptly terminates connection
 		socket.on('disconnect', function(){
 			if(socket.handshake.initialized){
 				global.log('info', 'Player: ' + socket.playerName + ' has timed out (removing from server)');
@@ -322,8 +322,8 @@ function initialize(io, express){
     	    }
 		});
 
+		// Debug
 		socket.on('PING', function(){
-			// console.log(Games[Players[socket.playerName].getCurrentGame()]);
 			console.log('PING RECEIVED');
 		});
 	});
