@@ -23,8 +23,73 @@ html(lang='en')
 				div(id = 'start-game', class = 'span12 text-center splash-column')
 					button(type = 'button', class = 'btn-default splash-button') Start a new Game
 
-		script(src='/scripts/init.js');
 		script(type='text/javascript').
+			var socket;
+			function init(url){
+			function setCookie(c_name,value,exdays){	
+			var exdate=new Date();
+				exdate.setDate(exdate.getDate() + exdays);
+				var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+				document.cookie=c_name + "=" + c_value;
+			}
+
+			function getCookie(c_name){
+				var c_value = document.cookie;
+				var c_start = c_value.indexOf(" " + c_name + "=");
+				if (c_start == -1){
+					c_start = c_value.indexOf(c_name + "=");
+				}
+				if (c_start == -1){
+					c_value = null;
+				}
+				else{
+					c_start = c_value.indexOf("=", c_start) + 1;
+					var c_end = c_value.indexOf(";", c_start);
+					if (c_end == -1){
+						c_end = c_value.length;
+					}
+					c_value = unescape(c_value.substring(c_start,c_end));
+				}
+				return c_value;
+			}
+
+			socket = io.connect(url);
+
+			var playerName, game;
+
+			socket.on('connect', function(){
+					playerName = prompt("What's your name?");
+
+					if(playerName=='')
+						window.location = 'https://sdslabs.co.in';
+				
+				socket.emit('addNewPlayer', playerName);
+			});
+
+
+			socket.on('addNewPlayerSuccess', function(){
+				console.log(playerName+" set.");
+			});
+
+			socket.on('createNewGameSuccess', function(){
+				console.log("Connected to game: " + game);
+			});
+		
+			socket.on('newPlayerAdded', function(userName, totalPlayers){
+				alert(userName + ' has connected!' + ' '+ totalPlayers + ' players are now in this game!!!');
+			});
+
+			socket.on('addToGameError', function(err){
+				alert(err);
+			});
+
+			$('#start-game').click(function(){
+				game = prompt ("Enter a new id for your game:");
+				if(game != '')
+					socket.emit('createNewGame', game);
+			})
+			}	
+
 			$(document).ready(function(){
 			init('http://#{locals.ip}:8080');
 				if(typeof topbar != 'undefined' && topbar != null){
