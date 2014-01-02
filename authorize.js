@@ -104,6 +104,9 @@ function initialize(io, express){
 
 	io.sockets.on('connection', function (socket){
 
+		//Adds more handlers for socket.
+		objects.init(Games, Players, socket);
+
 		socket.on('addNewPlayer', function(playerName){
 			if(playerName!=null){
 				if(!doesPlayerExist(playerName)&&
@@ -175,7 +178,7 @@ function initialize(io, express){
 												throw err;	
 									});
 									socket.join(game);
-									Games[game] = new objects.Game(socket.playerName, socket);
+									Games[game] = new objects.Game(socket.playerName, game, socket);
 									Games[game].addPlayer(socket.playerName);
 									Players[socket.playerName].setCurrentGame(game);
 
@@ -316,7 +319,7 @@ function initialize(io, express){
 		socket.on('PING', function(){
 			// console.log(Games[Players[socket.playerName].getCurrentGame()]);
 			console.log('PING RECEIVED');
-		})
+		});
 	});
 }
 
