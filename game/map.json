@@ -1,3 +1,31 @@
 {
-	
+	"properties":{
+		"1":{
+			"id":"1",
+			"name":null,
+			"location":{
+				"x":0,
+				"y":0
+			},
+			"paths":["2", "3"]
+		},
+		"2":{
+			"id":"2",
+			"name":null,
+			"location":{
+				"x":1,
+				"y":1
+			},
+			"paths":["1", "3"]
+		},
+		"3":{
+			"id":"3",
+			"name":null,
+			"location":{
+				"x":2,
+				"y":2
+			},
+			"paths":["1"]
+		}	
+	}
 }
