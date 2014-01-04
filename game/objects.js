@@ -17,15 +17,16 @@ var mp = require('./mp.js');
 
 function Player(playerName, sessionID,
 		currentGame, socket){
+	// These can be modified anywhere. Corrosponding setters and getters are needed.
 	this.playerName = playerName;
 	this.sessionID = sessionID;
 	this.lastActivity = new Date();
 	this.currentGame = currentGame;
 	this.socket = socket;
 
-
+	// These are modified only in mp.js. No setters or getters needed.
 	this.money = null;
-	this.location = new Location();
+	this.locProp = null;
 }
 
 Player.prototype.getPlayerName = function(){
@@ -77,8 +78,8 @@ function Game(creator, game, socket){
 	this.players = {};
 	this.totalPlayers = 0;
 	this.socket = socket;
-	this.map = require('./map.json');
-	this.mp = new mp.mp(map, game, socket);
+	this.map = loadMap();
+	this.mp = new mp.mp(game, socket);
 }
 
 Game.prototype.getCreator = function(){
@@ -159,13 +160,32 @@ Location.prototype.getY = function(){
 // 	this.type = null;
 // 	this.maxLevel = null;
 // 	this.basePrice = 0;
-// 	this.Location = new Location();
+// 	this.location = new Location();
 //  this.path = null;
 // }
 
 // function Map(){
 // 	this.properties = properties;
  // }
+
+// loadMap creates a new copy of the map for each game and adds functions to it
+
+function loadMap(){
+	var map = require('./map.json');
+
+	map.doesPropExist = function(property){	
+		return map.properties.hasOwnProperty(property);
+	}
+
+	map.doesPathExist = function(prop1, prop2){
+		if(map.doesPropExist(prop1))
+			if(map.properties[prop1].paths.indexOf("" + prop2) != -1)
+				return true;
+		return false;
+	}
+
+	return map;
+}
 
 module.exports.Game = Game;
 module.exports.Player = Player;
