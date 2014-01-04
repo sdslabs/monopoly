@@ -68,7 +68,7 @@ var socketio = (function()
 
 	var init = function()
 	{	
-		socket = io.connect('http://localhost:8081');
+		socket = io.connect('http://sdslabs.local:8080');
 		socket.on('connect', onConnect);
 		socket.on('addNewPlayerSuccess', addNewPlayerSuccess); 
 		socket.on('addToGameSuccess', addToGameSuccess); 

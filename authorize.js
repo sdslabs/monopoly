@@ -261,7 +261,7 @@ function initialize(io, express){
 		 		for(var key in Games)
 		 			if(doesGameExist(key))
 		 				gameList.push({'name':key, 'creator':Games[key].creator, 'numPlayers':Games[key].totalPlayers});
-				global.log('info', JSON.stringify(gameList));
+				//global.log('info', JSON.stringify(gameList));
 				socket.emit('updateGameList', JSON.stringify(gameList));
 				global.log('info', 'Game list sent to player: ' + socket.playerName);
 			}
