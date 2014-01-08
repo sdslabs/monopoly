@@ -58,6 +58,15 @@ function synchronize(){
 	});
 }
 
+//TODO
+
+function retriveSession(sessionID, callback){}
+function retrivePlayer(sessionID, callback){}
+function retriveGame(sessionID, callback){}
+function addSession(sessionID, playerName, callback){}
+function addGame(sessionID, game, callback){}
+function removeSession(sessionID, callback){}
+
 synchronize();
 
 module.exports.connection = connection;
