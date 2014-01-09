@@ -11,7 +11,6 @@ var monopoly = (function()
 		$('#create-btn').click(onCreateClick);
 		$('#back-btn').click(onBackClick);
 		$('.join-btn').on('click', onJoinClick);
-
 	};
 
 	var onStartClick = function()
@@ -32,22 +31,6 @@ var monopoly = (function()
 	{
 		socketio.joinGame($(this).attr('id'))
 	}
-	var showGameList = function(gameList)
-	{
-		console.log(gameList);
-		gameList = JSON.parse(gameList);
-		$('div#lobby-screen td').remove()
-		for(var key in gameList)
-		{
-			var game = gameList[key];
-			console.log(gameList[key])
-			var gameStatus = game['numPlayers'] == 1 ? 'Waiting' : game['numPlayers'] == 2 ? 'Ongoing' : 'Complete';
-			$('div#lobby-screen tbody').append('<tr><td>'+(parseInt(key)+1)+'</td><td>'+game['name']+'</td><td>'
-												+game['creator']+'</td><td>'+gameStatus+'</td><td><button type="button" id="'+game['name']
-												+'"class="btn btn-primary join-btn">Join</button></td></tr>');
-		}
-		addButtonHandlers()
-	}
 
 	return {
 		init:function() 
@@ -55,10 +38,10 @@ var monopoly = (function()
 			showScreen('#start-screen')
 			addButtonHandlers();
 			socketio.init();
+			angularjs.init();
 			// monopoly.canvas = $('#gamecanvas')[0];
 			// monopoly.context = monopoly.canvas.getContext('2d');
-		},
-		showGameList:showGameList
+		}
 	}
 })();
 
@@ -72,7 +55,7 @@ var socketio = (function()
 		socket.on('connect', onConnect);
 		socket.on('addNewPlayerSuccess', addNewPlayerSuccess); 
 		socket.on('addToGameSuccess', addToGameSuccess); 
-		socket.on('updateGameList', monopoly.showGameList)
+		socket.on('updateGameList', angularjs.updateGameList)
 		socket.on('createNewGameSuccess', createNewGameSuccess)
 		socket.on('newPlayerAdded', newPlayerAdded)
 	}	
@@ -133,6 +116,7 @@ var socketio = (function()
 	}
 	var createGame = function(gameName)
 	{
+		console.log(gameName)
 		socket.emit('createNewGame', gameName)
 	}
 	var joinGame = function(gameName)
@@ -145,5 +129,31 @@ var socketio = (function()
 		getGameList:getGameList,
 		createGame:createGame,
 		joinGame:joinGame
+	}
+})();
+
+var angularjs = (function()
+{
+	var monopolyApp = angular.module('monopoly-app', ['ngRoute']);
+	monopolyApp.controller('game-list-controller', function($scope)
+		{
+			$scope.gameList = []
+		});
+	return {
+		init: function()
+		{
+
+		},
+
+		updateGameList: function(list)
+		{
+			var scope = angular.element($('#lobby-screen')).scope()
+			scope.$apply(function()
+			{
+				scope.gameList = []
+				scope.gameList = JSON.parse(list)
+			})
+		},
+		monopolyApp: monopolyApp
 	}
 })();

@@ -1,5 +1,5 @@
 !!! 5
-html(lang='en')
+html(lang='en' ng-app='monopoly-app')
 	head
 		title Monopoly
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
@@ -8,28 +8,41 @@ html(lang='en')
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap.min.css', media = 'screen')
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap-responsive.min.css', media = 'screen')
 
-		<!--link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css')-->
+		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css')
 
 		link(rel ='stylesheet', type='text/css', href='/css/custom.css')
 
 		script(src='/socket.io/socket.io.js')
 		script(src='/js/jquery.js')
 		script(src='/js/bootstrap.min.js')
-		
-		<!--script(src='http://sdslabs.local/api/public/api.js')-->
+		script(src='/js/angular.js')
+		script(src='/js/angular-route.js')
+		<!--Change to minified versions for production-->
+
+		script(src='https://sdslabs.co.in/api/public/api.js')
 		
 	body
 		div(class = 'container game-layer' id='start-screen')
 				div(id = 'start-game', class = 'span12 text-center splash-column')
 					button(type = 'button', class = 'btn btn-primary btn-lg', id='start-btn') Start
-		div(class = 'container game-layer' id='lobby-screen')
-			div(class = 'row span12 text-center')
-				table(class = 'table')			
+		div(class = 'container game-layer' id='lobby-screen' ng-controller='game-list-controller')
+			div(class = 'row span12 text-center white-wrap')
+				table(class = 'table game-list')			
 					tr
 						th #
 						th Name
 						th Created By
-						th Game Status
+						th Players
+						th Join
+
+					tr(ng-repeat='game in gameList track by $index')
+						td {{$index+1}}
+						td {{game.name}}
+						td {{game.creator}}
+						td {{game.numPlayers}}
+						td 
+							button(type = 'button', class = 'btn btn-primary btn-lg join-btn' id='{{game.name}}') Join
+
 				button(type = 'button', class = 'btn btn-primary btn-lg', id='create-btn') Create
 				button(type = 'button', class = 'btn btn-primary btn-lg', id='back-btn') Back
 									
