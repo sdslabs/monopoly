@@ -7,10 +7,10 @@ var monopoly = (function()
 	};
 	var addButtonHandlers = function()
 	{
-		$('#start-btn').click(onStartClick);
-		$('#create-btn').click(onCreateClick);
-		$('#back-btn').click(onBackClick);
-		$('.join-btn').on('click', onJoinClick);
+		$('body').on('click','#start-btn', onStartClick);
+		$('body').on('click','#create-btn', onCreateClick);
+		$('body').on('click','#back-btn', onBackClick);
+		$('body').on('click','.join-btn', onJoinClick);
 	};
 
 	var onStartClick = function()
@@ -29,7 +29,8 @@ var monopoly = (function()
 	}
 	var onJoinClick = function()
 	{
-		socketio.joinGame($(this).attr('id'))
+		console.log(1111)
+		// socketio.joinGame($(this).attr('id'))
 	}
 
 	return {
