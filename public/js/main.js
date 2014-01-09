@@ -29,8 +29,8 @@ var monopoly = (function()
 	}
 	var onJoinClick = function()
 	{
-		console.log(1111)
-		// socketio.joinGame($(this).attr('id'))
+		console.log('Sent join message')
+		socketio.joinGame($(this).attr('id'))
 	}
 
 	return {
@@ -59,6 +59,8 @@ var socketio = (function()
 		socket.on('updateGameList', angularjs.updateGameList)
 		socket.on('createNewGameSuccess', createNewGameSuccess)
 		socket.on('newPlayerAdded', newPlayerAdded)
+		socket.on('gameListChanged', gameListChanged)
+
 	}	
 
 	var setCookie = function(c_name,value,exdays){	
@@ -123,6 +125,11 @@ var socketio = (function()
 	var joinGame = function(gameName)
 	{
 		socket.emit('addToGame', gameName)
+	}
+	var gameListChanged = function()
+	{
+		console.log('game list change')
+		getGameList();
 	}
 
 	return {

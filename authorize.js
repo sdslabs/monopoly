@@ -161,6 +161,7 @@ function initialize(io, express){
 							Players[socket.playerName].setCurrentGame(game);
 							socket.emit('createNewGameSuccess', 'Connected to game: '+game);
 							socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
+							socket.broadcast.emit('gameListChanged');
 							global.log('info', socket.playerName +' connected to game: ' + game);
 						}
 					});
@@ -187,6 +188,7 @@ function initialize(io, express){
 					
 								socket.emit('addToGameSuccess', game);
 								socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
+								socket.broadcast.emit('gameListChanged');
 								global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 							}
 						});
