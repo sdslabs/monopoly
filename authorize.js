@@ -53,7 +53,7 @@ function removePlayerFromGame(socket){
 
 			socket.leave(game);
 			Players[socket.playerName].setCurrentGame(null);
-			db.removePlayer(Players[socket.playerName].getSessionID());
+			db.removeGame(Players[socket.playerName].getSessionID());
 			
 			return true;
 		}
