@@ -113,7 +113,6 @@ function initialize(io, express){
 					&&!socket.hasOwnProperty(playerName)){
 						db.retrivePlayer(socket.handshake.sessionID, 
         					function(player){
-        						console.log("here");
         						if(player != ''){
         			 				socket.playerName = player;
         			 				socket.handshake.initialized = true;
@@ -153,35 +152,23 @@ function initialize(io, express){
 		
 		socket.on('createNewGame', function(game){
 			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.playerName].currentGame==''&&game!=''){
-					dbConnect.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
-        					function(err, row, fields){
-        					if(err)
-        						throw err;
-        					if(row[0]){
-        						if(row[0].game!=null){
-        							Players[socket.playerName].currentGame = row[0].game;
-        			 				global.log("info", "Player " + socket.playerName + " has reconected to game: "+ row[0].game);
-        			 			}
-        			 			else{
-									var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
-									dbConnect.query(Query,
-										function(err, row, fields){
-											if(err)
-												throw err;	
-									});
-									socket.join(game);
-									Games[game] = new objects.Game(socket.playerName, game, socket);
-									Games[game].addPlayer(socket.playerName);
-									Players[socket.playerName].setCurrentGame(game);
-
-									socket.emit('createNewGameSuccess', 'Connected to game: '+game);
-									socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
-									global.log('info', socket.playerName +' connected to game: ' + game);
-								}
-							}
-						});
-			}
-			else{
+				db.retriveGame(socket.handshake.sessionID, 
+        			function(dbGame){
+        				if(dbGame != ''){
+        					Players[socket.playerName].currentGame = dbGame;
+        			 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
+        			 	}else{
+							db.addGame(Players[socket.playerName].getSessionID(), game);
+							socket.join(game);
+							Games[game] = new objects.Game(socket.playerName, game, socket);
+							Games[game].addPlayer(socket.playerName);
+							Players[socket.playerName].setCurrentGame(game);
+							socket.emit('createNewGameSuccess', 'Connected to game: '+game);
+							socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
+							global.log('info', socket.playerName +' connected to game: ' + game);
+						}
+					});
+			}else{
 				socket.emit('addToGameError', 'Not authorized to create game');
 				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
 			}
@@ -189,33 +176,22 @@ function initialize(io, express){
 
 		socket.on('addToGame', function(game){
 			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null&&game!=''){
-				if(Games[game].morePlayersAllowed()){
-								
-					dbConnect.query('SELECT game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
-        					function(err, row, fields){
-        					if(err)
-        						throw err;
-        					if(row[0]){
-        						if(row[0].game!=null){
-        							Players[socket.playerName].currentGame = row[0].game;
-        			 				global.log("info", "Player " + socket.playerName + " has reconected to game: "+ row[0].game);
-        			 			}
-        			 			else{
-									var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
-									dbConnect.query(Query,
-										function(err, row, fields){
-											if(err)
-												throw err;	
-									});
-									socket.join(game);
+				if(Games[game].morePlayersAllowed()){		
+					db.retriveGame(socket.handshake.sessionID, 
+        				function(dbGame){
+        					if(dbGame != ''){
+        						Players[socket.playerName].currentGame = dbGame;
+        				 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ row[0].game);
+        				 	}else{
+								db.addGame(Players[socket.playerName].getSessionID(), game);
+								socket.join(game);
 
-									Games[game].addPlayer(socket.playerName);
-									Players[socket.playerName].setCurrentGame(game);
-						
-									socket.emit('addToGameSuccess', game);
-									socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
-									global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
-								}
+								Games[game].addPlayer(socket.playerName);
+								Players[socket.playerName].setCurrentGame(game);
+					
+								socket.emit('addToGameSuccess', game);
+								socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
+								global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 							}
 						});
 				}	
