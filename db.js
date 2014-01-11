@@ -4,6 +4,9 @@ var CONST = require('./constants.js');
 //Load the Global Function Module
 var global = require('./global.js');
 
+//Load the MySQL module
+var mysql = require('mysql');
+
 var SessionStore = null;
 
 function connect(express, app){
@@ -23,8 +26,6 @@ function connect(express, app){
 	}));
 	module.exports.SessionStore = SessionStore;
 }
-
-var mysql = require('mysql');
 
 var connection = mysql.createConnection({
 	host:      CONST.G_MYSQL_HOST,
@@ -56,6 +57,81 @@ function synchronize(){
 			global.log('info', 'Synchronized tables in MySQL.');
 		}
 	});
+}
+
+module.exports.retrivePlayer = function (sessionID, callback){
+	connection.query('SELECT player FROM sktio WHERE session = \"'+sessionID+'\"',
+        function(err, row, fields){
+        	if(err)
+        		throw err;
+        	if(row[0]){
+        		if(row[0].hasOwnProperty('player'))
+        			callback(row[0].player);
+        	}else
+        		callback('');
+        });
+}
+
+module.exports.addPlayer = function (sessionID, playerName, callback){
+	var Query = 'INSERT into sktio (session, player) VALUES '+'(\"'
+				+sessionID+'\"'+', \"'+playerName+'\")';
+	connection.query(Query,
+		function(err, row, fields){
+			if(err)
+				throw err;	
+			if(callback)
+				callback();
+		});
+}
+
+module.exports.retriveGame = function (sessionID, callback){
+	connection.query('SELECT game FROM sktio WHERE session = \"'+sessionID+'\"',
+        function(err, row, fields){
+        	if(err)
+        		throw err;
+        	if(row[0]){
+        		if(row[0].hasOwnProperty('game'))
+        			if(row[0].game!=null)
+        				callback(row[0].game);
+        			else
+        				callback('');
+        	}else
+        		callback('');
+        });
+}
+
+
+module.exports.addGame = function (sessionID, game, callback){
+	var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+sessionID+'\"';
+	connection.query(Query,
+		function(err, row, fields){
+			if(err)
+				throw err;	
+			if(callback)
+				callback();
+		});
+}
+
+module.exports.removeGame = function (sessionID, callback){
+	module.exports.addGame(sessionID, 'null', callback);
+}
+
+module.exports.removeSession = function (sessionID, callback){
+	var Query = 'DELETE FROM sktio WHERE session = \"'+sessionID+'\"';
+	connection.query(Query, 
+		function(err, row, fields){
+			if(err)
+				throw err;
+		});	
+	
+	var Query = 'DELETE FROM Sessions WHERE sid = \"'+sessionID+'\"';
+	connection.query(Query, 
+		function(err, row, fields){
+			if(err)
+				throw err;
+			if(callback)
+				callback();	
+		});
 }
 
 synchronize();
