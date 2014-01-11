@@ -111,14 +111,11 @@ function initialize(io, express){
 				if(!doesPlayerExist(playerName)&&
 					playerName.replace(/\s/g, '')!=''
 					&&!socket.hasOwnProperty(playerName)){
-
-						dbConnect.query('SELECT player, game FROM sktio WHERE session = \"'+socket.handshake.sessionID+'\"',
-        					function(err, row, fields){
-        					if(err)
-        						throw err;
-        					if(row[0]){
-        						if(row[0].hasOwnProperty('player')){
-        			 				socket.playerName = row[0].player;
+						db.retrivePlayer(socket.handshake.sessionID, 
+        					function(player){
+        						console.log("here");
+        						if(player != ''){
+        			 				socket.playerName = player;
         			 				socket.handshake.initialized = true;
 
         			 				if(playerName!=socket.playerName)
@@ -130,29 +127,20 @@ function initialize(io, express){
         			 					Players[socket.playerName] = new objects.Player(socket.playerName,
 		        			 				socket.handshake.sessionID, '', socket);
 
-        			 			}
-        			 		}
-        			 		else{
-        			 			var Query = 'INSERT into sktio (session, player) VALUES '+'(\"'
-									+socket.handshake.sessionID+'\"'+', \"'+playerName+'\")';
-								dbConnect.query(Query,
-									function(err, row, fields){
-										if(err)
-											throw err;	
-								});
+        			 			}else{
+									db.addPlayer(socket.handshake.sessionID, playerName);
 									
-								socket.playerName = playerName;
-								socket.handshake.initialized = true;
+									socket.playerName = playerName;
+									socket.handshake.initialized = true;
 
-        			 			Players[socket.playerName] = new objects.Player(socket.playerName,
+        			 				Players[socket.playerName] = new objects.Player(socket.playerName,
         			 				socket.handshake.sessionID, '', socket);
         			 				
-								socket.emit('addNewPlayerSuccess');
-								global.log('info', 'Player: ' + socket.playerName + ' logged in.');
-        			 		} 	
-        				});
-				}
-				else{
+									socket.emit('addNewPlayerSuccess');
+									global.log('info', 'Player: ' + socket.playerName + ' logged in.');
+        			 			} 	
+        					});
+				}else{
 					socket.emit('addNewPlayerFailed', playerName + ' already exists or illegal name');
 					global.log('warn', playerName + ' was refused connection. Already exists.');
 				}
