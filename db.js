@@ -64,9 +64,11 @@ module.exports.retrivePlayer = function retrivePlayer(sessionID, callback){
         function(err, row, fields){
         	if(err)
         		throw err;
-        	if(row[0])
+        	if(row[0]){
         		if(row[0].hasOwnProperty('player'))
-        	callback(row[0].player);
+        			callback(row[0].player);
+        	}else
+        		callback('');
         });
 }
 
@@ -87,9 +89,11 @@ module.exports.retriveGame = function retriveGame(sessionID, callback){
         function(err, row, fields){
         	if(err)
         		throw err;
-        	if(row[0])
+        	if(row[0]){
         		if(row[0].hasOwnProperty('game'))
-        	callback(row[0].game);
+        			callback(row[0].game);
+        	}else
+        		callback('');
         });
 }
 
