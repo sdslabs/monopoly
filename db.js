@@ -104,7 +104,23 @@ module.exports.addGame = function addGametoPlayer(sessionID, game, callback){
 				callback();
 		});
 }
-module.exports.removeSession = function removeSession(sessionID, callback){}
+module.exports.removeSession = function removeSession(sessionID, callback){
+	var Query = 'DELETE FROM sktio WHERE session = \"'+sessionID+'\"';
+	connection.query(Query, 
+		function(err, row, fields){
+			if(err)
+				throw err;
+		});	
+	
+	var Query = 'DELETE FROM Sessions WHERE sid = \"'+sessionID+'\"';
+	connection.query(Query, 
+		function(err, row, fields){
+			if(err)
+				throw err;
+			if(callback)
+				callback();	
+		});
+}
 
 synchronize();
 
