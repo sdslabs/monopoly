@@ -13,7 +13,6 @@ var parseSignedCookies = require('express/node_modules/connect/lib/utils').parse
 
 //Load the MySQL Driver
 var db = require('./db.js');
-var dbConnect = db.connection;
 
 //Global Objects containing current game and player info
 var Games = {};	//Active Games
@@ -54,11 +53,8 @@ function removePlayerFromGame(socket){
 
 			socket.leave(game);
 			Players[socket.playerName].setCurrentGame(null);
-			var Query = 'UPDATE sktio SET game = '+'null WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
-				dbConnect.query(Query, function(err, row, fields){
-					if(err)
-						throw err;	
-				});
+			db.removePlayer(Players[socket.playerName].getSessionID());
+			
 			return true;
 		}
 		else
@@ -194,8 +190,7 @@ function initialize(io, express){
 								global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 							}
 						});
-				}	
-				else{	
+				}else{	
 					socket.emit('addToGameError', 'This game is full!!!');
 					global.log('warn', 'Player ' + socket.playerName + ' refused access to '+ game + '.This game is full.');
 				}
@@ -225,7 +220,6 @@ function initialize(io, express){
 		 		for(var key in Games)
 		 			if(doesGameExist(key))
 		 				gameList.push({'name':key, 'creator':Games[key].creator, 'numPlayers':Games[key].totalPlayers});
-				//global.log('info', JSON.stringify(gameList));
 				socket.emit('updateGameList', JSON.stringify(gameList));
 				global.log('info', 'Game list sent to player: ' + socket.playerName);
 			}
@@ -247,19 +241,7 @@ function initialize(io, express){
                 		socket.emit('logoutFail', 'Internal Server error occured');
                 	}
                 	else{
-                		var Query = 'DELETE FROM sktio WHERE session = \"'+Players[socket.playerName].getSessionID()+'\"';
-							dbConnect.query(Query, 
-								function(err, row, fields){
-									if(err)
-										throw err;
-										});	
-						var Query = 'DELETE FROM Sessions WHERE sid = \"'+Players[socket.playerName].getSessionID()+'\"';
-							dbConnect.query(Query, 
-								function(err, row, fields){
-									if(err)
-										throw err;	
-									});
-
+                		db.removeSession(Players[socket.playerName].getSessionID());
 						removePlayerFromGame(socket);
                 		global.log('info', "Player: " + socket.playerName + " has logged out.");
                 		delete Players[socket.playerName];

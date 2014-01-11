@@ -59,7 +59,7 @@ function synchronize(){
 	});
 }
 
-module.exports.retrivePlayer = function retrivePlayer(sessionID, callback){
+module.exports.retrivePlayer = function (sessionID, callback){
 	connection.query('SELECT player FROM sktio WHERE session = \"'+sessionID+'\"',
         function(err, row, fields){
         	if(err)
@@ -72,7 +72,7 @@ module.exports.retrivePlayer = function retrivePlayer(sessionID, callback){
         });
 }
 
-module.exports.addPlayer = function addPlayer(sessionID, playerName, callback){
+module.exports.addPlayer = function (sessionID, playerName, callback){
 	var Query = 'INSERT into sktio (session, player) VALUES '+'(\"'
 				+sessionID+'\"'+', \"'+playerName+'\")';
 	connection.query(Query,
@@ -84,7 +84,7 @@ module.exports.addPlayer = function addPlayer(sessionID, playerName, callback){
 		});
 }
 
-module.exports.retriveGame = function retriveGame(sessionID, callback){
+module.exports.retriveGame = function (sessionID, callback){
 	connection.query('SELECT game FROM sktio WHERE session = \"'+sessionID+'\"',
         function(err, row, fields){
         	if(err)
@@ -101,7 +101,7 @@ module.exports.retriveGame = function retriveGame(sessionID, callback){
 }
 
 
-module.exports.addGame = function addGametoPlayer(sessionID, game, callback){
+module.exports.addGame = function (sessionID, game, callback){
 	var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+sessionID+'\"';
 	connection.query(Query,
 		function(err, row, fields){
@@ -111,7 +111,12 @@ module.exports.addGame = function addGametoPlayer(sessionID, game, callback){
 				callback();
 		});
 }
-module.exports.removeSession = function removeSession(sessionID, callback){
+
+module.exports.removeGame = function (sessionID, callback){
+	module.exports.addGame(sessionID, 'null', callback);
+}
+
+module.exports.removeSession = function (sessionID, callback){
 	var Query = 'DELETE FROM sktio WHERE session = \"'+sessionID+'\"';
 	connection.query(Query, 
 		function(err, row, fields){
