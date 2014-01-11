@@ -91,7 +91,10 @@ module.exports.retriveGame = function retriveGame(sessionID, callback){
         		throw err;
         	if(row[0]){
         		if(row[0].hasOwnProperty('game'))
-        			callback(row[0].game);
+        			if(row[0].game!=null)
+        				callback(row[0].game);
+        			else
+        				callback('');
         	}else
         		callback('');
         });
