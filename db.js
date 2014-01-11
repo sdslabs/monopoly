@@ -4,6 +4,9 @@ var CONST = require('./constants.js');
 //Load the Global Function Module
 var global = require('./global.js');
 
+//Load the MySQL module
+var mysql = require('mysql');
+
 var SessionStore = null;
 
 function connect(express, app){
@@ -23,8 +26,6 @@ function connect(express, app){
 	}));
 	module.exports.SessionStore = SessionStore;
 }
-
-var mysql = require('mysql');
 
 var connection = mysql.createConnection({
 	host:      CONST.G_MYSQL_HOST,
@@ -58,14 +59,52 @@ function synchronize(){
 	});
 }
 
-//TODO
+module.exports.retrivePlayer = function retrivePlayer(sessionID, callback){
+	connection.query('SELECT player FROM sktio WHERE session = \"'+sessionID+'\"',
+        function(err, row, fields){
+        	if(err)
+        		throw err;
+        	if(row[0])
+        		if(row[0].hasOwnProperty('player'))
+        	callback(row[0].player);
+        });
+}
 
-function retriveSession(sessionID, callback){}
-function retrivePlayer(sessionID, callback){}
-function retriveGame(sessionID, callback){}
-function addSession(sessionID, playerName, callback){}
-function addGame(sessionID, game, callback){}
-function removeSession(sessionID, callback){}
+module.exports.addPlayer = function addPlayer(sessionID, playerName, callback){
+	var Query = 'INSERT into sktio (session, player) VALUES '+'(\"'
+				+sessionID+'\"'+', \"'+playerName+'\")';
+	connection.query(Query,
+		function(err, row, fields){
+			if(err)
+				throw err;	
+			if(callback)
+				callback();
+		});
+}
+
+module.exports.retriveGame = function retriveGame(sessionID, callback){
+	connection.query('SELECT game FROM sktio WHERE session = \"'+sessionID+'\"',
+        function(err, row, fields){
+        	if(err)
+        		throw err;
+        	if(row[0])
+        		if(row[0].hasOwnProperty('game'))
+        	callback(row[0].game);
+        });
+}
+
+
+module.exports.addGame = function addGametoPlayer(sessionID, game, callback){
+	var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+sessionID+'\"';
+	connection.query(Query,
+		function(err, row, fields){
+			if(err)
+				throw err;	
+			if(callback)
+				callback();
+		});
+}
+module.exports.removeSession = function removeSession(sessionID, callback){}
 
 synchronize();
 
