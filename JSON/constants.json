@@ -12,6 +12,8 @@
 
 	"G_IFACE": "eth0",
 
+	"G_DB_SYNC_TIME": 1200000,
+
 	"G_SSL_KEY_FILE": "serverKey.pem",
 	"G_SSL_CERT_FILE": "serverCert.pem",
 

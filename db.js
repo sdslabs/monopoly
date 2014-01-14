@@ -135,6 +135,7 @@ module.exports.removeSession = function (sessionID, callback){
 }
 
 synchronize();
+setInterval(synchronize, CONST.G_DB_SYNC_TIME);
 
 module.exports.connection = connection;
 module.exports.connect = connect;
