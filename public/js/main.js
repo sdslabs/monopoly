@@ -12,6 +12,7 @@ var monopoly = (function()
 		$('body').on('click','#back-btn', onBackClick);
 		$('body').on('click','.join-btn', onJoinClick);
 		$('body').on('click','#leave-btn', onLeaveClick);
+		$('body').on('click','#begin-btn', onBeginClick);
 	};
 
 	var onStartClick = function()
@@ -22,6 +23,7 @@ var monopoly = (function()
 	var onCreateClick = function()
 	{
 		var gameName = prompt("Enter a game name");
+		angularjs.initCreatorControls(true)
 		showScreen('#room-screen');
 		socketio.createGame(gameName);
 	}
@@ -39,6 +41,15 @@ var monopoly = (function()
 		showScreen('#lobby-screen');
 		socketio.exitFromGame($(this).attr('id'));
 	}
+	var onBeginClick = function()
+	{
+		socketio.beginGame()
+		beginGame()
+	}
+	var beginGame = function()
+	{
+		showScreen('#game-screen');
+	}
 
 	return {
 		init:function() 
@@ -49,7 +60,8 @@ var monopoly = (function()
 			angularjs.init();
 			// monopoly.canvas = $('#gamecanvas')[0];
 			// monopoly.context = monopoly.canvas.getContext('2d');
-		}
+		},
+		beginGame:beginGame
 	}
 })();
 
@@ -70,6 +82,7 @@ var socketio = (function()
 		socket.on('gameListChanged', getGameList)
 		socket.on('playerListChanged', getPlayerList)
 		socket.on('exitFromGameSuccess', exitFromGameSuccess)
+		socket.on('beginGame', monopoly.beginGame)
 	}	
 
 	var setCookie = function(c_name,value,exdays){	
@@ -138,6 +151,10 @@ var socketio = (function()
 	{
 		socket.emit('addToGame', gameName)
 	}
+	var beginGame = function()
+	{
+		socket.emit('beginGame')
+	}
 	var exitFromGame = function()
 	{
 		socket.emit('exitFromGame')
@@ -153,6 +170,7 @@ var socketio = (function()
 		getPlayerList:getPlayerList,
 		createGame:createGame,
 		joinGame:joinGame,
+		beginGame:beginGame,
 		exitFromGame:exitFromGame
 	}
 })();
@@ -161,13 +179,15 @@ var angularjs = (function()
 {
 	var monopolyApp = angular.module('monopoly-app', ['ngRoute']);
 	monopolyApp.controller('game-list-controller', function($scope)
-		{
-			$scope.gameList = []
-		});
+	{
+		$scope.gameList = []
+	});
 	monopolyApp.controller('player-list-controller', function($scope)
-		{
-			$scope.playerList = []
-		});
+	{
+		$scope.playerList = []
+		$scope.creatorCheck = false
+	});
+
 	return {
 		init: function()
 		{
@@ -186,7 +206,6 @@ var angularjs = (function()
 
 		updatePlayerList: function(list)
 		{
-			console.log(list)
 			var scope = angular.element($('#room-screen')).scope()
 			scope.$apply(function()
 			{
@@ -194,6 +213,15 @@ var angularjs = (function()
 				scope.playerList = JSON.parse(list)
 			})
 
+		},
+
+		initCreatorControls: function(creatorCheck)
+		{
+			var scope = angular.element($('#room-screen')).scope()
+			scope.$apply(function()
+			{
+				scope.creatorCheck = creatorCheck
+			})
 		},
 
 		monopolyApp: monopolyApp
