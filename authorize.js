@@ -42,8 +42,8 @@ function removePlayerFromGame(socket){
 			Games[game].removePlayer(socket.playerName);
 			global.log('info', socket.playerName +' has left the game: ' + game);
 			socket.leave(game);
-			Players[socket.playerName].setCurrentGame(null);
 			db.removeGame(Players[socket.playerName].getSessionID());
+			Players[socket.playerName].removeCurrentGame();
 
 			if(Games[game].getTotalPlayers()<1){
 				delete Games[game];
@@ -54,11 +54,8 @@ function removePlayerFromGame(socket){
 				socket.broadcast.to(game).emit('playerListChanged');
 			}	
 
-			socket.emit('exitFromGameSuccess', 'socket.game');
 			socket.broadcast.emit('gameListChanged')
-			
-			Players[socket.playerName].removeCurrentGame();
-			db.removeGame(Players[socket.playerName].getSessionID());
+			socket.emit('exitFromGameSuccess', 'socket.game');
 			
 			return true;
 		}
@@ -153,23 +150,23 @@ function initialize(io, express){
 		
 		socket.on('createNewGame', function(game){
 			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.playerName].getCurrentGame()==null&&game!=''){
-				db.retriveGame(socket.handshake.sessionID, 
-        			function(dbGame){
-        				if(dbGame != ''){
-        					Players[socket.playerName].currentGame = dbGame;
-        			 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
-        			 	}else{
+			// 	db.retriveGame(socket.handshake.sessionID, 
+   //      			function(dbGame){
+   //      				if(dbGame != ''){
+   //      					Players[socket.playerName].currentGame = dbGame;
+   //      			 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
+   //      			 	}else{
 							db.addGame(Players[socket.playerName].getSessionID(), game);
 							socket.join(game);
 							Games[game] = new objects.Game(socket.playerName, game, socket);
 							Games[game].addPlayer(socket.playerName);
 							Players[socket.playerName].setCurrentGame(game);
-							socket.emit('createNewGameSuccess', 'Connected to game: '+game);
 							socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
 							socket.broadcast.emit('gameListChanged');
+							socket.emit('createNewGameSuccess');
 							global.log('info', socket.playerName +' connected to game: ' + game);
-						}
-					});
+						// }
+					// });
 			}else{
 				socket.emit('addToGameError', 'Not authorized to create game');
 				console.log(!doesGameExist(game));
@@ -184,25 +181,25 @@ function initialize(io, express){
 		socket.on('addToGame', function(game){
 			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null&&game!=''){
 				if(Games[game].morePlayersAllowed()){		
-					db.retriveGame(socket.handshake.sessionID, 
-        				function(dbGame){
-        					if(dbGame != ''){
-        						Players[socket.playerName].currentGame = dbGame;
-        				 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
-        				 	}else{
+					// db.retriveGame(socket.handshake.sessionID, 
+     //    				function(dbGame){
+     //    					if(dbGame != ''){
+     //    						Players[socket.playerName].currentGame = dbGame;
+     //    				 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
+     //    				 	}else{
 								db.addGame(Players[socket.playerName].getSessionID(), game);
 								socket.join(game);
 
 								Games[game].addPlayer(socket.playerName);
 								Players[socket.playerName].setCurrentGame(game);
 					
-								socket.emit('addToGameSuccess', game);
 								socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
 								socket.broadcast.emit('gameListChanged');
 								socket.broadcast.to(game).emit('playerListChanged');
+								socket.emit('addToGameSuccess', game);
 								global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
-							}
-						});
+							// }
+						// });
 				}else{	
 					socket.emit('addToGameError', 'This game is full!!!');
 					global.log('warn', 'Player ' + socket.playerName + ' refused access to '+ game + '.This game is full.');
