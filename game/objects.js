@@ -75,7 +75,7 @@ function Game(creator, game, socket){
 	this.creator = creator;
 	this.createdAt = new Date();
 	this.lastActivity = this.createdAt;
-	this.players = {};
+	this.players = [];
 	this.totalPlayers = 0;
 	this.socket = socket;
 	this.map = loadMap();
@@ -113,14 +113,15 @@ Game.prototype.setcreatedAt = function(createdAt){
 }
 
 Game.prototype.addPlayer = function(playerName){
-	this.players[playerName] = '';
+	// this.players[playerName] = '';
+	this.players.push(playerName);
 	this.lastActivity = new Date();
 	this.totalPlayers++;
 }
 
 Game.prototype.removePlayer = function(playerName){
-	if(this.players.hasOwnProperty(playerName)){
-		delete this.players[playerName];
+	if(this.players.indexOf(playerName) != -1){
+		this.players.splice(this.players.indexOf(playerName), 1);
 		this.totalPlayers--;
 		this.lastActivity = new Date();
 	}
