@@ -49,7 +49,7 @@ function init(G_ames, P_layers, socket){
 		if(game){
 			var players = game.getPlayers();
 			if(players){
-				socket.emit('mpCurrentPlayers_cb', players);
+				socket.emit('mpCurrentPlayersSuccess', players);
 				console.log(players);
 			}
 		}
@@ -60,7 +60,8 @@ function init(G_ames, P_layers, socket){
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
 			console.log(Players);
-			socket.emit("mpInitComplete");
+			socket.emit("mpInitSuccess");
+			socket.emitR("mpInitBy", player.playerName);
 
 	});
 
@@ -91,14 +92,29 @@ function init(G_ames, P_layers, socket){
 				
 			if(!flag){
 				var nextPlayer = game.mp.getNextPlayer();
-				socket.broadcast.to(game).emit('mpPlayerMove', route, nextPlayer);
-				socket.emit("mpMoveAccepted", nextPlayer);
+				socket.emitR('mpPlayerMove', route, nextPlayer);
+				socket.emit("mpMoveSuccess", nextPlayer);
 				global.log('verbose', "Move by " + socket.playerName + " in game " + player.getCurrentGame() + ". Route " + route + ".");
 			}
 			else{
 				socket.emit("mpMoveRejected");
 			}
 		}
+	});
+
+	socket.on("mpBuy", function(property){
+		var player = findPlayer(socket);
+		var game = findGame(socket);
+
+		if(game.mp.currentPlayer.equals(player.playerName))
+			if(game.map.properties.hasOwnProperty(property))
+				if(game.map.properties[property].owner.equals(M_CONST.NO_OWNER))
+					if(player.money > game.map.properties[property].value){
+						game.map.properties[property].owner = player.playerName;
+						player.propOwned.push(property);
+						socket.emit("mpBuySuccess");
+						socket.emitR("mpBuyBy", player.playerName, property);
+					}
 	});
 
 	socket.on('PING2', function(garb1, garb2){
