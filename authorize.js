@@ -48,9 +48,11 @@ function removePlayerFromGame(socket){
 			}
 			else{	
 				socket.broadcast.to(game).emit('playerExited', socket.playerName);
+				socket.broadcast.emit('playerListChanged');
 				socket.emit('exitFromGameSuccess', 'socket.game');
 			}	
 
+			socket.broadcast.emit('gameListChanged')
 			socket.leave(game);
 			Players[socket.playerName].removeCurrentGame();
 			db.removeGame(Players[socket.playerName].getSessionID());
