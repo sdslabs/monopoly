@@ -21,6 +21,17 @@ mp.prototype.getNextPlayer = function(){
 	return this.currentPlayer;
 }
 
+mp.prototype.levyTax = function(){
+	var player =  findPlayer(this.socket);
+	var prop = player.locProp;
+	if(this.game.map.properties[prop].owner != M_CONST.NO_OWNER){
+		player.money = player.money *= 0.95;
+		socket.emit("mpTaxLevied");
+		socket.emitR("mpTaxLevied", player.playerName);
+	}
+	 
+}
+
 // Fetches a game associated with a socket.
 function findGame(socket){
 	if(socket.hasOwnProperty('playerName')){
@@ -59,7 +70,6 @@ function init(G_ames, P_layers, socket){
 			var player = findPlayer(socket);
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
-			console.log(Players);
 			socket.emit("mpInitSuccess");
 			socket.emitR("mpInitBy", player.playerName);
 
@@ -91,6 +101,7 @@ function init(G_ames, P_layers, socket){
 				flag = true;
 				
 			if(!flag){
+				game.mp.levyTax();
 				var nextPlayer = game.mp.getNextPlayer();
 				socket.emitR('mpPlayerMove', route, nextPlayer);
 				socket.emit("mpMoveSuccess", nextPlayer);
