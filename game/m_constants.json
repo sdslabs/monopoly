@@ -2,5 +2,6 @@
 	"MAX_PLAYERS_PER_GAME" : 4,
 	"INITIAL_AMOUNT": 500,
 	"START_PROP": "-1",
-	"FIRST_PROP": "1"
+	"FIRST_PROP": "1",
+	"NO_OWNER": ""
 }
