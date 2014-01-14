@@ -37,7 +37,7 @@ var monopoly = (function()
 	var onLeaveClick = function()
 	{
 		showScreen('#lobby-screen');
-		socketio.exitGame($(this).attr('id'));
+		socketio.exitFromGame($(this).attr('id'));
 	}
 
 	return {
@@ -69,7 +69,7 @@ var socketio = (function()
 		socket.on('newPlayerAdded', newPlayerAdded)
 		socket.on('gameListChanged', getGameList)
 		socket.on('playerListChanged', getPlayerList)
-		socket.on('exitFromRoomSuccess', exitRoomSuccess)
+		socket.on('exitFromGameSuccess', exitFromGameSuccess)
 
 
 	}	
@@ -140,12 +140,13 @@ var socketio = (function()
 	{
 		socket.emit('addToGame', gameName)
 	}
-	var exitGame = function()
+	var exitFromGame = function()
 	{
 		socket.emit('exitFromGame')
 	}
-	var exitGameSuccess = function()
+	var exitFromGameSuccess = function()
 	{
+		console.log('getting game list')
 		getGameList()
 	}
 
@@ -155,7 +156,7 @@ var socketio = (function()
 		getPlayerList:getPlayerList,
 		createGame:createGame,
 		joinGame:joinGame,
-		exitGame:exitGame,
+		exitFromGame:exitFromGame
 	}
 })();
 

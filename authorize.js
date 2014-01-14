@@ -41,6 +41,9 @@ function removePlayerFromGame(socket){
 		if(doesGameExist(game)){
 			Games[game].removePlayer(socket.playerName);
 			global.log('info', socket.playerName +' has left the game: ' + game);
+			socket.leave(game);
+			Players[socket.playerName].setCurrentGame(null);
+			db.removeGame(Players[socket.playerName].getSessionID());
 
 			if(Games[game].getTotalPlayers()<1){
 				delete Games[game];
@@ -49,11 +52,11 @@ function removePlayerFromGame(socket){
 			else{	
 				socket.broadcast.to(game).emit('playerExited', socket.playerName);
 				socket.broadcast.to(game).emit('playerListChanged');
-				socket.emit('exitFromGameSuccess', 'socket.game');
 			}	
 
+			socket.emit('exitFromGameSuccess', 'socket.game');
 			socket.broadcast.emit('gameListChanged')
-			socket.leave(game);
+			
 			Players[socket.playerName].removeCurrentGame();
 			db.removeGame(Players[socket.playerName].getSessionID());
 			
@@ -180,7 +183,7 @@ function initialize(io, express){
         				function(dbGame){
         					if(dbGame != ''){
         						Players[socket.playerName].currentGame = dbGame;
-        				 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ row[0].game);
+        				 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
         				 	}else{
 								db.addGame(Players[socket.playerName].getSessionID(), game);
 								socket.join(game);
