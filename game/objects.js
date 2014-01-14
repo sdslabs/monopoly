@@ -15,13 +15,12 @@ var mp = require('./mp.js');
 // 	this.socket = socket;
 // }
 
-function Player(playerName, sessionID,
-		currentGame, socket){
+function Player(playerName, sessionID, socket){
 	// These can be modified anywhere. Corrosponding setters and getters are needed.
 	this.playerName = playerName;
 	this.sessionID = sessionID;
 	this.lastActivity = new Date();
-	this.currentGame = currentGame;
+	this.currentGame = null;
 	this.socket = socket;
 	this.socket.emitA = socket.broadcast.emit;
 
