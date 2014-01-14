@@ -12,6 +12,7 @@ function mp(game, socket){
 	// this.startedAt = new Date();
 	this.game = game;
 	this.socket = socket;
+	this.turnsPlayed = 0;
 	this.currentPlayer = null;
 }
 
@@ -24,12 +25,19 @@ mp.prototype.getNextPlayer = function(){
 mp.prototype.levyTax = function(){
 	var player =  findPlayer(this.socket);
 	var prop = player.locProp;
+	
 	if(this.game.map.properties[prop].owner != M_CONST.NO_OWNER){
 		player.money = player.money *= 0.95;
 		socket.emit("mpTaxLevied");
 		socket.emitR("mpTaxLevied", player.playerName);
 	}
-	 
+}
+
+mp.prototype.provideMoney = function(){
+	var players = findGame(this.socket).getPlayers();
+	for(var i = 0; i < players.length; i++)
+		Players[players[i]].money += M_CONST.MONEY_PER_UPDATE;
+	global.log('verbose', "Provided money ("+M_CONST.MONEY_PER_UPDATE+") to everyone in "+this.game.id);
 }
 
 // Fetches a game associated with a socket.
@@ -101,6 +109,9 @@ function init(G_ames, P_layers, socket){
 				flag = true;
 				
 			if(!flag){
+				game.mp.turnsPlayed++;
+				if(game.mp.turnsPlayed > M_CONST.MONEY_RFRSH_LIM)
+					game.mp.provideMoney();
 				game.mp.levyTax();
 				var nextPlayer = game.mp.getNextPlayer();
 				socket.emitR('mpPlayerMove', route, nextPlayer);
