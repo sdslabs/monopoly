@@ -91,7 +91,7 @@ function initialize(io, express){
     	} else {
        	// if there isn't, turn down the connection with a message
        	// and leave the function.
-       	return accept('No cookie transmitted.', false);
+       	return accept(null, false);
     	}
     	// accept the incoming connection
     	accept(null, true);
@@ -189,6 +189,7 @@ function initialize(io, express){
 								socket.emit('addToGameSuccess', game);
 								socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
 								socket.broadcast.emit('gameListChanged');
+								socket.broadcast.emit('playerListChanged');
 								global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 							}
 						});
@@ -204,10 +205,14 @@ function initialize(io, express){
 
 	 	socket.on('queryPlayerList', function(){
 		 	if(doesPlayerExist(socket.playerName)){
-		 		playerList = {};
-		 		for(var key in Players)
-		 			if(doesPlayerExist(key))
-		 				playerList[key] = '';
+		 		playerList = [];
+		 		var playerNames = Games[Players[socket.playerName].getCurrentGame()].getPlayers()
+		 		for(var key in playerNames)
+		 		{
+		 			var playerName = playerNames[key]
+		 			if(doesPlayerExist(playerName))
+		 				playerList.push({'name':playerName});
+		 		}
 		 		socket.emit('updatePlayerList', JSON.stringify(playerList));
 		 		global.log('info', 'Player list sent to player: ' + socket.playerName);
 		 	}

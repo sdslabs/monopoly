@@ -21,6 +21,7 @@ var monopoly = (function()
 	var onCreateClick = function()
 	{
 		var gameName = prompt("Enter a game name");
+		showScreen('#room-screen');
 		socketio.createGame(gameName);
 	}
 	var onBackClick = function()
@@ -29,8 +30,8 @@ var monopoly = (function()
 	}
 	var onJoinClick = function()
 	{
-		console.log('Sent join message')
-		socketio.joinGame($(this).attr('id'))
+		showScreen('#room-screen');
+		socketio.joinGame($(this).attr('id'));
 	}
 
 	return {
@@ -57,10 +58,11 @@ var socketio = (function()
 		socket.on('addNewPlayerSuccess', addNewPlayerSuccess); 
 		socket.on('addToGameSuccess', addToGameSuccess); 
 		socket.on('updateGameList', angularjs.updateGameList)
+		socket.on('updatePlayerList', angularjs.updatePlayerList)
 		socket.on('createNewGameSuccess', createNewGameSuccess)
 		socket.on('newPlayerAdded', newPlayerAdded)
-		socket.on('gameListChanged', gameListChanged)
-
+		socket.on('gameListChanged', getGameList)
+		socket.on('playerListChanged', getPlayerList)
 	}	
 
 	var setCookie = function(c_name,value,exdays){	
@@ -105,10 +107,10 @@ var socketio = (function()
 		setCookie('playerName', playerName, 1);	
 	};
 	var addToGameSuccess = function(data){
-		console.log("Successfully joined game " + data)
+		getPlayerList()
 	};
 	var createNewGameSuccess = function(data){
-		console.log(data);
+		getPlayerList()
 	};
 	var newPlayerAdded = function(data){
 		console.log("Player "+data+" has joined the game!");
@@ -117,24 +119,23 @@ var socketio = (function()
 	{
 		socket.emit('queryGameList');
 	}
+	var getPlayerList = function()
+	{
+		socket.emit('queryPlayerList');
+	}
 	var createGame = function(gameName)
 	{
-		console.log(gameName)
 		socket.emit('createNewGame', gameName)
 	}
 	var joinGame = function(gameName)
 	{
 		socket.emit('addToGame', gameName)
 	}
-	var gameListChanged = function()
-	{
-		console.log('game list change')
-		getGameList();
-	}
 
 	return {
 		init: init,
 		getGameList:getGameList,
+		getPlayerList:getPlayerList,
 		createGame:createGame,
 		joinGame:joinGame
 	}
@@ -146,6 +147,10 @@ var angularjs = (function()
 	monopolyApp.controller('game-list-controller', function($scope)
 		{
 			$scope.gameList = []
+		});
+	monopolyApp.controller('player-list-controller', function($scope)
+		{
+			$scope.playerList = []
 		});
 	return {
 		init: function()
@@ -162,6 +167,19 @@ var angularjs = (function()
 				scope.gameList = JSON.parse(list)
 			})
 		},
+
+		updatePlayerList: function(list)
+		{
+			console.log(list)
+			var scope = angular.element($('#room-screen')).scope()
+			scope.$apply(function()
+			{
+				scope.playerList = []
+				scope.playerList = JSON.parse(list)
+			})
+
+		},
+
 		monopolyApp: monopolyApp
 	}
 })();
