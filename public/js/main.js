@@ -11,6 +11,7 @@ var monopoly = (function()
 		$('body').on('click','#create-btn', onCreateClick);
 		$('body').on('click','#back-btn', onBackClick);
 		$('body').on('click','.join-btn', onJoinClick);
+		$('body').on('click','#leave-btn', onLeaveClick);
 	};
 
 	var onStartClick = function()
@@ -32,6 +33,11 @@ var monopoly = (function()
 	{
 		showScreen('#room-screen');
 		socketio.joinGame($(this).attr('id'));
+	}
+	var onLeaveClick = function()
+	{
+		showScreen('#lobby-screen');
+		socketio.exitGame($(this).attr('id'));
 	}
 
 	return {
@@ -63,6 +69,9 @@ var socketio = (function()
 		socket.on('newPlayerAdded', newPlayerAdded)
 		socket.on('gameListChanged', getGameList)
 		socket.on('playerListChanged', getPlayerList)
+		socket.on('exitFromRoomSuccess', exitRoomSuccess)
+
+
 	}	
 
 	var setCookie = function(c_name,value,exdays){	
@@ -131,13 +140,22 @@ var socketio = (function()
 	{
 		socket.emit('addToGame', gameName)
 	}
+	var exitGame = function()
+	{
+		socket.emit('exitFromGame')
+	}
+	var exitGameSuccess = function()
+	{
+		getGameList()
+	}
 
 	return {
 		init: init,
 		getGameList:getGameList,
 		getPlayerList:getPlayerList,
 		createGame:createGame,
-		joinGame:joinGame
+		joinGame:joinGame,
+		exitGame:exitGame,
 	}
 })();
 
