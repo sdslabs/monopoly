@@ -28,7 +28,8 @@ mp.prototype.levyTax = function(){
 	
 	if(this.game.map.properties[prop].owner != M_CONST.NO_OWNER &&
 		this.game.map.properties[prop].owner != player.playerName){
-		player.money = player.money *= 0.95;
+		player.money -= this.game.map.properties[prop].value*M_CONST.TAX_FROM_PLAYER;
+		Players[this.game.map.properties[prop].owner].money += this.game.map.properties[prop].value*M_CONST.TAX_TO_OWNER;
 		socket.emit("mpTaxLevied");
 		socket.emitR("mpTaxLevied", player.playerName);
 	}
