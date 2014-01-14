@@ -28,6 +28,7 @@ function Player(playerName, sessionID,
 	this.money = null;
 	this.propOwned = [];
 	this.locProp = null;
+	this.socket.emitA =socket.broadcast.emit;
 }
 
 Player.prototype.getPlayerName = function(){
@@ -58,9 +59,7 @@ Player.prototype.setSessionID = function(sessionID){
 
 Player.prototype.setCurrentGame = function(currentGame){
 	this.currentGame = currentGame;
-	this.socket.emitR = function(){
-		return socket.broadcast.to(currentGame);
-	}
+	this.socket.emitR = socket.broadcast.to(currentGame).emit;
 	lastActivity = new Date();
 }
 
