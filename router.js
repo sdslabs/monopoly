@@ -53,6 +53,12 @@ function initialize (app){
 		global.log('verbose', 'Sent homepage to client: ' + req.connection.remoteAddress);
 	});
 
+	app.get('/maps', function (req, res) {
+		res.render('maps')
+		global.log('verbose', 'Sent maps page to client: ' + req.connection.remoteAddress);
+	});
+
+
 
 	app.get('/:folder/:file', function(req, res){
 		send(req, res, req.params.folder+'/'+req.params.file);
