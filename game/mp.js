@@ -110,6 +110,7 @@ function init(G_ames, P_layers, socket){
 			if(game.map.properties.hasOwnProperty(property))
 				if(game.map.properties[property].owner.equals(M_CONST.NO_OWNER))
 					if(player.money > game.map.properties[property].value){
+						player.money -= game.map.properties[property].value;
 						game.map.properties[property].owner = player.playerName;
 						player.propOwned.push(property);
 						socket.emit("mpBuySuccess");
