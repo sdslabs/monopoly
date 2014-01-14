@@ -275,7 +275,7 @@ function initialize(io, express){
 		// Debug
 		socket.on('PING', function(){
 			console.log('PING RECEIVED');
-			db.removeSession(Players[socket.playerName].getSessionID());
+			console.log(Players);
 		});
 	});
 }

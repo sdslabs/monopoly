@@ -12,20 +12,13 @@ function mp(game, socket){
 	// this.startedAt = new Date();
 	this.game = game;
 	this.socket = socket;
-	this.currentPlayer = 0;
+	this.currentPlayer = null;
 }
 
 mp.prototype.getNextPlayer = function(){
-	var totalPlayers = this.game.getTotalPlayers;
-	this.currentPlayer = (this.currentPlayer + 1) % totalPlayers;
-
-	var i = 0;
-
-	for (var j in this.game.getPlayers()){
-		if(i == currentPlayer)
-			return j;
-		i++;
-	} 
+	var players = findGame(this.socket).getPlayers();
+	this.currentPlayer = players[(players.indexOf(this.currentPlayer)+1)%players.length];
+	return this.currentPlayer;
 }
 
 // Fetches a game associated with a socket.
@@ -46,18 +39,19 @@ function findPlayer(socket){
 		return null;
 }
 
-
-
-//This associates all dynamic functions associated with a map to the corrosponding socket object.
+//This associates all dynamic functions associated with a gane object to the corrosponding socket object.
 function init(G_ames, P_layers, socket){
 	Games = G_ames;
 	Players = P_layers; 
 
 	socket.on('mpCurrentPlayers', function(){
-		var players = findGame(socket).getPlayers();
-		if(players){
-			socket.emit('mpCurrentPlayers_cb', players);
-			console.log(players);
+		var game = findGame(socket)
+		if(game){
+			var players = game.getPlayers();
+			if(players){
+				socket.emit('mpCurrentPlayers_cb', players);
+				console.log(players);
+			}
 		}
 	});
 
@@ -70,7 +64,8 @@ function init(G_ames, P_layers, socket){
 
 	});
 
-	socket.on('mpMove', function(moves, route){
+	socket.on('mpMove', function(route){
+		var moves = route.length;
 		var game = findGame(socket);
 		var player = findPlayer(socket);
 		var flag = false;
@@ -95,9 +90,9 @@ function init(G_ames, P_layers, socket){
 				flag = true;
 				
 			if(!flag){
-				// var nextPlayer = game.mp.getNextPlayer();
-				// socket.broadcast.to(game).emit('mpPlayerMove', route, nextPlayer);
-				// socket.emit("mpMoveAccepted", nextPlayer);
+				var nextPlayer = game.mp.getNextPlayer();
+				socket.broadcast.to(game).emit('mpPlayerMove', route, nextPlayer);
+				socket.emit("mpMoveAccepted", nextPlayer);
 				global.log('verbose', "Move by " + socket.playerName + " in game " + player.getCurrentGame() + ". Route " + route + ".");
 			}
 			else{
@@ -109,7 +104,7 @@ function init(G_ames, P_layers, socket){
 	socket.on('PING2', function(garb1, garb2){
 		
 		console.log('PING2 RECEIVED');
-		console.log(findPlayer(socket));
+		console.log(findGame(socket).mp.getNextPlayer());
 	});
 }
 
