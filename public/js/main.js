@@ -70,8 +70,6 @@ var socketio = (function()
 		socket.on('gameListChanged', getGameList)
 		socket.on('playerListChanged', getPlayerList)
 		socket.on('exitFromGameSuccess', exitFromGameSuccess)
-
-
 	}	
 
 	var setCookie = function(c_name,value,exdays){	
@@ -146,7 +144,6 @@ var socketio = (function()
 	}
 	var exitFromGameSuccess = function()
 	{
-		console.log('getting game list')
 		getGameList()
 	}
 
