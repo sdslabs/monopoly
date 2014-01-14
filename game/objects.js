@@ -76,7 +76,7 @@ function Game(creator, game, socket){
 	this.createdAt = new Date();
 	this.lastActivity = this.createdAt;
 	this.players = [];
-	this.totalPlayers = 0;
+	//this.totalPlayers = 0;
 	this.socket = socket;
 	this.map = loadMap();
 	this.mp = new mp.mp(game, socket);
@@ -99,7 +99,7 @@ Game.prototype.getPlayers = function(){
 }
 
 Game.prototype.getTotalPlayers = function(){
-	return this.totalPlayers;
+	return this.players.length;
 }
 
 Game.prototype.setCreator = function(creator){
@@ -116,19 +116,19 @@ Game.prototype.addPlayer = function(playerName){
 	// this.players[playerName] = '';
 	this.players.push(playerName);
 	this.lastActivity = new Date();
-	this.totalPlayers++;
+	// this.totalPlayers++;
 }
 
 Game.prototype.removePlayer = function(playerName){
 	if(this.players.indexOf(playerName) != -1){
 		this.players.splice(this.players.indexOf(playerName), 1);
-		this.totalPlayers--;
+		// this.totalPlayers--;
 		this.lastActivity = new Date();
 	}
 }
 
 Game.prototype.morePlayersAllowed = function(){
-	return this.totalPlayers <= M_CONST.MAX_PLAYERS_PER_GAME;
+	return this.getTotalPlayers() <= M_CONST.MAX_PLAYERS_PER_GAME;
 }
 
 function Location(){
