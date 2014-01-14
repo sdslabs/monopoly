@@ -26,6 +26,7 @@ function Player(playerName, sessionID,
 
 	// These are modified only in mp.js. No setters or getters needed.
 	this.money = null;
+	this.propOwned = [];
 	this.locProp = null;
 }
 
@@ -57,7 +58,16 @@ Player.prototype.setSessionID = function(sessionID){
 
 Player.prototype.setCurrentGame = function(currentGame){
 	this.currentGame = currentGame;
+	this.socket.emitR = function(){
+		return socket.broadcast.to(currentGame);
+	}
 	lastActivity = new Date();
+}
+
+Player.prototype.removeCurrentGame = function(){
+	this.socket.leave(this.currentGame);
+	this.currentGame = null;
+	this.socket.emitR = null;
 }
 
 // function Game(socket){
@@ -72,6 +82,7 @@ Player.prototype.setCurrentGame = function(currentGame){
 // }
 
 function Game(creator, game, socket){
+	this.id = game;
 	this.creator = creator;
 	this.createdAt = new Date();
 	this.lastActivity = this.createdAt;
@@ -160,7 +171,7 @@ Location.prototype.getY = function(){
 // 	this.owner = null;
 // 	this.type = null;
 // 	this.maxLevel = null;
-// 	this.basePrice = 0;
+// 	this.value = 0;
 // 	this.location = new Location();
 //  this.path = null;
 // }
