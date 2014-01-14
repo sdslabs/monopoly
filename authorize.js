@@ -48,7 +48,7 @@ function removePlayerFromGame(socket){
 			}
 			else{	
 				socket.broadcast.to(game).emit('playerExited', socket.playerName);
-				socket.broadcast.emit('playerListChanged');
+				socket.broadcast.to(game).emit('playerListChanged');
 				socket.emit('exitFromGameSuccess', 'socket.game');
 			}	
 
@@ -191,7 +191,7 @@ function initialize(io, express){
 								socket.emit('addToGameSuccess', game);
 								socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
 								socket.broadcast.emit('gameListChanged');
-								socket.broadcast.emit('playerListChanged');
+								socket.broadcast.to(game).emit('playerListChanged');
 								global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 							}
 						});
