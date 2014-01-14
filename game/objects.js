@@ -23,12 +23,12 @@ function Player(playerName, sessionID,
 	this.lastActivity = new Date();
 	this.currentGame = currentGame;
 	this.socket = socket;
+	this.socket.emitA = socket.broadcast.emit;
 
 	// These are modified only in mp.js. No setters or getters needed.
 	this.money = null;
 	this.propOwned = [];
 	this.locProp = null;
-	this.socket.emitA =socket.broadcast.emit;
 }
 
 Player.prototype.getPlayerName = function(){
@@ -59,7 +59,7 @@ Player.prototype.setSessionID = function(sessionID){
 
 Player.prototype.setCurrentGame = function(currentGame){
 	this.currentGame = currentGame;
-	this.socket.emitR = socket.broadcast.to(currentGame).emit;
+	this.socket.emitR = this.socket.broadcast.to(currentGame).emit;
 	lastActivity = new Date();
 }
 
@@ -89,7 +89,7 @@ function Game(creator, game, socket){
 	//this.totalPlayers = 0;
 	this.socket = socket;
 	this.map = loadMap();
-	this.mp = new mp.mp(game, socket);
+	this.mp = new mp.mp(this, socket);
 }
 
 Game.prototype.getCreator = function(){
