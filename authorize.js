@@ -125,7 +125,7 @@ function initialize(io, express){
 
         			 				if(!doesPlayerExist(socket.playerName))
         			 					Players[socket.playerName] = new objects.Player(socket.playerName,
-		        			 				socket.handshake.sessionID, '', socket);
+		        			 				socket.handshake.sessionID, socket);
 
         			 			}else{
 									db.addPlayer(socket.handshake.sessionID, playerName);
@@ -134,7 +134,7 @@ function initialize(io, express){
 									socket.handshake.initialized = true;
 
         			 				Players[socket.playerName] = new objects.Player(socket.playerName,
-        			 				socket.handshake.sessionID, '', socket);
+        			 				socket.handshake.sessionID, socket);
         			 				
 									socket.emit('addNewPlayerSuccess');
 									global.log('info', 'Player: ' + socket.playerName + ' logged in.');
@@ -152,7 +152,7 @@ function initialize(io, express){
 		});
 		
 		socket.on('createNewGame', function(game){
-			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.playerName].currentGame==''&&game!=''){
+			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.playerName].getCurrentGame()==null&&game!=''){
 				db.retriveGame(socket.handshake.sessionID, 
         			function(dbGame){
         				if(dbGame != ''){
@@ -172,6 +172,11 @@ function initialize(io, express){
 					});
 			}else{
 				socket.emit('addToGameError', 'Not authorized to create game');
+				console.log(!doesGameExist(game));
+				console.log(doesPlayerExist(socket.playerName));
+				console.log(Players[socket.playerName]);
+				console.log(Players[socket.playerName].getCurrentGame()==null);
+				console.log(game);
 				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
 			}
 		});
