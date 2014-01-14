@@ -65,6 +65,12 @@ function init(G_ames, P_layers, socket){
 	Games = G_ames;
 	Players = P_layers; 
 
+	socket.on('beginGame', function()
+	{
+		if(findGame(socket).creator == socket.playerName)
+			socket.emitR('beginGame')
+	})
+	
 	socket.on('mpCurrentPlayers', function(){
 		var game = findGame(socket)
 		if(game){
