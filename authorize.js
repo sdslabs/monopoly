@@ -206,10 +206,13 @@ function initialize(io, express){
 	 	socket.on('queryPlayerList', function(){
 		 	if(doesPlayerExist(socket.playerName)){
 		 		playerList = [];
-		 		for(var key in Players)
-		 			if(doesPlayerExist(key))
-		 				playerList.push({'name':key});
-		 				// playerList[key] = '';
+		 		var playerNames = Games[Players[socket.playerName].getCurrentGame()].getPlayers()
+		 		for(var key in playerNames)
+		 		{
+		 			var playerName = playerNames[key]
+		 			if(doesPlayerExist(playerName))
+		 				playerList.push({'name':playerName});
+		 		}
 		 		socket.emit('updatePlayerList', JSON.stringify(playerList));
 		 		global.log('info', 'Player list sent to player: ' + socket.playerName);
 		 	}

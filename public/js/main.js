@@ -107,10 +107,10 @@ var socketio = (function()
 		setCookie('playerName', playerName, 1);	
 	};
 	var addToGameSuccess = function(data){
-		console.log("Successfully joined game " + data)
+		getPlayerList()
 	};
 	var createNewGameSuccess = function(data){
-		console.log(data);
+		getPlayerList()
 	};
 	var newPlayerAdded = function(data){
 		console.log("Player "+data+" has joined the game!");
@@ -126,12 +126,10 @@ var socketio = (function()
 	var createGame = function(gameName)
 	{
 		socket.emit('createNewGame', gameName)
-		getPlayerList()
 	}
 	var joinGame = function(gameName)
 	{
 		socket.emit('addToGame', gameName)
-		getPlayerList()
 	}
 
 	return {
@@ -172,6 +170,7 @@ var angularjs = (function()
 
 		updatePlayerList: function(list)
 		{
+			console.log(list)
 			var scope = angular.element($('#room-screen')).scope()
 			scope.$apply(function()
 			{
