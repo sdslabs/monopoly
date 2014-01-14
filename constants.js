@@ -12,6 +12,7 @@ module.exports.G_LOG_FILE                = constant.G_LOG_FILE;
 module.exports.G_MYSQL_HOST              = constant.G_MYSQL_HOST;
 module.exports.G_SERVER_LOG_LEVEL        = constant.G_SERVER_LOG_LEVEL;
 module.exports.G_IFACE					 = constant.G_IFACE;
+module.exports.G_DB_SYNC_TIME            = parseInt(constant.G_DB_SYNC_TIME);
 
 module.exports.G_APP_ID					 = constantPWD.G_APP_ID;
 module.exports.G_API_KEY				 = constantPWD.G_API_KEY;
