@@ -69,7 +69,7 @@ function init(G_ames, P_layers, socket){
 	socket.on('beginGame', function(){
 		var game = findGame(socket);
 		if(game.creator == socket.playerName
-			&&!game.mp.started{
+			&&!game.mp.started){
 			this.started = true;
 			socket.emitR('beginGame');
 		}
