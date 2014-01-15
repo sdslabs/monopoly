@@ -71,6 +71,22 @@ var G = (function(){
 		return infowindow;
 	}
 
+	function addPath(latLngList, color) {
+		if(color == null)
+			color = '#000000';
+		var line = new google.maps.Polyline({
+    			path: latLngList,
+   				geodesic: true,
+    			strokeColor: color,
+    			strokeOpacity: 1.0,
+    			strokeWeight: 2,
+ 		 });
+
+ 	 	line.setMap(map);
+
+ 	 	return line;
+	}
+
 	function addListener(type, action) {
 		 google.maps.event.addListener(map, type, action);
 	}
@@ -96,6 +112,7 @@ var G = (function(){
 		addListener:addListener,
 		addListenerOth:addListenerOth,
 		addInfoWindow:addInfoWindow,
+		addPath:addPath,
 		getLocation:getLocation
 
 	}
@@ -103,10 +120,19 @@ var G = (function(){
 
 
 // Testing functions
+var latLngList = [];
+var path;
 function clickListener() {
 	G.addListener('click', function(event){
-		var m = G.addMarkerAt(G.M().getCenter(), "click");
-		G.addListenerOth(m, 'click', function(){G.addInfoWindow(m, prompt("Caption?"))});
+		
+		latLngList.push(event.latLng);
+		G.addMarkerAt(event.latLng, "Location "+latLngList.length);
+		console.log("POINT "+ latLngList.length);
+		if(latLngList.length == 4){
+			path = G.addPath(latLngList);
+			latLngList = [];
+			// setTimeout(function(){path.setMap(null)}, 3000);
+		}
 	});
 
 }
