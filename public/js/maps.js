@@ -63,7 +63,7 @@ var G = (function(){
 
 // Stylers at: https://developers.google.com/maps/documentation/javascript/styling
 
-		map = new google.maps.Map(document.getElementById('map-canvas')[0],
+		map = new google.maps.Map(document.getElementById('map-canvas'),
 							mapOptions);
 		defineBound();
 		logStats();
@@ -77,7 +77,7 @@ var G = (function(){
 		);
 
 		var lastValidCenter = map.getCenter();
-		google.maps.event.addListener(gmap, 'center_changed', function() {
+		google.maps.event.addListener(map, 'center_changed', function() {
 			console.log(map.getCenter())
 		    if (allowedBounds.contains(map.getCenter())) {
 		        lastValidCenter = map.getCenter();
