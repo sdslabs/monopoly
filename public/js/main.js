@@ -49,6 +49,7 @@ var monopoly = (function()
 	var beginGame = function()
 	{
 		showScreen('#game-screen');
+		map.init();
 	}
 
 	return {

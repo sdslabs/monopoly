@@ -17,6 +17,7 @@ html(lang='en' ng-app='monopoly-app')
 		script(src='/js/bootstrap.min.js')
 		script(src='/js/angular.js')
 		script(src='/js/angular-route.js')
+		script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false')
 		<!--Change to minified versions for production-->
 
 		script(src='https://sdslabs.co.in/api/public/api.js')
@@ -62,8 +63,9 @@ html(lang='en' ng-app='monopoly-app')
 				button(type = 'button', class = 'btn btn-primary btn-lg', id='leave-btn') Leave
 		
 		div(class = 'container game-layer' id='game-screen')
-			canvas
+			div(id='map-canvas')
 		script(src='/js/main.js')
+		script(src='/js/maps.js')
 		script(type='text/javascript').
 			$(window).load(function(){
 			//init('http://#{locals.ip}:8080');
