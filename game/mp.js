@@ -74,6 +74,7 @@ function init(G_ames, P_layers, socket){
 			// socket.emitR('beginGame');
 		}
 	})
+
 	
 	socket.on('mpCurrentPlayers', function(){
 		var game = findGame(socket);
