@@ -5,8 +5,18 @@ var G = (function(){
 	function initialize() {
 		var mapOptions = {
 			zoom: 4,
-			center: new google.maps.LatLng(29.86535, 77.89475)
+			center: new google.maps.LatLng(29.86535, 77.89475),
+			panControl: true,
+			zoomControl: true,
+			mapTypeControl: false,
+			scaleControl: false,
+			streetViewControl: false,
+			overviewMapControl: true,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
 		};
+
+// Stylers at: https://developers.google.com/maps/documentation/javascript/styling
+
 		map = new google.maps.Map(document.getElementById('map-canvas'),
 							mapOptions);
 		return M;
