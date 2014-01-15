@@ -1,8 +1,12 @@
+html {
+  height: 100%;
+}
 body {
   margin-top: 30px;
   background: url("/images/main-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
+  height: 100%;
 }
 .game-layer {
   padding-top: 30%;
@@ -22,4 +26,11 @@ body {
 .game-list td,
 th {
   text-align: center;
+}
+#game-screen {
+  height: 100%;
+  padding-top: 0;
+}
+#map-canvas {
+  height: 100%;
 }

@@ -58,6 +58,7 @@ var monopoly = (function()
 			addButtonHandlers();
 			socketio.init();
 			angularjs.init();
+			maps.init();
 			// monopoly.canvas = $('#gamecanvas')[0];
 			// monopoly.context = monopoly.canvas.getContext('2d');
 		},
@@ -227,3 +228,4 @@ var angularjs = (function()
 		monopolyApp: monopolyApp
 	}
 })();
+
