@@ -11,6 +11,7 @@ var game = null;
 function mp(game, socket){
 	// this.startedAt = new Date();
 	this.game = game;
+	this.started = false;
 	this.socket = socket;
 	this.turnsPlayed = 0;
 	this.currentPlayer = null;
@@ -65,9 +66,18 @@ function init(G_ames, P_layers, socket){
 	Games = G_ames;
 	Players = P_layers; 
 
+	socket.on('beginGame', function(){
+		var game = findGame(socket);
+		if(game.creator == socket.playerName && !game.mp.started){
+			this.started = true;
+			socket.broadcast.to(findGame(socket).id).emit('beginGame')
+			// socket.emitR('beginGame');
+		}
+	})
+	
 	socket.on('mpCurrentPlayers', function(){
-		var game = findGame(socket)
-		if(game){
+		var game = findGame(socket);
+		if(game&&game.started){
 			var players = game.getPlayers();
 			if(players){
 				socket.emit('mpCurrentPlayersSuccess', players);
@@ -77,11 +87,13 @@ function init(G_ames, P_layers, socket){
 	});
 
 	socket.on('mpInitialize', function(){
+		if(game&&game.started){	
 			var player = findPlayer(socket);
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
 			socket.emit("mpInitSuccess");
 			socket.emitR("mpInitBy", player.playerName);
+		}
 
 	});
 
@@ -91,7 +103,7 @@ function init(G_ames, P_layers, socket){
 		var player = findPlayer(socket);
 		var flag = false;
 
-		if(game){
+		if(game&game.mp.started){
 			if(moves <= 6){
 				var i = 0;
 				if(player.locProp == M_CONST.START_PROP){
@@ -131,7 +143,8 @@ function init(G_ames, P_layers, socket){
 		var game = findGame(socket);
 		var property = player.locProp;
 
-		if((game.mp.currentPlayer == player.playerName)
+		if(game&game.mp.started){
+			if((game.mp.currentPlayer == player.playerName)
 			&&(game.map.properties.hasOwnProperty(property) && property != M_CONST.START_PROP)
 				&&(game.map.properties[property].owner == M_CONST.NO_OWNER)
 					&&(player.money > game.map.properties[property].value)){
@@ -141,9 +154,10 @@ function init(G_ames, P_layers, socket){
 						socket.emit("mpBuySuccess");
 						socket.emitR("mpBuyOther", player.playerName, property);
 						global.log('verbose', player.playerName + " has bought " + game.map.properties[property].id);
-		}else{
-			global.log('info', player.playerName + " not allowed to buy " + game.map.properties[property].id);
-			socket.emit("mpBuyFail");
+			}else{
+				global.log('info', player.playerName + " not allowed to buy " + game.map.properties[property].id);
+				socket.emit("mpBuyFail");
+			}
 		}
 	});
 

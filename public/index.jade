@@ -58,9 +58,11 @@ html(lang='en' ng-app='monopoly-app')
 						td {{$index+1}}
 						td {{player.name}}
 
+				button(type = 'button', class = 'btn btn-primary btn-lg', id='begin-btn', ng-show='creatorCheck') Begin
 				button(type = 'button', class = 'btn btn-primary btn-lg', id='leave-btn') Leave
-									
-
+		
+		div(class = 'container game-layer' id='game-screen')
+			canvas
 		script(src='/js/main.js')
 		script(type='text/javascript').
 			$(window).load(function(){
