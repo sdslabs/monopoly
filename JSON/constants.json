@@ -8,7 +8,7 @@
 	"G_MYSQL_HOST": "localhost",
 	"G_EXPRESS_SESSION_SECRET": "AABCDEFGHIJKLMNOP",
 
-	"G_DOMAIN_NAME": "127.0.0.1",
+	"G_IP_ADDR": "sdslabs.local",
 
 	"G_IFACE": "eth0",
 

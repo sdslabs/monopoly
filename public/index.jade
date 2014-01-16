@@ -71,8 +71,8 @@ html(lang='en' ng-app='monopoly-app')
 		script(src='/js/maps.js')
 		script(type='text/javascript').
 			$(window).load(function(){
-			//init('http://#{locals.ip}:8080');
-			monopoly.init();
+			//init();
+			monopoly.init('http://#{locals.ip}:#{locals.port}');
 				if(typeof topbar != 'undefined' && topbar != null){
 					topbar.showTopbar();
 				}

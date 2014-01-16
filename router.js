@@ -1,6 +1,9 @@
 //Load the Global Function Module
-
 var global = require('./global.js');
+
+//Load Constants
+var CONST = require('./constants.js');
+
 // var events = require('events');
 
 var fs = require('fs');
@@ -48,7 +51,8 @@ function initialize (app){
 	app.get('/', function (req, res) {
 		res.render('index',
 		{
-			ip: global.getIP()
+			ip: global.getIP(),
+			port: CONST.G_SERVER_PORT
 		})
 		global.log('verbose', 'Sent homepage to client: ' + req.connection.remoteAddress);
 	});

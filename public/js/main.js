@@ -55,11 +55,11 @@ var monopoly = (function()
 
 
 	return {
-		init:function() 
+		init:function(address) 
 		{
 			showScreen('#start-screen')
 			addButtonHandlers();
-			socketio.init();
+			socketio.init(address);
 			angularjs.init();
 			maps.init();
 			// monopoly.canvas = $('#gamecanvas')[0];
@@ -73,9 +73,9 @@ var socketio = (function()
 {
 	// var socket;
 
-	var init = function()
+	var init = function(address)
 	{	
-		socket = io.connect('http://sdslabs.local:8080');
+		socket = io.connect(address);
 		socket.on('connect', onConnect);
 		socket.on('addNewPlayerSuccess', addNewPlayerSuccess); 
 		socket.on('addToGameSuccess', addToGameSuccess); 
