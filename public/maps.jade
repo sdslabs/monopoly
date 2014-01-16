@@ -13,11 +13,9 @@ html()
 			padding: 0px
 			}
 		script(src='/js/jquery.js')
-		script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false')
 	body	
 		div(id='map-canvas')
 		script(src='/js/maps.js')
 		script(type="text/javascript").
-			var M = G.init()
-			clickListener();
+			var M = G.loadMap()
 
