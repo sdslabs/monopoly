@@ -64,8 +64,18 @@ function removePlayerFromGame(socket){
 	}
 }
 
+function addPlayerToGame(game, socket){
+	socket.join(game);
+	db.addGame(Players[socket.playerName].getSessionID(), game);
+	Games[game].addPlayer(socket.playerName);
+	Players[socket.playerName].setCurrentGame(game);
+	socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
+	socket.broadcast.emit('gameListChanged');
+	socket.broadcast.to(game).emit('playerListChanged');
+	global.log('info', socket.playerName +' connected to game: ' + game);
+}
+
 function initialize(io, express){
-	//Authenication Needed
 	io.set('authorization', function (data, accept) {
    		// check if there's a cookie header
     	if (data.headers.cookie) {
@@ -106,37 +116,31 @@ function initialize(io, express){
 
 		socket.on('addNewPlayer', function(playerName){
 			if(playerName!=null){
-				if(!doesPlayerExist(playerName)&&
-					playerName.replace(/\s/g, '')!=''
-					&&!socket.hasOwnProperty(playerName)){
-						db.retrivePlayer(socket.handshake.sessionID, 
-        					function(player){
-        						if(player != ''){
-        			 				socket.playerName = player;
-        			 				socket.handshake.initialized = true;
-
-        			 				if(playerName!=socket.playerName)
-        			 					global.log("warn", "Player: "+ socket.playerName +" tried to reconnect with alias: "+ playerName + ". Denied");
-
-        			 				global.log("info", "Player " + socket.playerName + " has reconected to server");
-
-        			 				if(!doesPlayerExist(socket.playerName))
-        			 					Players[socket.playerName] = new objects.Player(socket.playerName,
-		        			 				socket.handshake.sessionID, socket);
-
-        			 			}else{
-									db.addPlayer(socket.handshake.sessionID, playerName);
-									
-									socket.playerName = playerName;
-									socket.handshake.initialized = true;
-
-        			 				Players[socket.playerName] = new objects.Player(socket.playerName,
+				if(!doesPlayerExist(playerName)&&playerName.replace(/\s/g, '')!=''
+					&&!socket.hasOwnProperty(playerName))
+				{
+					db.retrivePlayer(socket.handshake.sessionID, 
+        				function(player){
+        					if(player != ''){
+        		 				socket.playerName = player;
+        		 				socket.handshake.initialized = true;
+        			 			if(playerName!=socket.playerName)
+        			 				global.log("warn", "Player: "+ socket.playerName 
+        			 					+" tried to reconnect with alias: "+ playerName + ". Denied");
+       			 				global.log("info", "Player " + socket.playerName + " has reconected to server");
+       			 				if(!doesPlayerExist(socket.playerName))
+       			 					Players[socket.playerName] = new objects.Player(socket.playerName,
+	        			 				socket.handshake.sessionID, socket);
+       			 			}else{
+								db.addPlayer(socket.handshake.sessionID, playerName);
+								socket.playerName = playerName;
+								socket.handshake.initialized = true;
+       			 				Players[socket.playerName] = new objects.Player(socket.playerName,
         			 				socket.handshake.sessionID, socket);
-        			 				
-									socket.emit('addNewPlayerSuccess');
-									global.log('info', 'Player: ' + socket.playerName + ' logged in.');
-        			 			} 	
-        					});
+								socket.emit('addNewPlayerSuccess');
+								global.log('info', 'Player: ' + socket.playerName + ' logged in.');
+       			 			} 	
+       					});
 				}else{
 					socket.emit('addNewPlayerFailed', playerName + ' already exists or illegal name');
 					global.log('warn', playerName + ' was refused connection. Already exists.');
@@ -156,24 +160,13 @@ function initialize(io, express){
    //      					Players[socket.playerName].currentGame = dbGame;
    //      			 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
    //      			 	}else{
-							db.addGame(Players[socket.playerName].getSessionID(), game);
-							socket.join(game);
 							Games[game] = new objects.Game(socket.playerName, game, socket);
-							Games[game].addPlayer(socket.playerName);
-							Players[socket.playerName].setCurrentGame(game);
-							socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
-							socket.broadcast.emit('gameListChanged');
+							addPlayerToGame(game, socket);
 							socket.emit('createNewGameSuccess');
-							global.log('info', socket.playerName +' connected to game: ' + game);
 						// }
 					// });
 			}else{
 				socket.emit('addToGameError', 'Not authorized to create game');
-				console.log(!doesGameExist(game));
-				console.log(doesPlayerExist(socket.playerName));
-				console.log(Players[socket.playerName]);
-				console.log(Players[socket.playerName].getCurrentGame()==null);
-				console.log(game);
 				global.log('warn', 'Player ' + socket.playerName + ' not allowed to create game: ' + game);
 			}
 		});
@@ -187,17 +180,8 @@ function initialize(io, express){
      //    						Players[socket.playerName].currentGame = dbGame;
      //    				 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
      //    				 	}else{
-								db.addGame(Players[socket.playerName].getSessionID(), game);
-								socket.join(game);
-
-								Games[game].addPlayer(socket.playerName);
-								Players[socket.playerName].setCurrentGame(game);
-					
-								socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName, Games[game].players);
-								socket.broadcast.emit('gameListChanged');
-								socket.broadcast.to(game).emit('playerListChanged');
+								addPlayerToGame(game, socket);
 								socket.emit('addToGameSuccess', game);
-								global.log('info', 'Player ' + socket.playerName +' has connected to game: ' + game);
 							// }
 						// });
 				}else{	
