@@ -43,14 +43,14 @@
 // 		init: init
 // 	}
 // })()
-var G = (function(){
+var gMaps = (function(){
 
 	var map;
 
 	function initialize() {
 		google.maps.visualRefresh = true;
 		var mapOptions = {
-			zoom: 4,
+			zoom: 17,
 			center: new google.maps.LatLng(29.86535, 77.89475),
 			panControl: true,
 			zoomControl: true,
@@ -196,13 +196,13 @@ var G = (function(){
 var latLngList = [];
 var path;
 function clickListener() {
-	G.addListener('click', function(event){
+	gMaps.addListener('click', function(event){
 		
 		latLngList.push(event.latLng);
-		G.addMarkerAt(event.latLng, "Location "+latLngList.length);
+		gMaps.addMarkerAt(event.latLng, "Location "+latLngList.length);
 		console.log("POINT "+ latLngList.length);
 		if(latLngList.length == 4){
-			path = G.addPath(latLngList);
+			path = gMaps.addPath(latLngList);
 			latLngList = [];
 			// setTimeout(function(){path.setMap(null)}, 3000);
 		}
