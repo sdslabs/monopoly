@@ -21,13 +21,6 @@ function initialize(io, express){
    		// check if there's a cookie header
     	if (data.headers.cookie) {
 
-    		// Production
-    		// check for authentication
-			// require('./sds_auth.js').user.check_login(data.headers.cookie['sds_login'], function(uid){
-			// 	if(uid == null || uid == 0)
-			// 		accept("Auth failed", false);
-			// });
-
         	// if there is, parse the cookie
         	data.cookie = cookie.parse(data.headers.cookie);
 
@@ -41,13 +34,24 @@ function initialize(io, express){
         	// retrive the cookie
         	data.sessionID = parsedCookie;
         	data.initialized = false;
-    	} else {
-       	// if there isn't, turn down the connection with a message
-       	// and leave the function.
-       	return accept(null, false);
+
+        	// Production
+    		// check for authentication
+			// require('./sds_auth.js').user.check_login(data.headers.cookie['sds_login'], function(uid){
+			// 	if(uid == null || uid == 0)
+			// 		accept("Auth failed", false);
+			// });
+
+        	db.SessionStore.get(data.sessionID, function(err, req){
+        		if(req.hasOwnProperty(uid))
+        			if(req.uid!=null || req.uid != '')
+        				// accept the incoming connection
+        				return accept(null, true);
+        		return accept('Auth failure', false);
+        	});
     	}
-    	// accept the incoming connection
-    	accept(null, true);
+       	// if there isn't, turn down the connection
+       	return accept(null, false);
 	});
 
 	io.sockets.on('connection', function (socket){
@@ -192,7 +196,7 @@ function initialize(io, express){
 		// Debug
 		socket.on('PING', function(){
 			console.log('PING RECEIVED');
-			console.log(auth.Players);
+			console.log(db.SessionStore);
 		});
 	});
 }

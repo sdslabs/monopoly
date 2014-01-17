@@ -34,7 +34,7 @@ function send404(res){
 function initialize (app){
 
 	app.use(function (req, res, next) {
-		res.header('Server', 'PSWS');
+		res.header('Server', 'SDSWS');
   		next();
 	});
 
@@ -44,8 +44,12 @@ function initialize (app){
 		// require('./sds_auth.js').user._check_login(req, function(uid, req){
 		// 	if(uid == null || uid == 0)
 		// 		res.redirect('http://sdslabs.local/login');
+		// req.session.uid = uid;
+		// next(); //Proceed iff this comes as true
 		// });
-		next();
+
+		// Development
+		next(); 
 	});
 
 	app.get('/', function (req, res) {
