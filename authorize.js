@@ -62,15 +62,32 @@ function removePlayerFromGame(socket){
 	}return false;
 }
 
+function removePlayerFromServer(socket) {
+	if(doesPlayerExist(socket.playerName)){
+		db.removeSession(Players[socket.playerName].getSessionID());
+		removePlayerFromGame(socket);
+        delete Players[socket.playerName];
+        delete socket.playerName;
+        socket.emit('logoutSuccess');
+        socket.disconnect();
+        return true;
+    }else
+    	return false;
+}
+
 function addPlayerToGame(game, socket){
-	socket.join(game);
-	db.addGame(Players[socket.playerName].getSessionID(), game);
-	Games[game].addPlayer(socket.playerName);
-	Players[socket.playerName].setCurrentGame(game);
-	socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
-	socket.broadcast.emit('gameListChanged');
-	socket.broadcast.to(game).emit('playerListChanged');
-	global.log('info', socket.playerName +' connected to game: ' + game);
+	if(doesPlayerExist(socket.playerName)
+		&&doesGameExist(game)) {
+		socket.join(game);
+		db.addGame(Players[socket.playerName].getSessionID(), game);
+		Games[game].addPlayer(socket.playerName);
+		Players[socket.playerName].setCurrentGame(game);
+		socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
+		socket.broadcast.emit('gameListChanged');
+		socket.broadcast.to(game).emit('playerListChanged');
+		global.log('info', socket.playerName +' connected to game: ' + game);
+		return true;
+	}return false;
 }
 
 function initialize(io, express){
@@ -114,39 +131,29 @@ function initialize(io, express){
 
 		socket.on('addNewPlayer', function(playerName){
 			if(playerName!=null){
-				if(!doesPlayerExist(playerName)&&playerName.replace(/\s/g, '')!=''
-					&&!socket.hasOwnProperty(playerName))
-				{
+				if(!doesPlayerExist(playerName)
+					&&playerName.replace(/\s/g, '')!=''
+					&&!socket.hasOwnProperty(playerName)) {
 					db.retrivePlayer(socket.handshake.sessionID, 
         				function(player){
-        					if(player != ''){
-        		 				socket.playerName = player;
-        		 				socket.handshake.initialized = true;
-        			 			if(playerName!=socket.playerName)
-        			 				global.log("warn", "Player: "+ socket.playerName 
-        			 					+" tried to reconnect with alias: "+ playerName + ". Denied");
-       			 				global.log("info", "Player " + socket.playerName + " has reconected to server");
-       			 				if(!doesPlayerExist(socket.playerName))
-       			 					Players[socket.playerName] = new objects.Player(socket.playerName,
-	        			 				socket.handshake.sessionID, socket);
-       			 			}else{
+        					if(player != '')
+        		 				playerName = player;
+       			 			else
 								db.addPlayer(socket.handshake.sessionID, playerName);
-								socket.playerName = playerName;
-								socket.handshake.initialized = true;
-       			 				Players[socket.playerName] = new objects.Player(socket.playerName,
-        			 				socket.handshake.sessionID, socket);
-								socket.emit('addNewPlayerSuccess');
-								global.log('info', 'Player: ' + socket.playerName + ' logged in.');
-       			 			} 	
+							socket.playerName = playerName; 
+       			 			Players[socket.playerName] = new objects.Player(socket.playerName,
+	        			 		socket.handshake.sessionID, socket);
+       			 			socket.handshake.initialized = true;
+       			 			socket.emit('addNewPlayerSuccess');
+       			 			global.log('info', 'Player: ' + socket.playerName + ' logged in.');	
        					});
 				}else{
-					socket.emit('addNewPlayerFailed', playerName + ' already exists or illegal name');
-					global.log('warn', playerName + ' was refused connection. Already exists.');
+					socket.emit('addNewPlayerFailed','Player already exists or illegal name');
+					global.log('warn', playerName + ' was refused connection. Player already exists or illegal name');
 				}
-			}
-			else{
-				socket.emit('addNewPlayerFailed', playerName + ' player name cannot be null');
-				global.log('warn', playerName + ' was refused connection. Invalid name.');
+			}else{
+				socket.emit('addNewPlayerFailed', 'Player name cannot be null');
+				global.log('warn', socket.handshake.address + ' was refused connection. Invalid name.');
 			}
 		});
 		
@@ -215,7 +222,7 @@ function initialize(io, express){
 				var gameList = [];
 		 		for(var key in Games)
 		 			if(doesGameExist(key))
-		 				gameList.push({'name':key, 'creator':Games[key].creator, 'numPlayers':Games[key].totalPlayers});
+		 				gameList.push({'name':key, 'creator':Games[key].getCreator(), 'numPlayers':Games[key].getTotalPlayers()});
 				socket.emit('updateGameList', JSON.stringify(gameList));
 				global.log('info', 'Game list sent to player: ' + socket.playerName);
 			}
@@ -236,16 +243,11 @@ function initialize(io, express){
 				db.SessionStore.get ( socket.handshake.sessionID, function(err, session){
 					if (err || !session) {
                 		global.log('error', " could not load the Session Store.");
-                		socket.emit('logoutFail', 'Internal Server error occured');
+                		socket.emit('logoutFailed', 'Internal Server error occured');
                 	}
                 	else{
-                		db.removeSession(Players[socket.playerName].getSessionID());
-						removePlayerFromGame(socket);
+                		removePlayerFromServer(socket);
                 		global.log('info', "Player: " + socket.playerName + " has logged out.");
-                		delete Players[socket.playerName];
-                		delete socket.playerName;
-                		socket.emit('logoutSuccess');
-                		socket.disconnect();
 					}
 				}); 
 			}
