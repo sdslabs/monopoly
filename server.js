@@ -21,7 +21,7 @@ var app = express();
 var stylus = require('stylus');
 
 //Configure Express to use Jade
-app.set('views', __dirname + '/public');
+app.set('views', __dirname + '/templates');
 app.set('view engine', 'jade');
 app.locals.pretty = true;
 

@@ -34,7 +34,7 @@ function send404(res){
 function initialize (app){
 
 	app.use(function (req, res, next) {
-		res.header('X-powered-by', 'PSWS');
+		res.header('Server', 'PSWS');
   		next();
 	});
 
