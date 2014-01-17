@@ -35,33 +35,31 @@ function getPlayerList(){
 	return Players;
 }
 
+function verifyGame(game, socket) {
+	if(Games[game].getTotalPlayers()<1){
+		delete Games[game];
+		socket.broadcast.emit('gameListChanged');
+		global.log('info', 'Game: ' + game + ' has been destroyed');
+		return false;
+	}else
+		return true;
+}
+
 function removePlayerFromGame(socket){
 	if(doesPlayerExist(socket.playerName)){
 		game = Players[socket.playerName].getCurrentGame();
 		if(doesGameExist(game)){
 			Games[game].removePlayer(socket.playerName);
-			global.log('info', socket.playerName +' has left the game: ' + game);
-			socket.leave(game);
-			db.removeGame(Players[socket.playerName].getSessionID());
 			Players[socket.playerName].removeCurrentGame();
+			db.removeGame(Players[socket.playerName].getSessionID());
+			global.log('info', socket.playerName +' has left the game: ' + game);
 
-			if(Games[game].getTotalPlayers()<1){
-				delete Games[game];
-				global.log('info', 'Game: ' + game + ' has been destroyed');
-			}
-			else{	
-				socket.broadcast.to(game).emit('playerExited', socket.playerName);
+			if(!verifyGame(game, socket))
+				// socket.broadcast.to(game).emit('playerExited', socket.playerName);
 				socket.broadcast.to(game).emit('playerListChanged');
-			}	
-
-			socket.broadcast.emit('gameListChanged')
-			socket.emit('exitFromGameSuccess', 'socket.game');
-			
 			return true;
-		}
-		else
-			return false;
-	}
+		}return false;
+	}return false;
 }
 
 function addPlayerToGame(game, socket){
@@ -229,6 +227,8 @@ function initialize(io, express){
 		socket.on('exitFromGame', function(){
 			if(!removePlayerFromGame(socket))
 				global.log('warn', 'Illegal request to exit game from player: '+ socket.playerName);
+			else
+				socket.emit('exitFromGameSuccess', 'socket.game');
 		});
 
 		socket.on('logout', function(){
