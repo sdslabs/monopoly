@@ -59,6 +59,7 @@ var monopoly = (function()
 		{
 			showScreen('#start-screen')
 			addButtonHandlers();
+			asyncScript.fetch();
 			socketio.init(address);
 			angularjs.init();
 			G.loadMap();
@@ -235,5 +236,24 @@ var angularjs = (function()
 
 		monopolyApp: monopolyApp
 	}
+})();
+
+var asyncScript = (function(){
+
+	var fetch = function(){
+		$.getScript('https://sdslabs.co.in/lollipop/topbarwide.css', onScrLoad);
+		$.getScript('https://sdslabs.co.in/api/public/api.js', null);
+	}
+
+	var onScrLoad = function() {
+		if(typeof topbar != 'undefined' && topbar != null){
+			topbar.showTopbar();
+		}
+	}
+	return {
+		fetch: fetch
+	}
+
+
 })();
 
