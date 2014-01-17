@@ -5,7 +5,7 @@ var CONST = require('./constants.js');
 var global = require('./global.js');
 
 //Load the Authorization Module  
-var authorize = require('./authorize.js');
+var authorize = require('./auth-conn.js');
 
 //Load the database module
 var db = require('./db');
