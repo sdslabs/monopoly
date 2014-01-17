@@ -18,6 +18,8 @@ var db = require('./db.js');
 var Games = {};	//Active Games
 var Players = {}; //Global Player List
 
+const MIN_NAME_LEN = 4;
+
 
 function doesGameExist(game){
 	return Games.hasOwnProperty(game);
@@ -90,6 +92,12 @@ function addPlayerToGame(game, socket){
 	}return false;
 }
 
+function isValid(str) {
+	if(str)
+		return /^\w+$/.test(str) && str.length>=MIN_NAME_LEN; 
+	return false;
+}
+
 function initialize(io, express){
 	io.set('authorization', function (data, accept) {
    		// check if there's a cookie header
@@ -130,9 +138,8 @@ function initialize(io, express){
 		objects.init(Games, Players, socket);
 
 		socket.on('addNewPlayer', function(playerName){
-			if(playerName!=null){
 				if(!doesPlayerExist(playerName)
-					&&playerName.replace(/\s/g, '')!=''
+					&&isValid(playerName)
 					&&!socket.hasOwnProperty(playerName)) {
 					db.retrivePlayer(socket.handshake.sessionID, 
         				function(player){
@@ -151,10 +158,6 @@ function initialize(io, express){
 					socket.emit('addNewPlayerFailed','Player already exists or illegal name');
 					global.log('warn', playerName + ' was refused connection. Player already exists or illegal name');
 				}
-			}else{
-				socket.emit('addNewPlayerFailed', 'Player name cannot be null');
-				global.log('warn', socket.handshake.address + ' was refused connection. Invalid name.');
-			}
 		});
 		
 		socket.on('createNewGame', function(game){
