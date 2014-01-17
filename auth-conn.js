@@ -14,89 +14,7 @@ var parseSignedCookies = require('express/node_modules/connect/lib/utils').parse
 //Load the MySQL Driver
 var db = require('./db.js');
 
-//Global Objects containing current game and player info
-var Games = {};	//Active Games
-var Players = {}; //Global Player List
-
-const MIN_NAME_LEN = 4;
-
-
-function doesGameExist(game){
-	return Games.hasOwnProperty(game);
-}
-
-function doesPlayerExist(playerName){
-	return Players.hasOwnProperty(playerName);
-}
-
-function getGameList(){
-	return Games;
-}
-
-function getPlayerList(){
-	return Players;
-}
-
-function verifyGame(game, socket) {
-	if(Games[game].getTotalPlayers()<1){
-		delete Games[game];
-		socket.broadcast.emit('gameListChanged');
-		global.log('info', 'Game: ' + game + ' has been destroyed');
-		return false;
-	}else
-		return true;
-}
-
-function removePlayerFromGame(socket){
-	if(doesPlayerExist(socket.playerName)){
-		game = Players[socket.playerName].getCurrentGame();
-		if(doesGameExist(game)){
-			Games[game].removePlayer(socket.playerName);
-			Players[socket.playerName].removeCurrentGame();
-			db.removeGame(Players[socket.playerName].getSessionID());
-			global.log('info', socket.playerName +' has left the game: ' + game);
-
-			if(!verifyGame(game, socket))
-				// socket.broadcast.to(game).emit('playerExited', socket.playerName);
-				socket.broadcast.to(game).emit('playerListChanged');
-			return true;
-		}return false;
-	}return false;
-}
-
-function removePlayerFromServer(socket) {
-	if(doesPlayerExist(socket.playerName)){
-		db.removeSession(Players[socket.playerName].getSessionID());
-		removePlayerFromGame(socket);
-        delete Players[socket.playerName];
-        delete socket.playerName;
-        socket.emit('logoutSuccess');
-        socket.disconnect();
-        return true;
-    }else
-    	return false;
-}
-
-function addPlayerToGame(game, socket){
-	if(doesPlayerExist(socket.playerName)
-		&&doesGameExist(game)) {
-		socket.join(game);
-		db.addGame(Players[socket.playerName].getSessionID(), game);
-		Games[game].addPlayer(socket.playerName);
-		Players[socket.playerName].setCurrentGame(game);
-		socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
-		socket.broadcast.emit('gameListChanged');
-		socket.broadcast.to(game).emit('playerListChanged');
-		global.log('info', socket.playerName +' connected to game: ' + game);
-		return true;
-	}return false;
-}
-
-function isValid(str) {
-	if(str)
-		return /^\w+$/.test(str) && str.length>=MIN_NAME_LEN; 
-	return false;
-}
+var auth = require('./auth-main.js');
 
 function initialize(io, express){
 	io.set('authorization', function (data, accept) {
@@ -135,11 +53,11 @@ function initialize(io, express){
 	io.sockets.on('connection', function (socket){
 
 		//Adds more handlers for socket.
-		objects.init(Games, Players, socket);
+		objects.init(auth.Games, auth.Players, socket);
 
 		socket.on('addNewPlayer', function(playerName){
-				if(!doesPlayerExist(playerName)
-					&&isValid(playerName)
+				if(!auth.doesPlayerExist(playerName)
+					&&auth.isValid(playerName)
 					&&!socket.hasOwnProperty(playerName)) {
 					db.retrivePlayer(socket.handshake.sessionID, 
         				function(player){
@@ -148,7 +66,7 @@ function initialize(io, express){
        			 			else
 								db.addPlayer(socket.handshake.sessionID, playerName);
 							socket.playerName = playerName; 
-       			 			Players[socket.playerName] = new objects.Player(socket.playerName,
+       			 			auth.Players[socket.playerName] = new objects.Player(socket.playerName,
 	        			 		socket.handshake.sessionID, socket);
        			 			socket.handshake.initialized = true;
        			 			socket.emit('addNewPlayerSuccess');
@@ -156,20 +74,20 @@ function initialize(io, express){
        					});
 				}else{
 					socket.emit('addNewPlayerFailed','Player already exists or illegal name');
-					global.log('warn', playerName + ' was refused connection. Player already exists or illegal name');
+					global.log('warn', socket.handshake.address.address + ' was refused connection. Player already exists or illegal name');
 				}
 		});
 		
 		socket.on('createNewGame', function(game){
-			if(!doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.playerName].getCurrentGame()==null&&game!=''){
+			if(!auth.doesGameExist(game)&&auth.doesPlayerExist(socket.playerName)&&auth.Players[socket.playerName].getCurrentGame()==null&&game!=''){
 			// 	db.retriveGame(socket.handshake.sessionID, 
    //      			function(dbGame){
    //      				if(dbGame != ''){
-   //      					Players[socket.playerName].currentGame = dbGame;
+   //      					auth.Players[socket.playerName].currentGame = dbGame;
    //      			 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
    //      			 	}else{
-							Games[game] = new objects.Game(socket.playerName, game, socket);
-							addPlayerToGame(game, socket);
+							auth.Games[game] = new objects.Game(socket.playerName, game, socket);
+							auth.addPlayerToGame(game, socket);
 							socket.emit('createNewGameSuccess');
 						// }
 					// });
@@ -180,15 +98,15 @@ function initialize(io, express){
 		});
 
 		socket.on('addToGame', function(game){
-			if(doesGameExist(game)&&doesPlayerExist(socket.playerName)&&Players[socket.currentGame]==null&&game!=''){
-				if(Games[game].morePlayersAllowed()){		
+			if(auth.doesGameExist(game)&&auth.doesPlayerExist(socket.playerName)&&auth.Players[socket.currentGame]==null&&game!=''){
+				if(auth.Games[game].morePlayersAllowed()){		
 					// db.retriveGame(socket.handshake.sessionID, 
      //    				function(dbGame){
      //    					if(dbGame != ''){
-     //    						Players[socket.playerName].currentGame = dbGame;
+     //    						auth.Players[socket.playerName].currentGame = dbGame;
      //    				 		global.log("info", "Player " + socket.playerName + " has reconected to game: "+ dbGame);
      //    				 	}else{
-								addPlayerToGame(game, socket);
+								auth.addPlayerToGame(game, socket);
 								socket.emit('addToGameSuccess', game);
 							// }
 						// });
@@ -203,13 +121,13 @@ function initialize(io, express){
 		});
 
 	 	socket.on('queryPlayerList', function(){
-		 	if(doesPlayerExist(socket.playerName)){
+		 	if(auth.doesPlayerExist(socket.playerName)){
 		 		playerList = [];
-		 		var playerNames = Games[Players[socket.playerName].getCurrentGame()].getPlayers()
+		 		var playerNames = auth.Games[auth.Players[socket.playerName].getCurrentGame()].getPlayers()
 		 		for(var key in playerNames)
 		 		{
 		 			var playerName = playerNames[key]
-		 			if(doesPlayerExist(playerName))
+		 			if(auth.doesPlayerExist(playerName))
 		 				playerList.push({'name':playerName});
 		 		}
 		 		socket.emit('updatePlayerList', JSON.stringify(playerList));
@@ -221,11 +139,11 @@ function initialize(io, express){
 		});
 
 		socket.on('queryGameList', function(){
-			if(doesPlayerExist(socket.playerName)){
+			if(auth.doesPlayerExist(socket.playerName)){
 				var gameList = [];
-		 		for(var key in Games)
-		 			if(doesGameExist(key))
-		 				gameList.push({'name':key, 'creator':Games[key].getCreator(), 'numPlayers':Games[key].getTotalPlayers()});
+		 		for(var key in auth.Games)
+		 			if(auth.doesGameExist(key))
+		 				gameList.push({'name':key, 'creator':auth.Games[key].getCreator(), 'numPlayers':auth.Games[key].getTotalPlayers()});
 				socket.emit('updateGameList', JSON.stringify(gameList));
 				global.log('info', 'Game list sent to player: ' + socket.playerName);
 			}
@@ -235,7 +153,7 @@ function initialize(io, express){
 		});
 		
 		socket.on('exitFromGame', function(){
-			if(!removePlayerFromGame(socket))
+			if(!auth.removePlayerFromGame(socket))
 				global.log('warn', 'Illegal request to exit game from player: '+ socket.playerName);
 			else
 				socket.emit('exitFromGameSuccess', 'socket.game');
@@ -249,7 +167,7 @@ function initialize(io, express){
                 		socket.emit('logoutFailed', 'Internal Server error occured');
                 	}
                 	else{
-                		removePlayerFromServer(socket);
+                		auth.removePlayerFromServer(socket);
                 		global.log('info', "Player: " + socket.playerName + " has logged out.");
 					}
 				}); 
@@ -265,8 +183,8 @@ function initialize(io, express){
 			if(socket.handshake.initialized){
 				global.log('info', 'Player: ' + socket.playerName + ' has timed out (removing from server)');
 
-				removePlayerFromGame(socket);
-				delete Players[socket.playerName];
+				auth.removePlayerFromGame(socket);
+				delete auth.Players[socket.playerName];
         	    delete socket.playerName;
     	    }
 		});
@@ -274,11 +192,11 @@ function initialize(io, express){
 		// Debug
 		socket.on('PING', function(){
 			console.log('PING RECEIVED');
-			console.log(Players);
+			console.log(auth.Players);
 		});
 	});
 }
 
 module.exports.initialize = initialize;
-module.exports.getGameList = getGameList;
-module.exports.getPlayerList = getPlayerList;
+// module.exports.getGameList = getGameList;
+// module.exports.getPlayerList = getPlayerList;
