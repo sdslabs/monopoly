@@ -62,8 +62,10 @@ function synchronize(){
 module.exports.retrivePlayer = function (sessionID, callback){
 	connection.query('SELECT player FROM sktio WHERE session = \"'+sessionID+'\"',
         function(err, row, fields){
-        	if(err)
-        		throw err;
+        	if(err){
+        		global.log('error', "retrivePlayer has failed. Resuming.")
+        		// throw err;
+        	}
         	if(row[0]){
         		if(row[0].hasOwnProperty('player'))
         			callback(row[0].player);
@@ -77,8 +79,10 @@ module.exports.addPlayer = function (sessionID, playerName, callback){
 				+sessionID+'\"'+', \"'+playerName+'\")';
 	connection.query(Query,
 		function(err, row, fields){
-			if(err)
-				throw err;	
+			if(err){
+        		global.log('error', "addPlayer has failed. Resuming.")
+        		// throw err;
+        	}	
 			if(callback)
 				callback();
 		});
@@ -87,8 +91,10 @@ module.exports.addPlayer = function (sessionID, playerName, callback){
 module.exports.retriveGame = function (sessionID, callback){
 	connection.query('SELECT game FROM sktio WHERE session = \"'+sessionID+'\"',
         function(err, row, fields){
-        	if(err)
-        		throw err;
+			if(err){
+        		global.log('error', "retriveGame has failed. Resuming.")
+        		// throw err;
+        	}
         	if(row[0]){
         		if(row[0].hasOwnProperty('game'))
         			if(row[0].game!=null)
@@ -105,8 +111,10 @@ module.exports.addGame = function (sessionID, game, callback){
 	var Query = 'UPDATE sktio SET game = '+'\"'+game+'\" WHERE session = \"'+sessionID+'\"';
 	connection.query(Query,
 		function(err, row, fields){
-			if(err)
-				throw err;	
+			if(err){
+        		global.log('error', "addGame has failed. Resuming.")
+        		// throw err;
+        	}	
 			if(callback)
 				callback();
 		});
@@ -120,15 +128,19 @@ module.exports.removeSession = function (sessionID, callback){
 	var Query = 'DELETE FROM sktio WHERE session = \"'+sessionID+'\"';
 	connection.query(Query, 
 		function(err, row, fields){
-			if(err)
-				throw err;
+			if(err){
+        		global.log('error', "removeSession has failed. Resuming.")
+        		// throw err;
+        	}
 		});	
 	
 	var Query = 'DELETE FROM Sessions WHERE sid = \"'+sessionID+'\"';
 	connection.query(Query, 
 		function(err, row, fields){
-			if(err)
-				throw err;
+			if(err){
+        		global.log('error', "removeSession has failed. Resuming.")
+        		// throw err;
+        	}
 			if(callback)
 				callback();	
 		});
