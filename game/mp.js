@@ -104,6 +104,19 @@ function findPlayer(socket){
 		return null;
 }
 
+function verifyRoute(route, socket){
+	var game = findGame(socket);
+	if(route&&game)
+		if(route.length>0&&route.length<=M_CONST.MAX_DICE_VAL){
+			var first = route[0];
+			for(var i = 1; i<route.length; i++)
+				if(!game.map.properties.hasOwnProperty(route)||route[0]==route[i])
+					return false;
+			return true;
+		}
+	return false;
+}
+
 //This associates all dynamic functions associated with a gane object to the corrosponding socket object.
 function init(G_ames, P_layers, socket){
 	Games = G_ames;
@@ -154,26 +167,25 @@ function init(G_ames, P_layers, socket){
 		var player = findPlayer(socket);
 		var flag = false;
 		console.log(game.mp.currentPlayer, socket.playerName);
-		if(game&&game.mp.started&&game.mp.currentPlayer==socket.playerName){
-			if(moves <= 6){
-				var i = 0;
-				if(player.locProp == M_CONST.START_PROP){
-					player.locProp = M_CONST.FIRST_PROP;
-					i++;
-				}
 
-				for(; i<moves; i++){
-					if(!game.map.doesPathExist(player.locProp, route[i])){
-						global.log('warn', "Illegal move by " + socket.playerName + " in game " + player.getCurrentGame() + ". No path between " + player.locProp + ", " + route[i]);
-						flag = true;
-						break;
-					}
-					player.locProp = route[i];
+		if(game&&game.mp.started
+				&&game.mp.currentPlayer==socket.playerName
+				&&verifyRoute(route, socket)){
+			var i = 0;
+			if(player.locProp == M_CONST.START_PROP){
+				player.locProp = M_CONST.FIRST_PROP;
+				i++;
+			}
+
+			for(; i<moves; i++){
+				if(!game.map.doesPathExist(player.locProp, route[i])){
+					global.log('warn', "Illegal move by " + socket.playerName + " in game " + player.getCurrentGame() + ". No path between " + player.locProp + ", " + route[i]);
+					flag = true;
+					break;
 				}
-			}else
-				flag = true;
-			
-			console.log('2')
+				player.locProp = route[i];
+			}
+				
 			if(!flag){
 				game.mp.turnsPlayed++;
 				if(game.mp.turnsPlayed > M_CONST.END_GAME_LIM)
