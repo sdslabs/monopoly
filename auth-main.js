@@ -38,9 +38,19 @@ module.exports.removePlayerFromGame = function (socket){
 			db.removeGame(Players[socket.playerName].getSessionID());
 			global.log('info', socket.playerName +' has left the game: ' + game);
 
-			// if(!verifyGame(game, socket))
-				// socket.broadcast.to(game).emit('playerExited', socket.playerName);
-				socket.broadcast.to(game).emit('playerListChanged', 'queryPlayerList');
+			verifyGame(game, socket);
+			socket.broadcast.to(game).emit('playerListChanged', 'queryPlayerList');
+			return true;
+		}return false;
+	}return false;
+}
+
+module.exports.removePlayerFromGameSp = function (socket){
+	if(doesPlayerExist(socket.playerName)){
+		game = Players[socket.playerName].getCurrentGame();
+		if(doesGameExist(game)){
+			Players[socket.playerName].removeCurrentGame();
+			db.removeGame(Players[socket.playerName].getSessionID());
 			return true;
 		}return false;
 	}return false;

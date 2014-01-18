@@ -3,8 +3,10 @@ var M_CONST = require('./m_constants.json');
 
 //Load the Global Function Module
 var global = require('../global.js');
-var places = require('./places.js');
 
+// Load the authorization module
+var auth = require('../auth-main.js');
+var places = require('./places.js');
 
 var Games = null;
 var Players = null;
@@ -19,14 +21,16 @@ function mp(game, socket){
 	this.currentPlayer = null;
 }
 
+// mp.socket stores the creator's socket
+
 mp.prototype.getNextPlayer = function(){
 	var players = findGame(this.socket).getPlayers();
 	this.currentPlayer = players[(players.indexOf(this.currentPlayer)+1)%players.length];
 	return this.currentPlayer;
 }
 
-mp.prototype.levyTax = function(){
-	var player =  findPlayer(this.socket);
+mp.prototype.levyTax = function(socket){
+	var player =  findPlayer(socket);
 	var prop = player.locProp;
 	
 	if(this.game.map.properties[prop].owner != M_CONST.NO_OWNER &&
@@ -43,6 +47,32 @@ mp.prototype.provideMoney = function(){
 	for(var i = 0; i < players.length; i++)
 		Players[players[i]].money += M_CONST.MONEY_PER_UPDATE;
 	global.log('verbose', "Provided money ("+M_CONST.MONEY_PER_UPDATE+") to everyone in "+this.game.id);
+}
+
+mp.prototype.end = function(){
+	var result = [];
+	var players = this.game.getPlayers();
+	for(var i = 0; i < players.length; i++)
+		result.push([Players[player].playerName, Players[player].money]);
+	results.sort(function(a, b){
+		return a[1] - b[1];
+		});
+
+	var report = {};
+	report.results = result;
+	report.startAt = this.game.startedAt;
+	report.endAt = new Date();
+
+	for(var i = 0; i < players.length; i++)
+		auth.removePlayerFromGameSp(Players[player].socket);
+
+	var id = this.game.id;
+	delete Games[id];
+
+	socket.emit('endGame', report);
+	socket.broadcast.to(this.game.id).emit('endGame', report);
+
+	global.log('info', 'Game: '+ id + 'has ended.')
 }
 
 // Fetches a game associated with a socket.
@@ -127,9 +157,11 @@ function init(G_ames, P_layers, socket){
 				
 			if(!flag){
 				game.mp.turnsPlayed++;
-				if(game.mp.turnsPlayed > M_CONST.MONEY_RFRSH_LIM)
+				if(game.mp.turnsPlayed > M_CONST.END_GAME_LIM)
+					game.mp.end();
+				if(!(game.mp.turnsPlayed % M_CONST.MONEY_RFRSH_LIM))
 					game.mp.provideMoney();
-				game.mp.levyTax();
+				game.mp.levyTax(socket);
 				var nextPlayer = game.mp.getNextPlayer();
 				socket.emit("mpMoveSuccess", nextPlayer);
 				socket.emitR('mpMoveOther', route, nextPlayer);
@@ -162,6 +194,13 @@ function init(G_ames, P_layers, socket){
 				socket.emit("mpBuyFail");
 			}
 		}
+	});
+
+	socket.on('mpEndGame', function(){
+		var player = findPlayer(socket);
+		var game = findGame(socket);
+		if(game.creator == player.playerName)
+			game.mp.end();
 	});
 
 	socket.on('getPlaceList', function()

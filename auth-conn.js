@@ -34,7 +34,6 @@ function initialize(io, express){
         	// retrive the cookie
         	data.sessionID = parsedCookie;
         	data.initialized = false;
-
         	// Production
     		// check for authentication
 			// require('./sds_auth.js').user.check_login(data.headers.cookie['sds_login'], function(uid){
@@ -46,7 +45,7 @@ function initialize(io, express){
         	// 	if(req.hasOwnProperty(uid))
         	// 		if(req.uid!=null || req.uid != '')
         	// 			// accept the incoming connection
-        				return accept(null, true);
+        	return accept(null, true);
         		// return accept('Auth failure', false);
         	// });
     	}

@@ -46,12 +46,12 @@ var monopoly = (function()
 	{
 		socketio.request('beginGame')
 		beginGame()
-		gMaps.init()
-		gPlaces.init()
 	}
 	var beginGame = function()
 	{
 		showScreen('#game-screen');
+		gMaps.init()
+		gPlaces.init()
 
 	}
 	var getPlaceList = function()
