@@ -105,12 +105,13 @@ var socketio = (function()
 		socket.on('placeListReceived', gPlaces.setPlaceList)
 		socket.on('endGame', monopoly.endGame)
 
-		//For debugging
-		socket.on('PING', function(data){
-			console.log(data);
-		});
-
-
+		var arr = ['mpInitBy', 'mpInitSuccess', 'mpMoveSuccess', 'mpMoveOther', 'mpMoveFail', 'mpBuySuccess', 'mpBuyOther', 'mpBuyFail',
+		'PING'];
+		for(var key in arr)
+		{
+			var event = arr[key]
+			addHandler(event)
+		}
 	}	
 
 	var setCookie = function(c_name,value,exdays){	
