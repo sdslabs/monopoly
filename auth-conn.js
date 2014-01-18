@@ -42,13 +42,13 @@ function initialize(io, express){
 			// 		accept("Auth failed", false);
 			// });
 
-        	db.SessionStore.get(data.sessionID, function(err, req){
-        		if(req.hasOwnProperty(uid))
-        			if(req.uid!=null || req.uid != '')
-        				// accept the incoming connection
+        	// db.SessionStore.get(data.sessionID, function(err, req){
+        	// 	if(req.hasOwnProperty(uid))
+        	// 		if(req.uid!=null || req.uid != '')
+        	// 			// accept the incoming connection
         				return accept(null, true);
-        		return accept('Auth failure', false);
-        	});
+        		// return accept('Auth failure', false);
+        	// });
     	}
        	// if there isn't, turn down the connection
        	return accept(null, false);
