@@ -102,8 +102,9 @@ function init(G_ames, P_layers, socket){
 		var game = findGame(socket);
 		if(game&&!game.started)
 		if(game.creator == socket.playerName && !game.mp.started){
-			this.started = true;
-			socket.broadcast.to(findGame(socket).id).emit('beginGame')
+			game.started = true;
+			socket.broadcast.to(findGame(socket).id).emit('beginGame');
+			global.log('info', 'Game '+game.id+' has started.');
 			// socket.emitR('beginGame');
 		}
 	})
@@ -121,12 +122,15 @@ function init(G_ames, P_layers, socket){
 	});
 
 	socket.on('mpInitialize', function(){
+		var game = findGame(socket);
 		if(game&&game.started){	
 			var player = findPlayer(socket);
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
 			socket.emit("mpInitSuccess");
 			socket.emitR("mpInitBy", player.playerName);
+		}else{
+			global.log('warn', 'Game could not be found');
 		}
 
 	});
