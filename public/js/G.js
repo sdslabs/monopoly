@@ -1,10 +1,15 @@
 var G = (function()
 {
+	var Ready =  false;
+
+	var ready = function(){
+		return Ready;
+	}
+
 	var uponLoad = function()
 	{
 		console.log(1)
-		gMaps.init()
-		gPlaces.init()
+		Ready = true;
 		monopoly.getPlaceList()
 	}	
 	return {
@@ -15,6 +20,7 @@ var G = (function()
 			script.src = 'https://maps.googleapis.com/maps/api/js?libraries=places&v=3.exp&sensor=false&callback=G.uponLoad';
 			document.body.appendChild(script);
 		},
-	uponLoad: uponLoad
+	uponLoad: uponLoad,
+	ready: ready
 	}
 })();

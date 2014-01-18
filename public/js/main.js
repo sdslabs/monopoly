@@ -46,10 +46,13 @@ var monopoly = (function()
 	{
 		socketio.request('beginGame')
 		beginGame()
+		gMaps.init()
+		gPlaces.init()
 	}
 	var beginGame = function()
 	{
 		showScreen('#game-screen');
+
 	}
 	var getPlaceList = function()
 	{
@@ -65,7 +68,7 @@ var monopoly = (function()
 			socketio.init(address);
 			angularjs.init();
 			G.init()
-			beginGame(); //Temporarily added to easen testing of maps
+			// beginGame(); //Temporarily added to easen testing of maps
 			// monopoly.canvas = $('#gamecanvas')[0];
 			// monopoly.context = monopoly.canvas.getContext('2d');
 		},
