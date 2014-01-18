@@ -24,9 +24,17 @@ function mp(game, socket){
 // mp.socket stores the creator's socket
 
 mp.prototype.getNextPlayer = function(){
-	var players = findGame(this.socket).getPlayers();
-	this.currentPlayer = players[(players.indexOf(this.currentPlayer)+1)%players.length];
-	return this.currentPlayer;
+
+	if(this.started){
+		var players = findGame(this.socket).getPlayers();
+		if(this.currentPlayer)
+			this.currentPlayer = players[(players.indexOf(this.currentPlayer)+1)%players.length];
+		else
+			this.currentPlayer = players[0];
+		global.log('verbose', "Player: " + currentPlayer + "'s' turn is next.")
+		return this.currentPlayer;
+	}
+	return null;
 }
 
 mp.prototype.levyTax = function(socket){
@@ -100,9 +108,9 @@ function init(G_ames, P_layers, socket){
 
 	socket.on('beginGame', function(){
 		var game = findGame(socket);
-		if(game&&!game.started)
+		if(game&&!game.mp.started)
 		if(game.creator == socket.playerName && !game.mp.started){
-			game.started = true;
+			game.mp.started = true;
 			socket.broadcast.to(findGame(socket).id).emit('beginGame');
 			global.log('info', 'Game '+game.id+' has started.');
 			// socket.emitR('beginGame');
@@ -112,7 +120,7 @@ function init(G_ames, P_layers, socket){
 	
 	socket.on('mpCurrentPlayers', function(){
 		var game = findGame(socket);
-		if(game&&game.started){
+		if(game&&game.mp.started){
 			var players = game.getPlayers();
 			if(players){
 				socket.emit('mpCurrentPlayersSuccess', players);
@@ -123,7 +131,7 @@ function init(G_ames, P_layers, socket){
 
 	socket.on('mpInitialize', function(){
 		var game = findGame(socket);
-		if(game&&game.started){	
+		if(game&&game.mp.started){	
 			var player = findPlayer(socket);
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
@@ -140,7 +148,7 @@ function init(G_ames, P_layers, socket){
 		var game = findGame(socket);
 		var player = findPlayer(socket);
 		var flag = false;
-
+		console.log(game);
 		if(game&game.mp.started){
 			if(moves <= 6){
 				var i = 0;
@@ -159,7 +167,8 @@ function init(G_ames, P_layers, socket){
 				}
 			}else
 				flag = true;
-				
+			
+			console.log('2')
 			if(!flag){
 				game.mp.turnsPlayed++;
 				if(game.mp.turnsPlayed > M_CONST.END_GAME_LIM)
@@ -215,7 +224,6 @@ function init(G_ames, P_layers, socket){
 	socket.on('PING2', function(garb1, garb2){
 		
 		console.log('PING2 RECEIVED');
-		socket.emit('PING', Players);
 	});
 }
 
