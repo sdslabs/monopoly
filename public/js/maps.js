@@ -174,7 +174,7 @@ var gMaps = (function(){
 
 var gPlaces = (function()
 {
-	var placesService;
+	var count = 0, placesService;
 	var init = function()
 	{
 		if(!G.ready()){
