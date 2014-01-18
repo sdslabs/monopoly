@@ -23,12 +23,15 @@ function mp(game, socket){
 
 // mp.socket stores the creator's socket
 
-mp.prototype.getNextPlayer = function(){
+mp.prototype.getNextPlayer = function(socket){
 
 	if(this.started){
-		var players = findGame(this.socket).getPlayers();
-		if(this.currentPlayer)
+		var players = findGame(socket).getPlayers();
+		if(this.currentPlayer){
 			this.currentPlayer = players[(players.indexOf(this.currentPlayer)+1)%players.length];
+			socket.emit('mpTurn', this.currentPlayer);
+			socket.broadcast.to(this.game.id).emit('mpTurn', this.currentPlayer);
+		}
 		else
 			this.currentPlayer = players[0];
 		global.log('verbose', "Player: " + this.currentPlayer + "'s' turn is next.")
@@ -178,10 +181,10 @@ function init(G_ames, P_layers, socket){
 				if(!(game.mp.turnsPlayed % M_CONST.MONEY_RFRSH_LIM))
 					game.mp.provideMoney();
 				game.mp.levyTax(socket);
-				var nextPlayer = game.mp.getNextPlayer();
-				socket.emit("mpMoveSuccess", nextPlayer);
-				socket.broadcast.to(game.id).emit('mpMoveOther', route, nextPlayer);
-				global.log('verbose', "Move by " + socket.playerName + " in game " + player.getCurrentGame() + ". Route " + route + ".");
+				var nextPlayer = game.mp.getNextPlayer(socket);
+				socket.emit("mpMoveSuccess");
+				socket.broadcast.to(game.id).emit('mpMoveOther', route);
+				global.log('verbose', socket.playerName + "moved in game " + player.getCurrentGame() + ". Route " + route + ".");
 			}
 			else{
 				socket.emit("mpMoveFail");
