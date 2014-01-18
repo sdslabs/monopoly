@@ -95,14 +95,6 @@ Game.prototype.getCreator = function(){
 	return this.creator;
 }
 
-Game.prototype.getcreatedAt = function(){
-	return this.createdAt;
-}
-
-Game.prototype.getlastActivity = function(){
-	return this.lastActivity;
-}
-
 Game.prototype.getPlayers = function(){
 	return this.players;
 }

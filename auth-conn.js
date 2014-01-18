@@ -124,7 +124,8 @@ function initialize(io, express){
 		});
 
 	 	socket.on('queryPlayerList', function(){
-		 	if(auth.doesPlayerExist(socket.playerName)){
+		 	if(auth.doesPlayerExist(socket.playerName)
+		 		&&auth.Players[socket.playerName].getCurrentGame()!=null){
 		 		playerList = [];
 		 		var playerNames = auth.Games[auth.Players[socket.playerName].getCurrentGame()].getPlayers()
 		 		for(var key in playerNames)
@@ -137,7 +138,9 @@ function initialize(io, express){
 		 		global.log('info', 'Player list sent to player: ' + socket.playerName);
 		 	}
 		 	else{
-		 		global.log('warn', 'Player list not sent to: ' + socket.playerName)
+		 		global.log('warn', 'Player list not sent to: ' + socket.playerName);
+		 		// console.log(auth.doesPlayerExist(socket.playerName));
+		 		// console.log(auth.Players[socket.currentGame])
 		 	}
 		});
 

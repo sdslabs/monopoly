@@ -50,27 +50,27 @@ mp.prototype.provideMoney = function(){
 }
 
 mp.prototype.end = function(){
-	var result = [];
+	var results = [];
 	var players = this.game.getPlayers();
 	for(var i = 0; i < players.length; i++)
-		result.push([Players[player].playerName, Players[player].money]);
+		results.push([Players[players[i]].playerName, Players[players[i]].money]);
 	results.sort(function(a, b){
 		return a[1] - b[1];
 		});
 
 	var report = {};
-	report.results = result;
-	report.startAt = this.game.startedAt;
+	report.results = results;
+	report.startAt = this.game.createdAt;
 	report.endAt = new Date();
 
 	for(var i = 0; i < players.length; i++)
-		auth.removePlayerFromGameSp(Players[player].socket);
+		auth.removePlayerFromGameSp(Players[players[i]].socket);
 
 	var id = this.game.id;
 	delete Games[id];
 
-	socket.emit('endGame', report);
-	socket.broadcast.to(this.game.id).emit('endGame', report);
+	this.game.socket.broadcast.to(id).emit('endGame', report);
+	this.game.socket.emit('endGame', report);
 
 	global.log('info', 'Game: '+ id + 'has ended.')
 }
