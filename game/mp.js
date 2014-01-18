@@ -128,7 +128,7 @@ function init(G_ames, P_layers, socket){
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
 			socket.emit("mpInitSuccess");
-			socket.emitR("mpInitBy", player.playerName);
+			socket.broadcast.to(game.id).emit("mpInitBy", player.playerName);
 		}else{
 			global.log('warn', 'Game could not be found');
 		}
@@ -169,7 +169,7 @@ function init(G_ames, P_layers, socket){
 				game.mp.levyTax(socket);
 				var nextPlayer = game.mp.getNextPlayer();
 				socket.emit("mpMoveSuccess", nextPlayer);
-				socket.emitR('mpMoveOther', route, nextPlayer);
+				socket.broadcast.to(game.id).emit('mpMoveOther', route, nextPlayer);
 				global.log('verbose', "Move by " + socket.playerName + " in game " + player.getCurrentGame() + ". Route " + route + ".");
 			}
 			else{
@@ -192,7 +192,7 @@ function init(G_ames, P_layers, socket){
 						game.map.properties[property].owner = player.playerName;
 						player.propOwned.push(property);
 						socket.emit("mpBuySuccess");
-						socket.emitR("mpBuyOther", player.playerName, property);
+						socket.broadcast.to(game.id).emitR("mpBuyOther", player.playerName, property);
 						global.log('verbose', player.playerName + " has bought " + game.map.properties[property].id);
 			}else{
 				global.log('info', player.playerName + " not allowed to buy " + game.map.properties[property].id);
@@ -215,7 +215,7 @@ function init(G_ames, P_layers, socket){
 	socket.on('PING2', function(garb1, garb2){
 		
 		console.log('PING2 RECEIVED');
-		console.log(Players);
+		socket.emit('PING', Players);
 	});
 }
 
