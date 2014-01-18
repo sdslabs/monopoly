@@ -1,0 +1,40 @@
+!!! 5
+html(lang='en' ng-app='monopoly-app')
+	head
+		title Monopoly - Leaderboard
+
+		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
+
+		link(rel ='stylesheet', type='text/css', href='/css/bootstrap.min.css', media = 'screen')
+		link(rel ='stylesheet', type='text/css', href='/css/bootstrap-responsive.min.css', media = 'screen')
+
+	
+		script(src='/js/jquery.min.js')
+		script(src='http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js')
+	body
+		script(id = 'score-table-template', type='text/x-jquery-tmpl').
+			<tr>
+				<td>${Name}
+				<td>${Score}
+			</tr>	
+		div(class = 'container')
+			div(class = 'row span12 text-center white-wrap')
+				div(id='score-table' class = 'table')
+					tr
+						th Name
+						th Score
+		script(type='text/javascript').
+			var results = [];
+			$(document).ready(function(){
+				results= [ {Name: 'a', Score: '5'},
+								{Name: 'b', Score: '6'}];
+				$('#score-table-template').tmpl(results).appendTo('#score-table tbody');
+			} ) ;
+			
+
+
+
+
+
+
+					

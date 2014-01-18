@@ -66,6 +66,13 @@ function initialize (app){
 		global.log('verbose', 'Sent maps page to client: ' + req.connection.remoteAddress);
 	});
 
+	app.get('/leaderboard', function(req, res) {
+		res.render('leaderboard',
+		{
+			
+		})
+	})
+
 
 
 	app.get('/:folder/:file', function(req, res){

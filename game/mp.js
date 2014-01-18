@@ -56,7 +56,7 @@ mp.prototype.end = function(){
 		results.push([Players[players[i]].playerName, Players[players[i]].money]);
 	results.sort(function(a, b){
 		return a[1] - b[1];
-		});
+	});
 
 	var report = {};
 	report.results = results;
@@ -100,6 +100,7 @@ function init(G_ames, P_layers, socket){
 
 	socket.on('beginGame', function(){
 		var game = findGame(socket);
+		if(game&&!game.started)
 		if(game.creator == socket.playerName && !game.mp.started){
 			this.started = true;
 			socket.broadcast.to(findGame(socket).id).emit('beginGame')
