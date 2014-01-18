@@ -71,8 +71,7 @@ function initialize (app){
 	app.get('/:folder/:file', function(req, res){
 		send(req, res, req.params.folder+'/'+req.params.file);
 	});
-
-
+	
 	app.get('*', function(req, res){
 		send404(res);
 	});

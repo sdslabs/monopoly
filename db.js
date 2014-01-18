@@ -60,18 +60,19 @@ function synchronize(){
 }
 
 module.exports.retrivePlayer = function (sessionID, callback){
-	connection.query('SELECT player FROM sktio WHERE session = \"'+sessionID+'\"',
-        function(err, row, fields){
-        	if(err){
-        		global.log('error', "retrivePlayer has failed. Resuming.")
-        		// throw err;
-        	}
-        	if(row[0]){
-        		if(row[0].hasOwnProperty('player'))
-        			callback(row[0].player);
-        	}else
-        		callback('');
-        });
+	// connection.query('SELECT player FROM sktio WHERE session = \"'+sessionID+'\"',
+ //        function(err, row, fields){
+ //        	if(err){
+ //        		global.log('error', "retrivePlayer has failed. Resuming.")
+ //        		// throw err;
+ //        	}
+ //        	if(row[0]){
+ //        		if(row[0].hasOwnProperty('player'))
+ //        			callback(row[0].player);
+ //        	}else
+ //        		callback('');
+ //        });
+return '';
 }
 
 module.exports.addPlayer = function (sessionID, playerName, callback){
@@ -89,21 +90,22 @@ module.exports.addPlayer = function (sessionID, playerName, callback){
 }
 
 module.exports.retriveGame = function (sessionID, callback){
-	connection.query('SELECT game FROM sktio WHERE session = \"'+sessionID+'\"',
-        function(err, row, fields){
-			if(err){
-        		global.log('error', "retriveGame has failed. Resuming.")
-        		// throw err;
-        	}
-        	if(row[0]){
-        		if(row[0].hasOwnProperty('game'))
-        			if(row[0].game!=null)
-        				callback(row[0].game);
-        			else
-        				callback('');
-        	}else
-        		callback('');
-        });
+	// connection.query('SELECT game FROM sktio WHERE session = \"'+sessionID+'\"',
+ //        function(err, row, fields){
+	// 		if(err){
+ //        		global.log('error', "retriveGame has failed. Resuming.")
+ //        		// throw err;
+ //        	}
+ //        	if(row[0]){
+ //        		if(row[0].hasOwnProperty('game'))
+ //        			if(row[0].game!=null)
+ //        				callback(row[0].game);
+ //        			else
+ //        				callback('');
+ //        	}else
+ //        		callback('');
+ //        });
+	return '';
 }
 
 

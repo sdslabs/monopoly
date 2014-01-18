@@ -105,6 +105,11 @@ var socketio = (function()
 		socket.on('placeListReceived', gPlaces.setPlaceList)
 		socket.on('endGame', monopoly.endGame)
 
+		//For debugging
+		socket.on('PING', function(data){
+			console.log(data);
+		});
+
 
 	}	
 
