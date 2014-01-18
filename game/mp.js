@@ -3,6 +3,8 @@ var M_CONST = require('./m_constants.json');
 
 //Load the Global Function Module
 var global = require('../global.js');
+var places = require('./places.js');
+
 
 var Games = null;
 var Players = null;
@@ -162,6 +164,10 @@ function init(G_ames, P_layers, socket){
 		}
 	});
 
+	socket.on('getPlaceList', function()
+	{
+		socket.emit('placeListReceived', JSON.stringify(places.placeList))
+	})
 	socket.on('PING2', function(garb1, garb2){
 		
 		console.log('PING2 RECEIVED');

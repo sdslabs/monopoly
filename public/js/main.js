@@ -51,7 +51,10 @@ var monopoly = (function()
 	{
 		showScreen('#game-screen');
 	}
-
+	var getPlaceList = function()
+	{
+		socketio.getPlaceList()
+	}
 
 	return {
 		init:function(address) 
@@ -66,7 +69,8 @@ var monopoly = (function()
 			// monopoly.canvas = $('#gamecanvas')[0];
 			// monopoly.context = monopoly.canvas.getContext('2d');
 		},
-		beginGame:beginGame
+		beginGame:beginGame,
+		getPlaceList:getPlaceList
 	}
 })();
 
@@ -88,6 +92,8 @@ var socketio = (function()
 		socket.on('playerListChanged', getPlayerList)
 		socket.on('exitFromGameSuccess', exitFromGameSuccess)
 		socket.on('beginGame', monopoly.beginGame)
+		socket.on('placeListReceived', gPlaces.setPlaceList)
+
 
 	}	
 
@@ -171,6 +177,10 @@ var socketio = (function()
 	{
 		getGameList()
 	}
+	var getPlaceList = function()
+	{
+		socket.emit('getPlaceList')
+	}
 
 	return {
 		init: init,
@@ -181,7 +191,8 @@ var socketio = (function()
 
 		beginGame:beginGame,
 
-		exitFromGame:exitFromGame
+		exitFromGame:exitFromGame,
+		getPlaceList:getPlaceList
 	}
 })();
 

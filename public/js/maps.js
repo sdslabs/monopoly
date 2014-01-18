@@ -191,12 +191,25 @@ var gPlaces = (function()
 		  	console.log(results, status)
 		  	if(results.length > 0)
 			  	gMaps.addMarkerAt(results[0].geometry.location)
+		    else
+		    	console.log(search)
+
 			});	
+	}
+	var setPlaceList = function(placeList)
+	{
+		placeList = JSON.parse(placeList)
+		for(var key in placeList)
+		{
+			var place = placeList[key]
+			placeSearch(place)
+		}
 	}
 
 	return {
 		init:init,
-		placeSearch:placeSearch
+		placeSearch:placeSearch,
+		setPlaceList:setPlaceList
 	}
 })();
 // // Testing functions

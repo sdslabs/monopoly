@@ -5,6 +5,7 @@ var G = (function()
 		console.log(1)
 		gMaps.init()
 		gPlaces.init()
+		monopoly.getPlaceList()
 	}	
 	return {
 	init: function() 
