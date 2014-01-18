@@ -50,7 +50,6 @@ var monopoly = (function()
 	var beginGame = function()
 	{
 		showScreen('#game-screen');
-		G.init();
 	}
 
 
@@ -62,7 +61,8 @@ var monopoly = (function()
 			asyncScript.fetch();
 			socketio.init(address);
 			angularjs.init();
-			G.loadMap();
+			gMaps.loadMap();
+			beginGame(); //Temporarily added to easen testing of maps
 			// monopoly.canvas = $('#gamecanvas')[0];
 			// monopoly.context = monopoly.canvas.getContext('2d');
 		},
