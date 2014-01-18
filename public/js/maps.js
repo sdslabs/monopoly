@@ -4,15 +4,6 @@ var gMaps = (function(){
 	// var state = false;
 	var count = 0;
 	var allowedBounds;
-
-	function loadMap() {
-		// console.log("Loading map...");
-		var script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = 'https://maps.googleapis.com/maps/api/js?libraries=places&v=3.exp&sensor=false&callback=gMaps.init';
-		document.body.appendChild(script);
-	}
-
 	// function ready() {
 	// 	state = true;
 	// }
@@ -168,7 +159,6 @@ var gMaps = (function(){
 		getMap:getMap,
 		// ready:ready,
 		init:initialize,
-		loadMap:loadMap,
 		addMarkerCenter:addMarkerCenter,
 		addMarkerAt:addMarkerAt,
 		addMarkerImage:addMarkerImage,
