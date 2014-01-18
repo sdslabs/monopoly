@@ -31,7 +31,7 @@ mp.prototype.getNextPlayer = function(){
 			this.currentPlayer = players[(players.indexOf(this.currentPlayer)+1)%players.length];
 		else
 			this.currentPlayer = players[0];
-		global.log('verbose', "Player: " + currentPlayer + "'s' turn is next.")
+		global.log('verbose', "Player: " + this.currentPlayer + "'s' turn is next.")
 		return this.currentPlayer;
 	}
 	return null;
@@ -135,6 +135,8 @@ function init(G_ames, P_layers, socket){
 			var player = findPlayer(socket);
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
+			if(socket.playerName==game.creator)
+				game.mp.getNextPlayer();
 			socket.emit("mpInitSuccess");
 			socket.broadcast.to(game.id).emit("mpInitBy", player.playerName);
 		}else{
@@ -148,8 +150,8 @@ function init(G_ames, P_layers, socket){
 		var game = findGame(socket);
 		var player = findPlayer(socket);
 		var flag = false;
-		console.log(game);
-		if(game&game.mp.started){
+		console.log(game.mp.currentPlayer, socket.playerName);
+		if(game&&game.mp.started&&game.mp.currentPlayer==socket.playerName){
 			if(moves <= 6){
 				var i = 0;
 				if(player.locProp == M_CONST.START_PROP){
@@ -192,7 +194,7 @@ function init(G_ames, P_layers, socket){
 		var game = findGame(socket);
 		var property = player.locProp;
 
-		if(game&game.mp.started){
+		if(game&&game.mp.started){
 			if((game.mp.currentPlayer == player.playerName)
 			&&(game.map.properties.hasOwnProperty(property) && property != M_CONST.START_PROP)
 				&&(game.map.properties[property].owner == M_CONST.NO_OWNER)
@@ -204,7 +206,7 @@ function init(G_ames, P_layers, socket){
 						socket.broadcast.to(game.id).emitR("mpBuyOther", player.playerName, property);
 						global.log('verbose', player.playerName + " has bought " + game.map.properties[property].id);
 			}else{
-				global.log('info', player.playerName + " not allowed to buy " + game.map.properties[property].id);
+				global.log('info', player.playerName + " not allowed to buy");
 				socket.emit("mpBuyFail");
 			}
 		}
@@ -223,6 +225,12 @@ function init(G_ames, P_layers, socket){
 	})
 	socket.on('PING2', function(garb1, garb2){
 		
+		console.log(findGame(socket));
+		console.log('PING2 RECEIVED');
+	});
+	socket.on('PING3', function(garb1, garb2){
+		
+		socket.emit('PING', findGame(socket).map.properties);
 		console.log('PING2 RECEIVED');
 	});
 }

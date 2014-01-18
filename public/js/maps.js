@@ -10,7 +10,7 @@ var gMaps = (function(){
 
 	function initialize() {
 		if(!G.ready()){
-			if(count < 15){
+			if(count++ < 15){
 				setTimeout(initialize, 500);
 				console.log("Google Maps not loaded yet...")
 			}else
@@ -178,7 +178,7 @@ var gPlaces = (function()
 	var init = function()
 	{
 		if(!G.ready()){
-			if(count < 15){
+			if(count++ < 15){
 				setTimeout(initialize, 500);
 				console.log("Google Maps not loaded yet...")
 			}else
