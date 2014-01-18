@@ -178,6 +178,14 @@ var socketio = (function()
 	{
 		socket.emit('addToGame', gameName)
 	}
+
+	var addHandler = function(on)
+	{
+		socket.on(on, function(data)
+		{
+			console.log(data)
+		})
+	}
 	// var beginGame = function()
 	// {
 	// 	socket.emit('beginGame')
@@ -201,7 +209,8 @@ var socketio = (function()
 		init: init,
 		createGame:createGame,
 		joinGame:joinGame,
-		request:request
+		request:request,
+		addHandler:addHandler
 	}
 })();
 
