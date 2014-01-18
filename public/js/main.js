@@ -54,6 +54,11 @@ var monopoly = (function()
 		gPlaces.init()
 
 	}
+	var endGame = function(data)
+	{
+		console.log(data)
+		showScreen('#lobby-screen')
+	}
 	var getPlaceList = function()
 	{
 		socketio.request('getPlaceList')
@@ -73,6 +78,7 @@ var monopoly = (function()
 			// monopoly.context = monopoly.canvas.getContext('2d');
 		},
 		beginGame:beginGame,
+		endGame:endGame,
 		getPlaceList:getPlaceList
 	}
 })();
@@ -96,6 +102,7 @@ var socketio = (function()
 		socket.on('exitFromGameSuccess', exitFromGameSuccess)
 		socket.on('beginGame', monopoly.beginGame)
 		socket.on('placeListReceived', gPlaces.setPlaceList)
+		socket.on('endGame', monopoly.endGame)
 
 
 	}	
