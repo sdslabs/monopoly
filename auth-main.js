@@ -22,7 +22,7 @@ function doesPlayerExist(playerName){
 function verifyGame(game, socket) {
 	if(Games[game].getTotalPlayers()<1){
 		delete Games[game];
-		socket.broadcast.emit('gameListChanged');
+		socket.broadcast.emit('gameListChanged', 'queryGameList');
 		global.log('info', 'Game: ' + game + ' has been destroyed');
 		return false;
 	}else
@@ -38,9 +38,9 @@ module.exports.removePlayerFromGame = function (socket){
 			db.removeGame(Players[socket.playerName].getSessionID());
 			global.log('info', socket.playerName +' has left the game: ' + game);
 
-			if(!verifyGame(game, socket))
+			// if(!verifyGame(game, socket))
 				// socket.broadcast.to(game).emit('playerExited', socket.playerName);
-				socket.broadcast.to(game).emit('playerListChanged');
+				socket.broadcast.to(game).emit('playerListChanged', 'queryPlayerList');
 			return true;
 		}return false;
 	}return false;
@@ -67,8 +67,8 @@ module.exports.addPlayerToGame = function (game, socket){
 		Games[game].addPlayer(socket.playerName);
 		Players[socket.playerName].setCurrentGame(game);
 		socket.broadcast.to(game).emit('newPlayerAdded', socket.playerName);
-		socket.broadcast.emit('gameListChanged');
-		socket.broadcast.to(game).emit('playerListChanged');
+		socket.broadcast.emit('gameListChanged', 'queryGameList');
+		socket.broadcast.to(game).emit('playerListChanged', 'queryPlayerList');
 		global.log('info', socket.playerName +' connected to game: ' + game);
 		return true;
 	}return false;

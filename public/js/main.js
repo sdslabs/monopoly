@@ -18,7 +18,7 @@ var monopoly = (function()
 	var onStartClick = function()
 	{
 		showScreen('#lobby-screen');
-		socketio.getGameList();
+		socketio.request('queryGameList');
 	}
 	var onCreateClick = function()
 	{
@@ -39,12 +39,12 @@ var monopoly = (function()
 	var onLeaveClick = function()
 	{
 		showScreen('#lobby-screen');
-		socketio.exitFromGame($(this).attr('id'));
+		socketio.request('exitFromGame');
 	}
 
 	var onBeginClick = function()
 	{
-		socketio.beginGame()
+		socketio.request('beginGame')
 		beginGame()
 	}
 	var beginGame = function()
@@ -53,7 +53,7 @@ var monopoly = (function()
 	}
 	var getPlaceList = function()
 	{
-		socketio.getPlaceList()
+		socketio.request('getPlaceList')
 	}
 
 	return {
@@ -88,8 +88,8 @@ var socketio = (function()
 		socket.on('updatePlayerList', angularjs.updatePlayerList)
 		socket.on('createNewGameSuccess', createNewGameSuccess)
 		socket.on('newPlayerAdded', newPlayerAdded)
-		socket.on('gameListChanged', getGameList)
-		socket.on('playerListChanged', getPlayerList)
+		socket.on('gameListChanged', request)
+		socket.on('playerListChanged', request)
 		socket.on('exitFromGameSuccess', exitFromGameSuccess)
 		socket.on('beginGame', monopoly.beginGame)
 		socket.on('placeListReceived', gPlaces.setPlaceList)
@@ -139,22 +139,26 @@ var socketio = (function()
 		setCookie('playerName', playerName, 1);	
 	};
 	var addToGameSuccess = function(data){
-		getPlayerList()
+		request('queryPlayerList')
 	};
 	var createNewGameSuccess = function(data){
-		getPlayerList()
+		request('queryPlayerList')
 	};
 	var newPlayerAdded = function(data){
 		console.log("Player "+data+" has joined the game!");
 	};
-	var getGameList = function()
+	var exitFromGameSuccess = function()
 	{
-		socket.emit('queryGameList');
+		request('queryGameList')
 	}
-	var getPlayerList = function()
-	{
-		socket.emit('queryPlayerList');
-	}
+	// var getGameList = function()
+	// {
+	// 	socket.emit('queryGameList');
+	// }
+	// var getPlayerList = function()
+	// {
+	// 	socket.emit('queryPlayerList');
+	// }
 	var createGame = function(gameName)
 	{
 		socket.emit('createNewGame', gameName)
@@ -163,36 +167,30 @@ var socketio = (function()
 	{
 		socket.emit('addToGame', gameName)
 	}
+	// var beginGame = function()
+	// {
+	// 	socket.emit('beginGame')
+	// }
+	// var exitFromGame = function()
+	// {
+	// 	socket.emit('exitFromGame')
+	// }
+	// var getPlaceList = function()
+	// {
+	// 	socket.emit('getPlaceList')
+	// }
 
-	var beginGame = function()
+	var request = function(message)
 	{
-		socket.emit('beginGame')
-	}
-
-	var exitFromGame = function()
-	{
-		socket.emit('exitFromGame')
-	}
-	var exitFromGameSuccess = function()
-	{
-		getGameList()
-	}
-	var getPlaceList = function()
-	{
-		socket.emit('getPlaceList')
+		console.log('requesting '+message)
+		socket.emit(message)
 	}
 
 	return {
 		init: init,
-		getGameList:getGameList,
-		getPlayerList:getPlayerList,
 		createGame:createGame,
 		joinGame:joinGame,
-
-		beginGame:beginGame,
-
-		exitFromGame:exitFromGame,
-		getPlaceList:getPlaceList
+		request:request
 	}
 })();
 
