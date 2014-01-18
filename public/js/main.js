@@ -49,6 +49,7 @@ var monopoly = (function()
 	}
 	var beginGame = function()
 	{
+		socketio.request('mpInitialize')
 		showScreen('#game-screen');
 		gMaps.init()
 		gPlaces.init()
