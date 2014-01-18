@@ -5,14 +5,24 @@ html(lang='en' ng-app='monopoly-app')
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
 
 		meta(name = 'viewport', content = 'width=device-width, initial-scale=1.0')  
+		script(src='/js/jquery.min.js')
+
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap.min.css', media = 'screen')
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap-responsive.min.css', media = 'screen')
+
+		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css')
 		link(rel ='stylesheet', type='text/css', href='/css/custom.css')
 
-		script(src='/js/jquery.js')
+		script(src='/socket.io/socket.io.js')
 		script(src='/js/bootstrap.min.js')
 		script(src='/js/angular.js')
 		script(src='/js/angular-route.js')
+		<!--script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&region=IN')-->
+		<!--Change to minified versions for production-->
+
+		script(src='https://sdslabs.co.in/api/public/api.js')
+		script(src='/js/maps.js')
+		script(src='/js/main.js')
 
 	body
 		div(class = 'container game-layer' id='start-screen')
@@ -57,9 +67,6 @@ html(lang='en' ng-app='monopoly-app')
 		div(class = 'game-layer' id='game-screen')
 			div(id='map-canvas')		
 			
-		script(src='/socket.io/socket.io.js')
-		script(src='/js/maps.js')
-		script(src='/js/main.js')
 		script(type='text/javascript').
 			$(window).load(function(){
 			monopoly.init('http://#{locals.ip}:#{locals.port}');
