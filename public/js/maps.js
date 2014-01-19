@@ -97,28 +97,36 @@ var gMaps = (function(){
   		return marker;
 	}
 
-	function addInfoWindow(marker, cap) {
+	function getInfoWindow(marker, cap) {
 		var infowindow = new google.maps.InfoWindow({
 			content: cap,
 			size: new google.maps.Size(50,50)
 		});
-		infowindow.open(map, marker);
+		// infowindow.open(map, marker);
 		return infowindow;
 	}
 
-	function addPath(latLngList, color) {
-		if(color == null)
-			color = '#000000';
-		var line = new google.maps.Polyline({
-    			path: latLngList,
+	function getPath(latLngList, obj) {	
+		if(!obj.color)
+			obj.color = '#000000';
+		
+		if(!obj.opacity)
+			obj.opacity = 1.0;
+		
+		if(!obj.weight)
+			obj.weight = 2;
+
+		var options = {
    				geodesic: true,
-    			strokeColor: color,
-    			strokeOpacity: 1.0,
-    			strokeWeight: 2,
- 		 });
+    			strokeColor: obj.color,
+    			strokeOpacity: obj.opacity,
+    			strokeWeight: obj.weight,
+ 		 	}
 
- 	 	line.setMap(map);
+ 		if(latLngList)
+ 			options.path = latLngList;
 
+		var line = new google.maps.Polyline(options);
  	 	return line;
 	}
 
@@ -152,8 +160,8 @@ var gMaps = (function(){
 		addMarkerImage:addMarkerImage,
 		addListener:addListener,
 		addListenerOth:addListenerOth,
-		addInfoWindow:addInfoWindow,
-		addPath:addPath,
+		getInfoWindow:getInfoWindow,
+		getPath:getPath,
 		getLocation:getLocation,
 		getBounds:getBounds
 
@@ -209,7 +217,7 @@ var gDirections = (function(){
 		directionsService = new google.maps.DirectionsService();
 	}
 
-	function drawRoute(origin, destination) {
+	function drawRoute(origin, destination, color, opacity, weight ) {
 		var request = {
 			origin:origin,
 			destination:destination,
@@ -217,7 +225,13 @@ var gDirections = (function(){
 		};
 		directionsService.route(request, function(result, status) {
 			if (status == google.maps.DirectionsStatus.OK) {
-				directionsDisplay = new google.maps.DirectionsRenderer();
+				var line = gMaps.getPath(null, {
+					color:color, 
+					opacity:opacity,
+					weight:weight
+				});
+	
+			directionsDisplay = new google.maps.DirectionsRenderer({polylineOptions: line}); 
 				directionsDisplay.setMap(gMaps.Map());
 				directionsDisplay.setDirections(result);
 				return directionsDisplay;
