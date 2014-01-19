@@ -7,7 +7,7 @@ var gMaps = (function(){
 
 		google.maps.visualRefresh = true;
 		var mapOptions = {
-			zoom: 17,
+			zoom: 10,
 			center: new google.maps.LatLng(29.86535, 77.89475),
 			panControl: true,
 			zoomControl: true,
@@ -24,8 +24,8 @@ var gMaps = (function(){
 		$('#map-canvas').height($("#game-screen").height());
 		$('#map-canvas').width($("#game-screen").width());
 
-		defineBound();
-		logStats();
+		// defineBound();
+		// logStats();
 		gPlaces.init()
 		  
 		return map;
@@ -97,28 +97,36 @@ var gMaps = (function(){
   		return marker;
 	}
 
-	function addInfoWindow(marker, cap) {
+	function getInfoWindow(marker, cap) {
 		var infowindow = new google.maps.InfoWindow({
 			content: cap,
 			size: new google.maps.Size(50,50)
 		});
-		infowindow.open(map, marker);
+		// infowindow.open(map, marker);
 		return infowindow;
 	}
 
-	function addPath(latLngList, color) {
-		if(color == null)
-			color = '#000000';
-		var line = new google.maps.Polyline({
-    			path: latLngList,
+	function getPath(latLngList, obj) {	
+		if(!obj.color)
+			obj.color = '#000000';
+		
+		if(!obj.opacity)
+			obj.opacity = 1.0;
+		
+		if(!obj.weight)
+			obj.weight = 2;
+
+		var options = {
    				geodesic: true,
-    			strokeColor: color,
-    			strokeOpacity: 1.0,
-    			strokeWeight: 2,
- 		 });
+    			strokeColor: obj.color,
+    			strokeOpacity: obj.opacity,
+    			strokeWeight: obj.weight,
+ 		 	}
 
- 	 	line.setMap(map);
+ 		if(latLngList)
+ 			options.path = latLngList;
 
+		var line = new google.maps.Polyline(options);
  	 	return line;
 	}
 
@@ -139,21 +147,21 @@ var gMaps = (function(){
 		return allowedBounds;
 	}
 
-	function getMap(){
+	function Map(){
+		console.log(map);
 		return map;
 	}
 
 	return {
-		getMap:getMap,
-		// ready:ready,
+		Map:Map,
 		init:initialize,
 		addMarkerCenter:addMarkerCenter,
 		addMarkerAt:addMarkerAt,
 		addMarkerImage:addMarkerImage,
 		addListener:addListener,
 		addListenerOth:addListenerOth,
-		addInfoWindow:addInfoWindow,
-		addPath:addPath,
+		getInfoWindow:getInfoWindow,
+		getPath:getPath,
 		getLocation:getLocation,
 		getBounds:getBounds
 
@@ -165,7 +173,7 @@ var gPlaces = (function()
     var placesService;
 	var init = function()
 	{
-		placesService = new google.maps.places.PlacesService(gMaps.getMap());
+		placesService = new google.maps.places.PlacesService(gMaps.Map());
 		
 	}
 
@@ -198,5 +206,42 @@ var gPlaces = (function()
 		init:init,
 		placeSearch:placeSearch,
 		setPlaceList:setPlaceList
+	}
+})();
+
+var gDirections = (function(){
+
+	var directionsService;
+
+	function init(map) {	
+		directionsService = new google.maps.DirectionsService();
+	}
+
+	function drawRoute(origin, destination, color, opacity, weight ) {
+		var request = {
+			origin:origin,
+			destination:destination,
+			travelMode: google.maps.TravelMode.DRIVING
+		};
+		directionsService.route(request, function(result, status) {
+			if (status == google.maps.DirectionsStatus.OK) {
+				var line = gMaps.getPath(null, {
+					color:color, 
+					opacity:opacity,
+					weight:weight
+				});
+	
+			directionsDisplay = new google.maps.DirectionsRenderer({polylineOptions: line}); 
+				directionsDisplay.setMap(gMaps.Map());
+				directionsDisplay.setDirections(result);
+				return directionsDisplay;
+   			 }else
+   			 	return null;
+		});
+	}
+
+	return {
+		init:init,
+		drawRoute:drawRoute
 	}
 })();

@@ -52,6 +52,7 @@ var monopoly = (function()
 		socketio.request('mpInitialize')
 		showScreen('#game-screen');
 		G.load(gMaps);
+		G.load(gDirections);
 		// maps.load(gPlaces);
 
 	}
