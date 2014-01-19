@@ -24,17 +24,21 @@ html(lang='en')
 			div(class = 'row' )
 				div(class = 'span2 text-center')
 				div(class = 'span8 text-center')
-					table(class = 'table table-bordered table-hover' id='score-table')			
+					table(class = 'table table-bordered table-hover table-striped' id='score-table')			
 						tr
 							th Name
 							th Score
 				div(class = 'span2 text-center')
 		script(type='text/javascript').
-			$.post('/leaderboard', function(data){
+			$(document).ready(function(){
+					if(typeof topbar != 'undefined' && topbar != null){
+						topbar.showTopbar();
+					}
+					$.post('/leaderboard', function(data){
 					var obj = JSON.parse(data);
-					console.log(obj.results);
 					$('#score-table-template').tmpl(obj.results).appendTo('#score-table tbody');
 				});
+			})
 
 
 
