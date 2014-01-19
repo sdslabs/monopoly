@@ -4,6 +4,7 @@ var constantPWD = require('./JSON/password.json');
 
 module.exports.G_SERVER_PORT             = parseInt(constant.G_SERVER_PORT);//G_SERVER_PORT;
 module.exports.G_LOG_CONNECTION_MESSAGES = parseInt(constant.G_LOG_CONNECTION_MESSAGES)==0?false:true;
+module.exports.G_LDB_COUNT               = constant.G_LDB_COUNT;
 module.exports.G_MYSQL_USERNAME          = constantPWD.G_MYSQL_USERNAME;
 module.exports.G_MYSQL_PASSWORD          = constantPWD.G_MYSQL_PASSWORD;
 module.exports.G_MYSQL_DB                = constant.G_MYSQL_DB;

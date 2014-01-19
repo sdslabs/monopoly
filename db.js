@@ -150,8 +150,16 @@ module.exports.removeSession = function (sessionID, callback){
 		});
 }
 
-module.exports.fetchLeaderboard = function(callback){
-	var Query = "SELECT player as Name, Score FROM sktio ORDER BY Score desc LIMIT 0, 2";
+module.exports.fetchLeaderboard = function(options, callback){
+		console.log(options);
+		options.start = parseInt(options.start) || 0;
+		options.count = parseInt(options.end) || 0;
+		
+		if(!options.count)
+			options.count = CONST.G_LDB_COUNT;
+		
+	var Query = "SELECT player as Name, Score FROM sktio ORDER BY Score desc LIMIT "+options.start +", "+options.count;
+	console.log(Query);
 	connection.query(Query, 
 		function(err, row, fields){
 			if(err){
