@@ -25,6 +25,8 @@ function connect(express, app){
 		secret: CONST.G_EXPRESS_SESSION_SECRET
 	}));
 	module.exports.SessionStore = SessionStore;
+	synchronize();
+	setInterval(synchronize, CONST.G_DB_SYNC_TIME);
 }
 
 var connection = mysql.createConnection({
@@ -148,8 +150,22 @@ module.exports.removeSession = function (sessionID, callback){
 		});
 }
 
-synchronize();
-setInterval(synchronize, CONST.G_DB_SYNC_TIME);
+module.exports.fetchLeaderboard = function(callback){
+	var Query = "SELECT player as Name, Score FROM sktio ORDER BY Score desc LIMIT 0, 2";
+	connection.query(Query, 
+		function(err, row, fields){
+			if(err){
+				global.log('error', "fetchLeaderboard has failed. Resuming.")
+			}
+			if(callback){
+				var results = {
+					results: row,
+					time: new Date()
+				};
+				callback(results);
+			}
+		});
+}
 
 module.exports.connection = connection;
 module.exports.connect = connect;

@@ -197,11 +197,7 @@ function initialize(io, express){
 
 		// Debug
 		socket.on('PING', function(){
-			var roster = io.sockets.clients(auth.Players[socket.playerName].getCurrentGame());
-
-			roster.forEach(function(client){
-				console.log(client.nickname);
-			})
+			db.fetchLeaderboard();
 			console.log('PING RECEIVED');
 		});
 	});

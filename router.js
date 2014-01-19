@@ -4,6 +4,9 @@ var global = require('./global.js');
 //Load Constants
 var CONST = require('./constants.js');
 
+//Load database
+var db = require('./db.js');
+
 // var events = require('events');
 
 var fs = require('fs');
@@ -70,6 +73,13 @@ function initialize (app){
 		res.render('leaderboard',
 		{
 			
+		})
+	})
+
+	app.post('/leaderboard', function(req, res){
+		db.fetchLeaderboard(function(results){
+			res.write(JSON.stringify(results));
+			res.send();
 		})
 	})
 

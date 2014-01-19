@@ -12,7 +12,8 @@ html(lang='en')
 		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css', media = 'screen')
 
 		script(src='/js/jquery.min.js')
-		script(src='http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js')
+		script(src='/js/jquery.tmpl.js')
+		script(src='https://sdslabs.co.in/api/public/api.js')
 	body
 		script(id = 'score-table-template', type='text/x-jquery-tmpl').
 			<tr>
@@ -34,6 +35,8 @@ html(lang='en')
 					console.log(obj.results);
 					$('#score-table-template').tmpl(obj.results).appendTo('#score-table tbody');
 				});
+
+
 
 
 
