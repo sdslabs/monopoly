@@ -1,12 +1,8 @@
 var gMaps = (function(){
 
 	var map;
-	// var state = false;
 	var count = 0;
 	var allowedBounds;
-	// function ready() {
-	// 	state = true;
-	// }
 
 	function initialize() {
 		if(!G.ready()){
@@ -220,27 +216,3 @@ var gPlaces = (function()
 		setPlaceList:setPlaceList
 	}
 })();
-// // Testing functions
-// var latLngList = [];
-// var path;
-// function clickListener() {
-// 	G.addListener('click', function(event){
-		
-// 		latLngList.push(event.latLng);
-// 		G.addMarkerAt(event.latLng, "Location "+latLngList.length);
-// 		console.log("POINT "+ latLngList.length);
-// 		if(latLngList.length == 4){
-// 			path = G.addPath(latLngList);
-// 			latLngList = [];
-// 			// setTimeout(function(){path.setMap(null)}, 3000);
-// 		}
-// 	});
-
-// }
-
-window.initialize = function(){
-
-	// console.log("Ready");
-	// gMaps.ready();
-	// G.init();
-}
