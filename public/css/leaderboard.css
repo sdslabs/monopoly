@@ -2,10 +2,19 @@ th {
   text-align: center;
 }
 body {
-  background: #c8c8c8;
+  background: #fff;
   background-size: cover;
   background-repeat: no-repeat;
+  counter-reset: Serial;
 }
 .container {
-  margin-top: 10%;
+  margin-top: 7%;
+}
+tr td:first-child:before {
+  counter-increment: Serial;
+  content: counter(Serial);
+}
+#title-main {
+  margin-bottom: 4%;
+  color: #0000c8;
 }

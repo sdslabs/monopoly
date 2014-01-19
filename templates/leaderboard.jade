@@ -17,15 +17,20 @@ html(lang='en')
 	body
 		script(id = 'score-table-template', type='text/x-jquery-tmpl').
 			<tr>
+				<td></td>
 				<td>${Name}
 				<td>${Score}
 			</tr>	
 		div(class = 'container' )
+			div(class = 'row')
+				div(id = 'title-main' class = 'span12 text-center')
+					h1 Leaderboard
 			div(class = 'row' )
 				div(class = 'span2 text-center')
 				div(class = 'span8 text-center')
 					table(class = 'table table-bordered table-hover table-striped' id='score-table')			
 						tr
+							th #
 							th Name
 							th Score
 				div(class = 'span2 text-center')
@@ -34,11 +39,31 @@ html(lang='en')
 					if(typeof topbar != 'undefined' && topbar != null){
 						topbar.showTopbar();
 					}
-					$.post('/leaderboard', function(data){
-					var obj = JSON.parse(data);
-					$('#score-table-template').tmpl(obj.results).appendTo('#score-table tbody');
+					update();
 				});
-			})
+
+				var start = 0; var loaded = false;
+
+				function update(start) {
+					$.post('/leaderboard', {start:start}, function(data){
+						var obj = JSON.parse(data);
+						if(!obj.results.length)
+							loaded = true;
+						else
+							$('#score-table-template').tmpl(obj.results).appendTo('#score-table tbody');
+					});
+				}
+
+
+				$(window).scroll(function() { 
+						
+					if($(window).scrollTop() + $(window).height() == $(document).height()) { 
+						if(!loaded){
+							start += 15;
+							update(start);
+						}
+					}
+				});
 
 
 

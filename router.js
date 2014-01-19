@@ -77,7 +77,7 @@ function initialize (app){
 	})
 
 	app.post('/leaderboard', function(req, res){
-		db.fetchLeaderboard(function(results){
+		db.fetchLeaderboard(req.body, function(results){
 			res.write(JSON.stringify(results));
 			res.send();
 		})
