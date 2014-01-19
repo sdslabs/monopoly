@@ -3,7 +3,7 @@ var gPlaces = (function()
     var placesService;
 	var init = function()
 	{
-		placesService = new google.maps.places.PlacesService(gMaps.getMap());
+		placesService = new google.maps.places.PlacesService(gMaps.Map());
 		
 	}
 

@@ -166,6 +166,8 @@ var gMaps = (function(){
 		getBounds:getBounds
 
 	}
+})()
+
 var gDirections = (function(){
 
 	var directionsService;
