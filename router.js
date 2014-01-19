@@ -98,9 +98,22 @@ function initialize (app){
 	})
 	app.post('/json/map/update', function(req, res)
 	{
-		// console.log(JSON.parse(mapInfo))
-		res.write('a')
-		res.send()
+		var map = require('./game/map.json')
+		var i = 0
+		for(var key in req.body)
+		{
+			var property = req.body[key]
+			if(key in map.properties)
+			{
+				for(var attr in property)
+				{
+					var attrValue = property[attr]
+					map.properties[key][attr] = attrValue
+				}
+				map.properties[key].id = ++i
+			}
+		}
+		fs.writeFile('./game/map.json', JSON.stringify(map, null, 4))
 	});
 	
 	app.get('*', function(req, res){
