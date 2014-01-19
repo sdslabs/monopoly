@@ -139,13 +139,13 @@ var gMaps = (function(){
 		return allowedBounds;
 	}
 
-	function getMap(){
+	function Map(){
+		console.log(map);
 		return map;
 	}
 
 	return {
-		getMap:getMap,
-		// ready:ready,
+		Map:Map,
 		init:initialize,
 		addMarkerCenter:addMarkerCenter,
 		addMarkerAt:addMarkerAt,
@@ -165,7 +165,7 @@ var gPlaces = (function()
     var placesService;
 	var init = function()
 	{
-		placesService = new google.maps.places.PlacesService(gMaps.getMap());
+		placesService = new google.maps.places.PlacesService(gMaps.Map());
 		
 	}
 
@@ -203,25 +203,22 @@ var gPlaces = (function()
 
 var gDirections = (function(){
 
-	var map;
 	var directionsService;
 
 	function init(map) {	
-		map = gMaps.getMap();
 		directionsService = new google.maps.DirectionsService();
-		console.log('initiated')
 	}
 
-	function drawRoute(start, end) {
+	function drawRoute(origin, destination) {
 		var request = {
-			origin:start,
-			destination:end,
+			origin:origin,
+			destination:destination,
 			travelMode: google.maps.TravelMode.DRIVING
 		};
 		directionsService.route(request, function(result, status) {
 			if (status == google.maps.DirectionsStatus.OK) {
 				directionsDisplay = new google.maps.DirectionsRenderer();
-				directionsDisplay.setMap(map);
+				directionsDisplay.setMap(gMaps.Map());
 				directionsDisplay.setDirections(result);
 				return directionsDisplay;
    			 }else
