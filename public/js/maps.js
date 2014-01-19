@@ -7,7 +7,7 @@ var gMaps = (function(){
 
 		google.maps.visualRefresh = true;
 		var mapOptions = {
-			zoom: 17,
+			zoom: 10,
 			center: new google.maps.LatLng(29.86535, 77.89475),
 			panControl: true,
 			zoomControl: true,
@@ -24,8 +24,8 @@ var gMaps = (function(){
 		$('#map-canvas').height($("#game-screen").height());
 		$('#map-canvas').width($("#game-screen").width());
 
-		defineBound();
-		logStats();
+		// defineBound();
+		// logStats();
 		gPlaces.init()
 		  
 		return map;
@@ -198,5 +198,39 @@ var gPlaces = (function()
 		init:init,
 		placeSearch:placeSearch,
 		setPlaceList:setPlaceList
+	}
+})();
+
+var gDirections = (function(){
+
+	var map;
+	var directionsService;
+
+	function init(map) {	
+		map = gMaps.getMap();
+		directionsService = new google.maps.DirectionsService();
+		console.log('initiated')
+	}
+
+	function drawRoute(start, end) {
+		var request = {
+			origin:start,
+			destination:end,
+			travelMode: google.maps.TravelMode.DRIVING
+		};
+		directionsService.route(request, function(result, status) {
+			if (status == google.maps.DirectionsStatus.OK) {
+				directionsDisplay = new google.maps.DirectionsRenderer();
+				directionsDisplay.setMap(map);
+				directionsDisplay.setDirections(result);
+				return directionsDisplay;
+   			 }else
+   			 	return null;
+		});
+	}
+
+	return {
+		init:init,
+		drawRoute:drawRoute
 	}
 })();
