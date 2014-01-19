@@ -99,6 +99,8 @@ function initialize (app){
 	app.post('/json/map/update', function(req, res)
 	{
 		var map = require('./game/map.json')
+		var fields = require('./game/propertyFields.json')
+		console.log(fields)
 		var i = 0
 		for(var key in req.body)
 		{
@@ -112,7 +114,18 @@ function initialize (app){
 				}
 				map.properties[key].id = ++i
 			}
+			else
+			{
+				map.properties[key] = {}
+				for(var index in fields)
+				{
+					var field = fields[index]
+					map.properties[key][field] = property[field] || ""
+				}
+				map.properties[key].id = ++i
+			}
 		}
+		console.log(map)
 		fs.writeFile('./game/map.json', JSON.stringify(map, null, 4))
 	});
 	

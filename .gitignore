@@ -9,4 +9,5 @@ password.json
 *.key
 openssl.cnf
 */custom.css
+game/map.json
 
