@@ -276,8 +276,7 @@ var angularjs = (function()
 var asyncScript = (function(){
 
 	var fetch = function(){
-		$.getScript('https://sdslabs.co.in/lollipop/topbarwide.css', onScrLoad);
-		$.getScript('https://sdslabs.co.in/api/public/api.js', null);
+		$.getScript('https://sdslabs.co.in/api/public/api.js', onScrLoad);
 	}
 
 	var onScrLoad = function() {
