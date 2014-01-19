@@ -88,6 +88,20 @@ function initialize (app){
 	app.get('/:folder/:file', function(req, res){
 		send(req, res, req.params.folder+'/'+req.params.file);
 	});
+
+	app.get('/json/map/update', function(req, res)
+	{
+		var places = require('./game/places.js')
+		// res.write(JSON.stringify(places.placeList))
+		// res.send()
+		res.render('places', {'placeList':JSON.stringify(places.placeList)})
+	})
+	app.post('/json/map/update', function(req, res)
+	{
+		// console.log(JSON.parse(mapInfo))
+		res.write('a')
+		res.send()
+	});
 	
 	app.get('*', function(req, res){
 		send404(res);

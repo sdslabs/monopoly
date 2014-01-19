@@ -1,0 +1,21 @@
+!!! 5
+html()
+	head
+
+		title Update Places
+		meta(name = 'viewport', content = 'initial-scale=1.0, user-scalable=no')  
+		meta(charset = 'utf-8')  
+		script(src='/js/jquery.min.js')
+		script(src='/js/update_places.js')
+		script(src='/js/G.js')
+		script(src='/js/maps.js')
+		script(src='/js/places.js')
+	body
+		div(id='map-canvas')		
+
+
+	script(type="text/javascript").
+		$(window).load(function()
+		{
+			updatePlaces.init(!{placeList})
+		})
