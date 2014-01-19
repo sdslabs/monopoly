@@ -24,7 +24,9 @@ html(lang='en')
 		div(class = 'container' )
 			div(class = 'row')
 				div(id = 'title-main' class = 'span12 text-center')
-					h1 Leaderboard
+					h1(class='text-danger') LEADERBOARD 
+					small(class='text-success')
+						em for the best game ever made!
 			div(class = 'row' )
 				div(class = 'span2 text-center')
 				div(class = 'span8 text-center')
@@ -33,6 +35,9 @@ html(lang='en')
 							th #
 							th Name
 							th Score
+					p(class='text-muted' id='loading-alert') Loading! 
+					p(class='text-info' id='loaded-alert') No more content to load! 
+
 				div(class = 'span2 text-center')
 		script(type='text/javascript').
 			$(document).ready(function(){
@@ -47,10 +52,16 @@ html(lang='en')
 				function update(start) {
 					$.post('/leaderboard', {start:start}, function(data){
 						var obj = JSON.parse(data);
-						if(!obj.results.length)
+						if(!obj.results.length){
 							loaded = true;
-						else
+							$('#loading-alert').hide();
+							$('#loaded-alert').show();
+						}
+						else{
 							$('#score-table-template').tmpl(obj.results).appendTo('#score-table tbody');
+							$('#loaded-alert').hide();
+							$('#loading-alert').show();
+						}
 					});
 				}
 

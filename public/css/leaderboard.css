@@ -16,5 +16,7 @@ tr td:first-child:before {
 }
 #title-main {
   margin-bottom: 4%;
-  color: #0000c8;
+}
+#loaded-alert {
+  display: none;
 }
