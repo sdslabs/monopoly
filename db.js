@@ -167,5 +167,19 @@ module.exports.fetchLeaderboard = function(callback){
 		});
 }
 
+module.exports.updateScore = function(sessionID, Score, callback){
+	var Query = 'UPDATE sktio SET score = '+Score+' WHERE sid = "'+sessionID+'"';
+
+	connection.query(Query, 
+		function(err, row, fields){
+			if(err){
+        		global.log('error', "updateScore has failed. Resuming.")
+        		// throw err;
+        	}
+			if(callback)
+				callback();	
+		});
+}
+
 module.exports.connection = connection;
 module.exports.connect = connect;
