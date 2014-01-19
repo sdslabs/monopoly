@@ -13,8 +13,6 @@ var G = (function()
 	}	
 
 	function load(module){
-		console.log("hrer")
-		console.log(ready())
 		if(!ready()){
 			if(count++ < 15){
 				setTimeout(load, 500);
