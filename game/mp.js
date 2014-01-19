@@ -152,7 +152,7 @@ function init(G_ames, P_layers, socket){
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
 			if(socket.playerName==game.creator)
-				game.mp.getNextPlayer();
+				game.mp.getNextPlayer(socket);
 			socket.emit("mpInitSuccess");
 			socket.broadcast.to(game.id).emit("mpInitBy", player.playerName);
 		}else{
