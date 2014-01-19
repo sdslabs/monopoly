@@ -197,7 +197,7 @@ function initialize(io, express){
 
 		// Debug
 		socket.on('PING', function(){
-			db.fetchLeaderboard();
+			db.updateScore(auth.Players[socket.playerName].sessionID, Math.random()*50000);
 			console.log('PING RECEIVED');
 		});
 	});

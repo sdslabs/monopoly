@@ -68,6 +68,12 @@ Player.prototype.removeCurrentGame = function(){
 	this.socket.emitR = null;
 }
 
+Player.prototype.reset = function(){
+	this.money = null;
+	this.propOwned = [];
+	this.locProp = null;
+}
+
 // function Game(socket){
 // 	this.creator = null;
 // 	this.createdAt = null;

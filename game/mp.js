@@ -74,8 +74,11 @@ mp.prototype.end = function(){
 	report.startAt = this.game.createdAt;
 	report.endAt = new Date();
 
-	for(var i = 0; i < players.length; i++)
+	for(var i = 0; i < players.length; i++){
 		auth.removePlayerFromGameSp(Players[players[i]].socket);
+		db.updateScore(Players[players[i]].sessionID, Players[players[i]].money);
+		Players[players[i]].reset();
+	}
 
 	var id = this.game.id;
 	delete Games[id];
