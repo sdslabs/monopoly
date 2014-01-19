@@ -1,18 +1,10 @@
 var gMaps = (function(){
 
 	var map;
-	var count = 0;
 	var allowedBounds;
 
 	function initialize() {
-		if(!G.ready()){
-			if(count++ < 15){
-				setTimeout(initialize, 500);
-				console.log("Google Maps not loaded yet...")
-			}else
-				console.log("Failed to load map");
-			return null;
-		}
+
 		google.maps.visualRefresh = true;
 		var mapOptions = {
 			zoom: 17,
@@ -170,17 +162,9 @@ var gMaps = (function(){
 
 var gPlaces = (function()
 {
-	var count = 0, placesService;
+    var placesService;
 	var init = function()
 	{
-		if(!G.ready()){
-			if(count++ < 15){
-				setTimeout(initialize, 500);
-				console.log("Google Maps not loaded yet...")
-			}else
-				console.log("Failed to load map");
-			return null;
-		}
 		placesService = new google.maps.places.PlacesService(gMaps.getMap());
 		
 	}
