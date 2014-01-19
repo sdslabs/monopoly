@@ -9,7 +9,6 @@ var G = (function()
 	var uponLoad = function()
 	{
 		Ready = true;
-		monopoly.getPlaceList()
 	}	
 
 	function load(module){
@@ -30,11 +29,13 @@ var G = (function()
 	}
 
 	return {
-	init: function() 
+	init: function(callback) 
 		{
+			if(!callback)
+				callback = 'G.uponLoad'
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
-			script.src = 'https://maps.googleapis.com/maps/api/js?libraries=places&v=3.exp&sensor=false&callback=G.uponLoad';
+			script.src = 'https://maps.googleapis.com/maps/api/js?libraries=places&v=3.exp&sensor=false&callback='+callback;
 			document.body.appendChild(script);
 		},
 	load:load,

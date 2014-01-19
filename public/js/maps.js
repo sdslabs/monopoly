@@ -166,49 +166,6 @@ var gMaps = (function(){
 		getBounds:getBounds
 
 	}
-})();
-
-var gPlaces = (function()
-{
-    var placesService;
-	var init = function()
-	{
-		placesService = new google.maps.places.PlacesService(gMaps.Map());
-		
-	}
-
-	var placeSearch = function(search)
-	{
-		var request = {
-			'bounds': gMaps.getBounds(), //The bounds within which to search for Places
-			'keyword': search
-		};
-		  placesService.nearbySearch(request, function(results, status){
-		  	console.log(results, status)
-		  	if(results.length > 0)
-			  	gMaps.addMarkerAt(results[0].geometry.location)
-		    else
-		    	console.log(search)
-
-			});	
-	}
-	var setPlaceList = function(placeList)
-	{
-		placeList = JSON.parse(placeList)
-		for(var key in placeList)
-		{
-			var place = placeList[key]
-			placeSearch(place)
-		}
-	}
-
-	return {
-		init:init,
-		placeSearch:placeSearch,
-		setPlaceList:setPlaceList
-	}
-})();
-
 var gDirections = (function(){
 
 	var directionsService;
