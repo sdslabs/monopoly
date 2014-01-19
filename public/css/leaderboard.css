@@ -1,0 +1,11 @@
+th {
+  text-align: center;
+}
+body {
+  background: #c8c8c8;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.container {
+  margin-top: 10%;
+}

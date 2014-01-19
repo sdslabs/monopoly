@@ -1,5 +1,5 @@
 !!! 5
-html(lang='en' ng-app='monopoly-app')
+html(lang='en')
 	head
 		title Monopoly - Leaderboard
 
@@ -8,10 +8,11 @@ html(lang='en' ng-app='monopoly-app')
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap.min.css', media = 'screen')
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap-responsive.min.css', media = 'screen')
 
+		link(rel ='stylesheet', type='text/css' href='/css/leaderboard.css')
+		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css', media = 'screen')
+
 		script(src='/js/jquery.min.js')
-	
-		script(src='/js/angular.js')
-		script(src='/js/angular-route.js')
+		script(src='http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js')
 	body
 		script(id = 'score-table-template', type='text/x-jquery-tmpl').
 			<tr>
@@ -19,24 +20,20 @@ html(lang='en' ng-app='monopoly-app')
 				<td>${Score}
 			</tr>	
 		div(class = 'container' )
-			div(class = 'row span12 white-wrap' )
-				div()
-					table(class = 'table' id='score-table' ng-controller='table-controller')			
+			div(class = 'row' )
+				div(class = 'span2 text-center')
+				div(class = 'span8 text-center')
+					table(class = 'table table-bordered table-hover' id='score-table')			
 						tr
-							th #
 							th Name
 							th Score
-						tr(ng-repeat='result in results track by $index')
-							td {{$index+1}}
-							td {{result.name}}
-							td {{result.score}}
+				div(class = 'span2 text-center')
 		script(type='text/javascript').
-			var results = [{name:'a', score: '5'}, {name:'a', score: '5'}, {name:'b', score: '5'}, {name:'c', score: '5'}, {name:'d', score: '5'}];
-			var ctrl = angular.module('monopoly-app', []);
-			ctrl.controller('table-controller', ['$scope', function($scope){
-				$scope.results = results;
-			}])
-
+			$.post('/leaderboard', function(data){
+					var obj = JSON.parse(data);
+					console.log(obj.results);
+					$('#score-table-template').tmpl(obj.results).appendTo('#score-table tbody');
+				});
 
 
 
