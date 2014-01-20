@@ -2,7 +2,7 @@
 var CONST = require('../constants.js');
 
 //Load Game Specific Constants
-var M_CONST = require('./m_constants.json');
+var M_CONST = require('../JSON/m_constants.json');
 
 //Load the game module
 var mp = require('./mp.js');
@@ -93,7 +93,7 @@ function Game(creator, game, socket){
 	this.players = [];
 	//this.totalPlayers = 0;
 	this.socket = socket;
-	this.map = loadMap();
+	this.map = loadMap('iitr');
 	this.mp = new mp.mp(this, socket);
 }
 
@@ -179,7 +179,7 @@ Location.prototype.getY = function(){
 // loadMap creates a new copy of the map for each game and adds functions to it
 
 function loadMap(){
-	var map = require('../JSON/maps/iitr.json');
+	var map = require('../JSON/maps/' + _map+'/'+_map+'.json');
 
 	map.doesPropExist = function(property){	
 		return map.properties.hasOwnProperty(property);
@@ -196,7 +196,7 @@ function loadMap(){
 }
 
 module.exports.updateMap = function (_map, _places_new) {
-		var map = require('../JSON/maps/' + _map)
+		var map = require('../JSON/maps/' + _map+'/'+_map+'.json')
 		var fields = map.structure;
 		var i = 0, j = 0;
 

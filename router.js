@@ -92,15 +92,17 @@ function initialize (app){
 
 	app.get('/json/map/update', function(req, res)
 	{
-		var places = require('./game/places.json')
+	
+		console.log(CONST.G_SERVER_PORT);
+		var places = require('./JSON/maps/'+CONST.G_CUR_MAP+'/places.json')
 		// res.write(JSON.stringify(places.placeList))
 		// res.send()
 		res.render('places', {'placeList':JSON.stringify(places.list)})
 	})
 	app.post('/json/map/update', function(req, res)
 	{
-		var _res = objects.updateMap('iitr.json', req.body);
-		fs.writeFile('./JSON/maps/iitr.json', _res, function(err){
+		var _res = objects.updateMap(CONST.G_CUR_MAP, req.body);
+		fs.writeFile('./JSON/maps/iitr/iitr.json', _res, function(err){
 			if(err)
 				console.log(err);
 		})

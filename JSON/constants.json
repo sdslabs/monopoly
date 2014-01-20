@@ -11,6 +11,8 @@
 
 	"G_IP_ADDR": "",
 
+	"G_CUR_MAP": "iitr",
+
 	"G_IFACE": "eth0",
 
 	"G_DB_SYNC_TIME": 1200000,

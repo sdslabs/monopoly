@@ -8,6 +8,7 @@ module.exports.G_LDB_COUNT               = constant.G_LDB_COUNT;
 module.exports.G_MYSQL_USERNAME          = constantPWD.G_MYSQL_USERNAME;
 module.exports.G_MYSQL_PASSWORD          = constantPWD.G_MYSQL_PASSWORD;
 module.exports.G_MYSQL_DB                = constant.G_MYSQL_DB;
+module.exports.G_CUR_MAP                 = constant.G_CUR_MAP;
 module.exports.G_EXPRESS_SESSION_SECRET  = constant.G_EXPRESS_SESSION_SECRET;
 module.exports.G_LOG_FILE                = constant.G_LOG_FILE;
 module.exports.G_MYSQL_HOST              = constant.G_MYSQL_HOST;
