@@ -7,7 +7,8 @@ var CONST = require('./constants.js');
 //Load database
 var db = require('./db.js');
 
-// var events = require('events');
+// Load the objects module for map functions
+var objects = require('./game/objects.js');
 
 var fs = require('fs');
 
@@ -98,41 +99,13 @@ function initialize (app){
 	})
 	app.post('/json/map/update', function(req, res)
 	{
-		var map = require('./JSON/maps/iitr.json')
-		var fields = map.structure;
-
-		console.log(req.body);
-		function generateI(){
-			var id = 0;
-			for(var key in map.properties)
-				if(parseInt(key) > id)
-					id = parseInt(key);
-			return id+1 + '';
-		}
-		function doesExist(prop){
-			for(var key in map.properties){
-				if(map.properties[key].id == prop)
-					return key;
-			}
-			return '';
-		}
-		for(var key in req.body){
-			var property = req.body[key]
-			var i = doesExist(property['name'])
-			if(i != ''){
-				for(var field in property){
-						map.properties[i][field] = property[field] || ""
-				}
-			}
-			else{
-				i = generateI();
-				map.properties[i] = {}
-				for(var index in fields)
-					map.properties[i][fields[index]] = property[fields[index]] || ""
-			}
-		}
-		console.log(map)
-		fs.writeFile('./JSON/maps/iitr.json', JSON.stringify(map, null, 4))
+		var _res = objects.updateMap('iitr.json', req.body);
+		fs.writeFile('./JSON/maps/iitr.json', _res, function(err){
+			if(err)
+				console.log(err);
+		})
+		res.write(_res);
+		res.send();
 	});
 	
 	app.get('*', function(req, res){

@@ -2,6 +2,7 @@ var updatePlaces = (function()
 {
 	var placeList;
 	var placeInfo = {}
+	var dom_obj;
 
 	var searchPlaces = function()
 	{
@@ -32,13 +33,17 @@ var updatePlaces = (function()
 		$.ajax({
 			type:'POST',
 			url:'/json/map/update',
-			data:placeInfo
-		})
+			data:placeInfo,
+
+		}).done(function(data){
+				dom_obj.html(data);
+			})
 	}
 	return {
-		init: function(places)
+		init: function(places, object)
 		{
 			placeList = places
+			dom_obj = object
 			G.init(updatePlaces.searchPlaces)
 		},
 

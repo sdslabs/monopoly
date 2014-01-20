@@ -195,6 +195,45 @@ function loadMap(){
 	return map;
 }
 
+module.exports.updateMap = function (_map, _places_new) {
+		var map = require('../JSON/maps/' + _map)
+		var fields = map.structure;
+		var i = 0, j = 0;
+
+		function generateI(){
+			var id = 0;
+			for(var key in map.properties)
+				if(parseInt(key) > id)
+					id = parseInt(key);
+			return id+1 + '';
+		}
+		function doesExist(prop){
+			for(var key in map.properties){
+				if(map.properties[key].id == prop)
+					return key;
+			}
+			return '';
+		}
+		for(var key in _places_new){
+			var property = _places_new[key]
+			var i = doesExist(property['id'])
+			if(i != ''){
+				for(var field in property){
+						map.properties[i][field] = property[field] || ""
+				}
+			}
+			else{
+				i = generateI();
+				map.properties[i] = {}
+				for(var index in fields)
+					map.properties[i][fields[index]] = property[fields[index]] || ""
+			}
+		}
+
+		var _map_str = JSON.stringify(map, null, 4);
+		return _map_str;
+}
+
 module.exports.Game = Game;
 module.exports.Player = Player;
 module.exports.init = mp.init;
