@@ -179,7 +179,7 @@ Location.prototype.getY = function(){
 // loadMap creates a new copy of the map for each game and adds functions to it
 
 function loadMap(){
-	var map = require('./map.json');
+	var map = require('../JSON/maps/iitr.json');
 
 	map.doesPropExist = function(property){	
 		return map.properties.hasOwnProperty(property);

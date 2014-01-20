@@ -98,7 +98,7 @@ function initialize (app){
 	})
 	app.post('/json/map/update', function(req, res)
 	{
-		var map = require('./game/map.json')
+		var map = require('./JSON/maps/iitr.json')
 		var fields = map.structure;
 
 		console.log(req.body);
@@ -132,7 +132,7 @@ function initialize (app){
 			}
 		}
 		console.log(map)
-		fs.writeFile('./game/map.json', JSON.stringify(map, null, 4))
+		fs.writeFile('./JSON/maps/iitr.json', JSON.stringify(map, null, 4))
 	});
 	
 	app.get('*', function(req, res){
