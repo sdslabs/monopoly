@@ -98,35 +98,41 @@ function initialize (app){
 	})
 	app.post('/json/map/update', function(req, res)
 	{
-		var map = require('./game/map.json')
-		var fields = require('./game/propertyFields.json')
-		console.log(fields)
-		var i = 0
-		for(var key in req.body)
-		{
-			var property = req.body[key]
-			if(key in map.properties)
-			{
-				for(var attr in property)
-				{
-					var attrValue = property[attr]
-					map.properties[key][attr] = attrValue
-				}
-				map.properties[key].id = ++i
+		var map = require('./JSON/maps/iitr.json')
+		var fields = map.structure;
+
+		console.log(req.body);
+		function generateI(){
+			var id = 0;
+			for(var key in map.properties)
+				if(parseInt(key) > id)
+					id = parseInt(key);
+			return id+1 + '';
+		}
+		function doesExist(prop){
+			for(var key in map.properties){
+				if(map.properties[key].id == prop)
+					return key;
 			}
-			else
-			{
-				map.properties[key] = {}
-				for(var index in fields)
-				{
-					var field = fields[index]
-					map.properties[key][field] = property[field] || ""
+			return '';
+		}
+		for(var key in req.body){
+			var property = req.body[key]
+			var i = doesExist(property['name'])
+			if(i != ''){
+				for(var field in property){
+						map.properties[i][field] = property[field] || ""
 				}
-				map.properties[key].id = ++i
+			}
+			else{
+				i = generateI();
+				map.properties[i] = {}
+				for(var index in fields)
+					map.properties[i][fields[index]] = property[fields[index]] || ""
 			}
 		}
 		console.log(map)
-		fs.writeFile('./game/map.json', JSON.stringify(map, null, 4))
+		fs.writeFile('./JSON/maps/iitr.json', JSON.stringify(map, null, 4))
 	});
 	
 	app.get('*', function(req, res){
