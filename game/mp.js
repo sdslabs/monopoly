@@ -6,7 +6,7 @@ var global = require('../global.js');
 
 // Load the authorization module
 var auth = require('../auth-main.js');
-var places = require('./places.js');
+var places = require('./places.json');
 
 var Games = null;
 var Players = null;
@@ -237,7 +237,7 @@ function init(G_ames, P_layers, socket){
 
 	socket.on('getPlaceList', function()
 	{
-		socket.emit('placeListReceived', JSON.stringify(places.placeList))
+		socket.emit('placeListReceived', JSON.stringify(places.list))
 	})
 	socket.on('PING2', function(garb1, garb2){
 		
