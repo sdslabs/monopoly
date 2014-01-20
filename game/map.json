@@ -15,7 +15,7 @@
             ]
         },
         "mgcl": {
-            "id": 5,
+            "id": 7,
             "name": "Mahatma Gandhi IIT Central Library",
             "value": 200,
             "owner": "",
@@ -29,7 +29,7 @@
             ]
         },
         "hobbies club": {
-            "id": 7,
+            "id": 5,
             "name": "Hobbies Club",
             "value": 100,
             "owner": "",

@@ -39,7 +39,7 @@ var updatePlaces = (function()
 		init: function(places)
 		{
 			placeList = places
-			G.init('updatePlaces.searchPlaces')
+			G.init(updatePlaces.searchPlaces)
 		},
 
 		searchPlaces:searchPlaces,
