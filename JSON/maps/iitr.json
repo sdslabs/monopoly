@@ -89,6 +89,206 @@
                 "long": "77.89923499999998"
             },
             "paths": ""
+        },
+        "10": {
+            "id": "Main Bldg",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.8649905",
+                "long": "77.89647889999992"
+            },
+            "paths": ""
+        },
+        "11": {
+            "id": "Century Gate",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.8686497",
+                "long": "77.89017230000002"
+            },
+            "paths": ""
+        },
+        "12": {
+            "id": "SDS Labs",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.86346",
+                "long": "77.894856"
+            },
+            "paths": ""
+        },
+        "13": {
+            "id": "ESTC ACEL",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.871478",
+                "long": "77.88916799999993"
+            },
+            "paths": ""
+        },
+        "14": {
+            "id": "Mechanical Department IIT Roorkee",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.862305",
+                "long": "77.89728200000002"
+            },
+            "paths": ""
+        },
+        "15": {
+            "id": "Departmrnt of Chemical Engineering",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.866796",
+                "long": "77.89394100000004"
+            },
+            "paths": ""
+        },
+        "16": {
+            "id": "Institute Gymnasium",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.8666272",
+                "long": "77.89835730000004"
+            },
+            "paths": ""
+        },
+        "17": {
+            "id": "Computer Home",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.870217",
+                "long": "77.89085999999998"
+            },
+            "paths": ""
+        },
+        "18": {
+            "id": "Information Management Group",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.862618",
+                "long": "77.89650000000006"
+            },
+            "paths": ""
+        },
+        "19": {
+            "id": "Department of Computer Science and Engineering",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.863284",
+                "long": "77.89573199999995"
+            },
+            "paths": ""
+        },
+        "20": {
+            "id": "Convocation Hall",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.868117",
+                "long": "77.89085599999999"
+            },
+            "paths": ""
+        },
+        "21": {
+            "id": "Cautley Bhawan Canteen",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.870182",
+                "long": "77.89551000000006"
+            },
+            "paths": ""
+        },
+        "22": {
+            "id": "Govind Bhawan",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.86159",
+                "long": "77.89439500000003"
+            },
+            "paths": ""
+        },
+        "23": {
+            "id": "Jawahar Bhawan",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.863825",
+                "long": "77.90115800000001"
+            },
+            "paths": ""
+        },
+        "24": {
+            "id": "Ganga Bhawan",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.871298",
+                "long": "77.89403300000004"
+            },
+            "paths": ""
+        },
+        "25": {
+            "id": "Swimming Pool",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.866347",
+                "long": "77.89737000000002"
+            },
+            "paths": ""
+        },
+        "26": {
+            "id": "LBS Stadium",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.867334",
+                "long": "77.89565600000003"
+            },
+            "paths": ""
+        },
+        "27": {
+            "id": "Saraswati Mandir",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.868263",
+                "long": "77.89768400000003"
+            },
+            "paths": ""
+        },
+        "28": {
+            "id": "ABN Ground",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.869194",
+                "long": "77.89621199999999"
+            },
+            "paths": ""
+        },
+        "29": {
+            "id": "Lecture Hall Complex",
+            "value": "",
+            "owner": "",
+            "location": {
+                "lat": "29.864856",
+                "long": "77.89384399999994"
+            },
+            "paths": ""
         }
     },
     "structure": [
