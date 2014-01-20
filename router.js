@@ -99,7 +99,7 @@ function initialize (app){
 	app.post('/json/map/update', function(req, res)
 	{
 		var map = require('./game/map.json')
-		var fields = require('./game/propertyFields.json')
+		var fields = map.structure;
 
 		console.log(req.body);
 		function generateI(){
@@ -132,7 +132,7 @@ function initialize (app){
 			}
 		}
 		console.log(map)
-	//	fs.writeFile('./game/map.json', JSON.stringify(map, null, 4))
+		fs.writeFile('./game/map.json', JSON.stringify(map, null, 4))
 	});
 	
 	app.get('*', function(req, res){
