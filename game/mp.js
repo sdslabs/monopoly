@@ -113,7 +113,7 @@ function verifyRoute(route, socket){
 		if(route.length>0&&route.length<=M_CONST.MAX_DICE_VAL){
 			var first = route[0];
 			for(var i = 1; i<route.length; i++)
-				if(!game.map.properties.hasOwnProperty(route)||route[0]==route[i])
+				if(!game.map.doesPropExist(route[i])||route[0]==route[i])
 					return false;
 			return true;
 		}
@@ -165,16 +165,14 @@ function init(G_ames, P_layers, socket){
 	});
 
 	socket.on('mpMove', function(route){
-		var moves = route.length;
 		var game = findGame(socket);
 		var player = findPlayer(socket);
 		var flag = false;
-		console.log(game.mp.currentPlayer, socket.playerName);
 
 		if(game&&game.mp.started
 				&&game.mp.currentPlayer==socket.playerName
 				&&verifyRoute(route, socket)){
-			var i = 0;
+			var i = 0, moves = route.length;
 			if(player.locProp == M_CONST.START_PROP){
 				player.locProp = M_CONST.FIRST_PROP;
 				i++;
