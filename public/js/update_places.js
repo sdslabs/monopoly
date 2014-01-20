@@ -17,7 +17,7 @@ var updatePlaces = (function()
 				{
 					if(results.length)
 						placeInfo[_place] = {'location':{'lat':results[0].geometry.location.d, 'long':results[0].geometry.location.e},
-											 'name':results[0].name};
+											 'id':results[0].name};
 					if(++requestCount >= placeList.length)
 						sendUpdateRequest()
 					console.log(requestCount, placeList.length)
