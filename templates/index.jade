@@ -73,6 +73,15 @@ html(lang='en' ng-app='monopoly-app')
 				button(type = 'button', class = 'btn btn-primary btn-lg', id='leave-btn') Leave
 		
 		div(class = 'game-layer' id='game-screen')
+			div(id='side-bar')
+				div(id='player-controls')
+				div(id='player-details' ng-controller='player-details-controller')
+					div(id='money') Money
+						p {{playerDetails.money}}
+					div(id='properties') Properties
+						p(ng-repeat='property in playerDetails.propertyList track by $index')
+							span {{$index+1}}
+							span {{property.name}}
 			div(id='map-canvas')		
 			
 		script(type='text/javascript').
