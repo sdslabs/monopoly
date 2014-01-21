@@ -18,7 +18,7 @@
                 "lat": "29.86975",
                 "long": "77.89486899999997"
             },
-            "paths": ""
+            "paths": ["2", "4", "5"]
         },
         "2": {
             "id": "Radhakrishnan Bhawan",
@@ -28,7 +28,7 @@
                 "lat": "29.871047",
                 "long": "77.89578689999996"
             },
-            "paths": ""
+            "paths": ["1", "3", "4"]
         },
         "3": {
             "id": "Department of Hydrology",
@@ -38,7 +38,7 @@
                 "lat": "29.86864",
                 "long": "77.89500900000007"
             },
-            "paths": ""
+            "paths": ["4", "5", "7"]
         },
         "4": {
             "id": "Dept of Chemical Engineering",
@@ -48,7 +48,7 @@
                 "lat": "29.8668843",
                 "long": "77.89347410000005"
             },
-            "paths": ""
+            "paths": ["2", "3", "1"]
         },
         "5": {
             "id": "Mahatma Gandhi IIT Central Library",

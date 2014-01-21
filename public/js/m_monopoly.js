@@ -46,7 +46,6 @@ var monopoly = (function()
 	var onBeginClick = function()
 	{
 		socketio.request('beginGame')
-		beginGame()
 	}
 	var beginGame = function()
 	{

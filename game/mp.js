@@ -13,7 +13,7 @@ var CONST = require('../constants.js');
 var Games = null;
 var Players = null;
 var game = null;
-
+var j =0;
 function mp(game, socket){
 	// this.startedAt = new Date();
 	this.game = game;
@@ -42,16 +42,25 @@ mp.prototype.getNextPlayer = function(socket){
 	return null;
 }
 
-mp.prototype.levyTax = function(socket){
-	var player =  findPlayer(socket);
-	var prop = player.locProp;
-	
-	if(this.game.map.properties[prop].owner != M_CONST.NO_OWNER &&
-		this.game.map.properties[prop].owner != player.playerName){
-		player.money -= this.game.map.properties[prop].value*M_CONST.TAX_FROM_PLAYER;
-		Players[this.game.map.properties[prop].owner].money += this.game.map.properties[prop].value*M_CONST.TAX_TO_OWNER;
+mp.prototype.levyTax = function(socket, route){
+	for (var i =0; i<route.length; i++){
+		if(this.game.map.properties[prop].owner != M_CONST.NO_OWNER &&
+			this.game.map.properties[prop].owner != player.playerName){
+			console.log(player.money);
+			prop = this.game.map.properties[route[i]+''];
+			if(i == route.length -1){
+				player.money -= this.game.map.properties[prop].value*M_CONST.TAX_FROM_PLAYER;
+				Players[this.game.map.properties[prop].owner].money += this.game.map.properties[prop].value*M_CONST.TAX_TO_OWNER;
+			}else{
+				Player.money -= this.game.map.properties[i].value*M_CONST.TAX_FOR_TRAVEL_FROM_PLAYER;
+				Players[this.game.map.properties[prop].owner].money += this.game.map.properties[prop].value*M_CONST.TAX_FOR_TRAVEL_TO_PLAYER;
+			}
+		
+
+		console.log(player.money);
 		socket.emit("mpTaxLevied");
 		socket.emitR("mpTaxLevied", player.playerName);
+	}
 	}
 }
 
@@ -132,6 +141,7 @@ function init(G_ames, P_layers, socket){
 		if(game&&!game.mp.started)
 		if(game.creator == socket.playerName && !game.mp.started){
 			game.mp.started = true;
+			socket.emit('beginGame');
 			socket.broadcast.to(findGame(socket).id).emit('beginGame');
 			global.log('info', 'Game '+game.id+' has started.');
 			// socket.emitR('beginGame');
@@ -156,6 +166,8 @@ function init(G_ames, P_layers, socket){
 			var player = findPlayer(socket);
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
+
+			console.log(j++, socket.playerName, game.creator);
 			if(socket.playerName==game.creator)
 				game.mp.getNextPlayer(socket);
 			socket.emit("mpInitSuccess");
@@ -170,6 +182,7 @@ function init(G_ames, P_layers, socket){
 		var game = findGame(socket);
 		var player = findPlayer(socket);
 		var flag = false;
+		var currentProp = player.locProp;
 
 		if(game&&game.mp.started
 				&&game.mp.currentPlayer==socket.playerName
@@ -195,13 +208,14 @@ function init(G_ames, P_layers, socket){
 					game.mp.end();
 				if(!(game.mp.turnsPlayed % M_CONST.MONEY_RFRSH_LIM))
 					game.mp.provideMoney();
-				game.mp.levyTax(socket);
+				game.mp.levyTax(socket, route);
 				var nextPlayer = game.mp.getNextPlayer(socket);
 				socket.emit("mpMoveSuccess");
 				socket.broadcast.to(game.id).emit('mpMoveOther', route);
 				global.log('verbose', socket.playerName + " moved in game " + player.getCurrentGame() + ". Route " + route + ".");
 			}
 			else{
+				player.locProp = currentProp;
 				socket.emit("mpMoveFail");
 			}
 		}
