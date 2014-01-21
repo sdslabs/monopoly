@@ -39,6 +39,11 @@ function send404(res){
 
 function initialize (app){
 
+	app.configure(function()
+	{
+		app.use(express.static(__dirname + '/public'));
+	})
+	
 	app.use(function (req, res, next) {
 		res.header('Server', 'SDSWS');
   		next();
@@ -89,6 +94,11 @@ function initialize (app){
 			res.send();
 		})
 	})
+
+	// app.get('/:folder/:file', function(req, res){
+	// 	console.log(req.params.folder, req.params.file)
+	// 	send(req, res, req.params.folder+'/'+req.params.file);
+	// });
 
 	app.get('/json/map/update', function(req, res){
 		// Production
