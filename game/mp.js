@@ -199,7 +199,7 @@ function init(G_ames, P_layers, socket){
 				var nextPlayer = game.mp.getNextPlayer(socket);
 				socket.emit("mpMoveSuccess");
 				socket.broadcast.to(game.id).emit('mpMoveOther', route);
-				global.log('verbose', socket.playerName + "moved in game " + player.getCurrentGame() + ". Route " + route + ".");
+				global.log('verbose', socket.playerName + " moved in game " + player.getCurrentGame() + ". Route " + route + ".");
 			}
 			else{
 				socket.emit("mpMoveFail");

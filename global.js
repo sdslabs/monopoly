@@ -73,7 +73,8 @@ function getIP(){
 }
 
 process.on('uncaughtException', function ( err ) {
-    log('error', "Uncaught exception. Attempting to proceed anyway.");
+    log('error', "Uncaught exception. Attempting to proceed anyway...");
+    error(err);
 });
 
 module.exports.error = error;
