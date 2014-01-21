@@ -1,0 +1,7 @@
+var player = (function()
+{
+	return {
+		
+	}
+
+})();
