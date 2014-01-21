@@ -1,0 +1,35 @@
+var start = 0; var loaded = false;
+
+$(document).ready(function(){
+	if(typeof topbar != 'undefined' && topbar != null){
+		topbar.showTopbar();
+	}
+	update();
+});
+
+function update(start) {
+	$.post('/leaderboard', {start:start}, function(data){
+		var obj = JSON.parse(data);
+		if(!obj.results.length){
+			loaded = true;
+			$('#loading-alert').hide();
+			$('#loaded-alert').show();
+		}
+		else{
+			$('#score-table-template').tmpl(obj.results).appendTo('#score-table tbody');
+			$('#loaded-alert').hide();
+			$('#loading-alert').show();
+		}
+	});
+}
+
+
+$(window).scroll(function() { 
+		
+	if($(window).scrollTop() + $(window).height() == $(document).height()) { 
+		if(!loaded){
+			start += 15;
+			update(start);
+		}
+	}
+});

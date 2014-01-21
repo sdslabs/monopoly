@@ -1,4 +1,4 @@
-!!! 5
+doctype html
 html(lang='en')
 	head
 		title Monopoly - Leaderboard
@@ -39,42 +39,8 @@ html(lang='en')
 					p(class='text-info' id='loaded-alert') No more content to load! 
 
 				div(class = 'span2 text-center')
-		script(type='text/javascript').
-			$(document).ready(function(){
-					if(typeof topbar != 'undefined' && topbar != null){
-						topbar.showTopbar();
-					}
-					update();
-				});
+		script(src='/js/leaderboard.js')
 
-				var start = 0; var loaded = false;
-
-				function update(start) {
-					$.post('/leaderboard', {start:start}, function(data){
-						var obj = JSON.parse(data);
-						if(!obj.results.length){
-							loaded = true;
-							$('#loading-alert').hide();
-							$('#loaded-alert').show();
-						}
-						else{
-							$('#score-table-template').tmpl(obj.results).appendTo('#score-table tbody');
-							$('#loaded-alert').hide();
-							$('#loading-alert').show();
-						}
-					});
-				}
-
-
-				$(window).scroll(function() { 
-						
-					if($(window).scrollTop() + $(window).height() == $(document).height()) { 
-						if(!loaded){
-							start += 15;
-							update(start);
-						}
-					}
-				});
 
 
 
