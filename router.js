@@ -95,7 +95,12 @@ function initialize (app){
 	// 	console.log(req.params.folder, req.params.file)
 	// 	send(req, res, req.params.folder+'/'+req.params.file);
 	// });
-
+	app.get('/json/map/get', function(req, res)
+	{
+		var map = require('./JSON/maps/'+CONST.G_CUR_MAP+'/'+CONST.G_CUR_MAP+'.json');
+		res.write(JSON.stringify(map))
+		res.send()
+	})
 	app.get('/json/map/update', function(req, res){
 		// Production
 		// require('./sds_auth.js').user._isDeveloper(req, function(result, req){
