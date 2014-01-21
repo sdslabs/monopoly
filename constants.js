@@ -11,6 +11,7 @@ module.exports.G_MYSQL_DB                = constant.G_MYSQL_DB;
 module.exports.G_CUR_MAP                 = constant.G_CUR_MAP;
 module.exports.G_EXPRESS_SESSION_SECRET  = constant.G_EXPRESS_SESSION_SECRET;
 module.exports.G_LOG_FILE                = constant.G_LOG_FILE;
+module.exports.G_LOG_ERR_FILE            = constant.G_LOG_ERR_FILE;
 module.exports.G_MYSQL_HOST              = constant.G_MYSQL_HOST;
 module.exports.G_SERVER_LOG_LEVEL        = constant.G_SERVER_LOG_LEVEL;
 module.exports.G_IFACE					 = constant.G_IFACE;

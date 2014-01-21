@@ -58,7 +58,6 @@ db.connect(express, app);
 
 e_middle.init(app, express);
 
-//Initialize Authorization Socket Responses
 authorize.initialize(io, express);
 
 //Pop out a success notification

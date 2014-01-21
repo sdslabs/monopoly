@@ -4,6 +4,9 @@ var CONST = require('./constants.js');
 //Load the winston module
 var winston = require('winston');
 
+//Load the filesystem module
+var fs = require('fs');
+
 winston.remove(winston.transports.Console);
 winston.add(winston.transports.Console, {
 	//silent: !CONST.G_LOG_REQUESTS,
@@ -11,7 +14,7 @@ winston.add(winston.transports.Console, {
 	colorize: true,
 	timestamp: false});
 
-if(CONST.G_LOG_FILE!=null)
+if(CONST.G_LOG_FILE!=null && CONST.G_LOG_FILE!='')
 	winston.add(winston.transports.File, {
 		filename: CONST.G_LOG_FILE,
 	//	silent: !CONST.G_LOG_REQUESTS,
@@ -51,9 +54,13 @@ function log(lvl, text){
 
 		// winston.log(lvl, '[' + hh + ':' + mi + ':' + ss +':' + ml + ' ' + dd +'/'+ mm+ '] ' + text);
 		winston.log(lvl, '[' + hh + ':' + mi + '] ' + text);
+		if(lvl == 'error')
+			error(text);
 }
 
-
+function error(text){
+	fs.appendFile('logs/' + CONST.G_LOG_ERR_FILE, '\n' + new Date()+ text)
+}
 
 function getIP(){
 	if(CONST.G_IP_ADDR == ''){
@@ -65,5 +72,10 @@ function getIP(){
 		return CONST.G_IP_ADDR;		
 }
 
+process.on('uncaughtException', function ( err ) {
+    log('error', "Uncaught exception. Attempting to proceed anyway.");
+});
+
+module.exports.error = error;
 module.exports.log = log;
 module.exports.getIP = getIP;
