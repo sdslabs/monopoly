@@ -15,7 +15,6 @@ var fs = require('fs');
 function send(req, res, file){
 	var mime = require('mime')
 	path = __dirname + '/public/' + file;
-	console.log(mime.lookup(path))
 	fs.exists(path, function (exists){
 			if(!exists)
 				send404(res);
@@ -104,8 +103,6 @@ function initialize (app){
 
 	app.get('/json/map/update', function(req, res)
 	{
-	
-		console.log(CONST.G_SERVER_PORT);
 		var places = require('./JSON/maps/'+CONST.G_CUR_MAP+'/places.json')
 		// res.write(JSON.stringify(places.placeList))
 		// res.send()
