@@ -21,10 +21,11 @@ var gMaps = (function(){
 		map = new google.maps.Map(document.getElementById('map-canvas'),
 							mapOptions);
 
-		$('#map-canvas').height($("#game-screen").height());
-		$('#map-canvas').width($("#game-screen").width());
+		$('#map-canvas').height($(window).height());
+		$('#map-canvas').width($(window).width());
 
 		defineBound();
+		initResizeHandler();
 		// logStats();
 		gPlaces.init()
 		  
@@ -46,6 +47,17 @@ var gMaps = (function(){
 		        return; 
 		    }
 		    map.panTo(lastValidCenter);
+		});
+	}
+
+	var initResizeHandler = function()
+	{
+		$(window).resize(function(){
+	        $('#map_canvas').css("height",$(window).height());
+	        $('#map_canvas').css("width",$(window).width());
+	        google.maps.event.trigger(map, 'resize');
+	        map.setZoom( map.getZoom() );
+	        console.log('map resized')
 		});
 	}
 
