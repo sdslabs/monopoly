@@ -24,7 +24,7 @@ var gMaps = (function(){
 		$('#map-canvas').height($(window).height());
 		$('#map-canvas').width($(window).width());
 
-		defineBound();
+		// defineBound();
 		initResizeHandler();
 		// logStats();
 		gPlaces.init()
@@ -93,21 +93,24 @@ var gMaps = (function(){
 
 	
 	// options - cap, size (optional)
+	// 			 draw (optional, boolean)
 	function getInfoWindow(options) {
 		var size = options.size || 50;
 		var infowindow = new google.maps.InfoWindow({
 			content: options.cap,
 			size: new google.maps.Size(size, size)
 		});
-		// infowindow.open(map, marker);
+		if(!options.draw)
+			infowindow.open(map, options.marker);
 		return infowindow;
 	}
 
 	// draws a line
 	// options - latLngList (array of latLng to plot)
 	//           obj(JSON, optional) - color, opacity, weight 
+	//           draw(optional, boolean)
 	function getPath(options) {	
-		var obj = options.obj;
+		var obj = options.obj || {};
 		if(!obj.color)
 			obj.color = '#000000';
 		
@@ -127,7 +130,10 @@ var gMaps = (function(){
  		if(options.latLngList)
  			_options.path = options.latLngList;
 
+ 		console.log(_options, options)
 		var line = new google.maps.Polyline(_options);
+		if(!options.draw)
+			line.setMap(map);
  	 	return line;
 	}
 
