@@ -23,16 +23,17 @@ $(document).ready(function(){
 		topbar.showTopbar();
 	}
 	update();
-});
-
-
-
-$(window).scroll(function() { 
+	
+	$(window).scroll(function() { 
 		
-	if($(window).scrollTop() + $(window).height() == $(document).height()) { 
-		if(!loaded){
-			start += 15;
-			update(start);
+		if($(window).scrollTop() + $(window).height() == $(document).height()) { 
+			if(!loaded){
+				start += 15;
+				update(start);
+			}
 		}
-	}
+	});
 });
+
+
+
