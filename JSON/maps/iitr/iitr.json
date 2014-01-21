@@ -2,7 +2,7 @@
     "properties": {
         "-1": {
             "id":"Starting location",
-            "value":"",
+            "value":"100",
             "owner":"",
             "location": {
                 "lat": "29.868479901201255", 
@@ -12,7 +12,7 @@
         },
         "1": {
             "id": "Rajiv Bhawan",
-            "value": "",
+            "value": "100",
             "owner": "",
             "location": {
                 "lat": "29.86975",
@@ -22,7 +22,7 @@
         },
         "2": {
             "id": "Radhakrishnan Bhawan",
-            "value": "",
+            "value": "121",
             "owner": "",
             "location": {
                 "lat": "29.871047",
@@ -32,7 +32,7 @@
         },
         "3": {
             "id": "Department of Hydrology",
-            "value": "",
+            "value": "333",
             "owner": "",
             "location": {
                 "lat": "29.86864",
@@ -42,7 +42,7 @@
         },
         "4": {
             "id": "Dept of Chemical Engineering",
-            "value": "",
+            "value": "356",
             "owner": "",
             "location": {
                 "lat": "29.8668843",

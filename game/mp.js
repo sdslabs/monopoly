@@ -44,24 +44,21 @@ mp.prototype.getNextPlayer = function(socket){
 
 mp.prototype.levyTax = function(socket, route){
 	for (var i =0; i<route.length; i++){
+		var prop = route[i]+'';
+		var player = findPlayer(socket);
 		if(this.game.map.properties[prop].owner != M_CONST.NO_OWNER &&
 			this.game.map.properties[prop].owner != player.playerName){
-			console.log(player.money);
-			prop = this.game.map.properties[route[i]+''];
 			if(i == route.length -1){
 				player.money -= this.game.map.properties[prop].value*M_CONST.TAX_FROM_PLAYER;
 				Players[this.game.map.properties[prop].owner].money += this.game.map.properties[prop].value*M_CONST.TAX_TO_OWNER;
 			}else{
-				Player.money -= this.game.map.properties[i].value*M_CONST.TAX_FOR_TRAVEL_FROM_PLAYER;
-				Players[this.game.map.properties[prop].owner].money += this.game.map.properties[prop].value*M_CONST.TAX_FOR_TRAVEL_TO_PLAYER;
-			}
-		
-
-		console.log(player.money);
-		socket.emit("mpTaxLevied");
-		socket.emitR("mpTaxLevied", player.playerName);
+				player.money -= this.game.map.properties[prop].value*M_CONST.TAX_FOR_TRAVEL_FROM_PLAYER;
+				Players[this.game.map.properties[prop].owner].money += this.game.map.properties[prop].value*M_CONST.TAX_FOR_TRAVEL_TO_OWNER;
+			}	
+		}
 	}
-	}
+	socket.emit("mpTaxLevied");
+	socket.emitR("mpTaxLevied", player.playerName);
 }
 
 mp.prototype.provideMoney = function(){
@@ -167,7 +164,6 @@ function init(G_ames, P_layers, socket){
 			player.money = M_CONST.INITIAL_AMOUNT;
 			player.locProp = M_CONST.START_PROP;
 
-			console.log(j++, socket.playerName, game.creator);
 			if(socket.playerName==game.creator)
 				game.mp.getNextPlayer(socket);
 			socket.emit("mpInitSuccess");
@@ -263,8 +259,9 @@ function init(G_ames, P_layers, socket){
 	});
 	socket.on('PING3', function(garb1, garb2){
 		
-		socket.emit('PING', findGame(socket).map.properties);
+		// socket.emit('PING', findGame(socket).map.properties);
 		console.log('PING2 RECEIVED');
+		console.log(M_CONST);
 	});
 }
 

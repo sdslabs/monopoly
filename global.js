@@ -72,10 +72,10 @@ function getIP(){
 		return CONST.G_IP_ADDR;		
 }
 
-process.on('uncaughtException', function ( err ) {
-    log('error', "Uncaught exception. Attempting to proceed anyway...");
-    error(err);
-});
+// process.on('uncaughtException', function ( err ) {
+//     log('error', "Uncaught exception. Attempting to proceed anyway...");
+//     error(err);
+// });
 
 module.exports.error = error;
 module.exports.log = log;
