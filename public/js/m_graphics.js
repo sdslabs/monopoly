@@ -1,0 +1,3 @@
+var graphics = (function(){
+
+})();

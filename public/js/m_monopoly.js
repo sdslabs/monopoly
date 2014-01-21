@@ -54,7 +54,7 @@ var monopoly = (function()
 		showScreen('#game-screen');
 		G.load(gMaps);
 		G.load(gDirections);
-		map.init()
+		properties.init()
 		// maps.load(gPlaces);
 	}
 	var endGame = function(data)

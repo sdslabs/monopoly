@@ -14,7 +14,7 @@ var players = (function()
 	var init = function()
 	{
 		var list = monopoly.getPlayerList()
-		var startLocation = map.getStartLocation()
+		var startLocation = properties.getStartLocation()
 		for(var key in list)
 		{
 			all.push(new Player(list[key].name, startLocation))
