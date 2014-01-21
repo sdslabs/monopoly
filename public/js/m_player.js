@@ -7,7 +7,7 @@ function Player(name, location, money)
 }
 Player.prototype.draw = function()
 {
-	gMaps.addMarkerAt({'latLng':this.location, 'cap':this.name})
+	// gMaps.addMarkerAt({'latLng':this.location, 'cap':this.name})
 }
 
 Player.prototype.addProperty = function(property)

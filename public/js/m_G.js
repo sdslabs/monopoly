@@ -8,7 +8,7 @@ var G = (function()
 
 	var uponLoad = function()
 	{
-		Ready = true;
+		Ready = true;	
 	}	
 
 	function load(module){
@@ -29,7 +29,7 @@ var G = (function()
 	}
 
 	function execute_callback(){
-		uponLoad();
+		$.getScript('/js/lib/oms.min.js', uponLoad);
 		if(_callback.callback){
 			if(_callback.args)
 				_callback.callback(_callback.args);

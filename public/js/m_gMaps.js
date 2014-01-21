@@ -88,7 +88,6 @@ var gMaps = (function(){
 			title: options.cap,
 			animation: google.maps.Animation.DROP
   		});
-  		return marker;
 	}
 
 	

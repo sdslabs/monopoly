@@ -55,6 +55,7 @@ var monopoly = (function()
 		G.load(gMaps);
 		G.load(gDirections);
 		loadGameData()
+		graphics.init();
 		// maps.load(gPlaces);
 	}
 	var endGame = function(data)
@@ -122,14 +123,15 @@ var monopoly = (function()
 var asyncScript = (function(){
 
 	var fetch = function(){
-		$.getScript('https://sdslabs.co.in/api/public/api.js', onScrLoad);
+		$.getScript('https://sdslabs.co.in/api/public/api.js', onSDSLoad);
 	}
 
-	var onScrLoad = function() {
+	var onSDSLoad = function() {
 		if(typeof topbar != 'undefined' && topbar != null){
 			topbar.showTopbar();
 		}
 	}
+
 	return {
 		fetch: fetch
 	}
