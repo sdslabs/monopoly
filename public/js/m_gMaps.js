@@ -131,16 +131,16 @@ var gMaps = (function(){
  	 	return line;
 	}
 
-	function addListener(type, action) {
-		google.maps.event.addListener(map, type, action);
+	function addListener(options) {
+		google.maps.event.addListener(map, options.type, options.action);
 	}
 
-	function addListenerOth(obj, type, action) {
-		google.maps.event.addListener(obj, type, action);
+	function addListenerOth(options) {
+		google.maps.event.addListener(options.obj, options.type, options.action);
 	}	
 
-	function getLocation(lat, lng){
-		return new google.maps.LatLng(lat, lng);
+	function lN(options){
+		return new google.maps.LatLng(options.lat, options.lng);
 	}
 
 	function getBounds()
@@ -149,21 +149,18 @@ var gMaps = (function(){
 	}
 
 	function Map(){
-		console.log(map);
 		return map;
 	}
 
 	return {
 		Map:Map,
 		init:initialize,
-		// addMarkerCenter:addMarkerCenter,
 		addMarkerAt:addMarkerAt,
-		addMarkerImage:addMarkerImage,
 		addListener:addListener,
 		addListenerOth:addListenerOth,
 		getInfoWindow:getInfoWindow,
 		getPath:getPath,
-		getLocation:getLocation,
+		lN:lN,
 		getBounds:getBounds
 
 	}
