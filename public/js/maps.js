@@ -7,7 +7,7 @@ var gMaps = (function(){
 
 		google.maps.visualRefresh = true;
 		var mapOptions = {
-			zoom: 10,
+			zoom: 16,
 			center: new google.maps.LatLng(29.86535, 77.89475),
 			panControl: true,
 			zoomControl: true,
