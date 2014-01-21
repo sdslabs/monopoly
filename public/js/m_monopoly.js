@@ -1,5 +1,6 @@
 var monopoly = (function()
 {
+	var playerList = []
 	var showScreen = function(id) 
 	{
 		$('.game-layer').hide()
@@ -53,8 +54,8 @@ var monopoly = (function()
 		showScreen('#game-screen');
 		G.load(gMaps);
 		G.load(gDirections);
+		map.init()
 		// maps.load(gPlaces);
-
 	}
 	var endGame = function(data)
 	{
@@ -64,6 +65,16 @@ var monopoly = (function()
 	var getPlaceList = function()
 	{
 		socketio.request('getPlaceList')
+	}
+	var updatePlayerList = function(list)
+	{
+		playerList = JSON.parse(list)
+		console.log(list, playerList)
+		angularjs.updatePlayerList(list)
+	}
+	var getPlayerList = function()
+	{
+		return playerList
 	}
 
 	return {
@@ -81,7 +92,9 @@ var monopoly = (function()
 		},
 		beginGame:beginGame,
 		endGame:endGame,
-		getPlaceList:getPlaceList
+		getPlaceList:getPlaceList,
+		updatePlayerList: updatePlayerList,
+		getPlayerList: getPlayerList,
 	}
 })();
 

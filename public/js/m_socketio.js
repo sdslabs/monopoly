@@ -9,7 +9,7 @@ var socketio = (function()
 		socket.on('addNewPlayerSuccess', addNewPlayerSuccess); 
 		socket.on('addToGameSuccess', addToGameSuccess); 
 		socket.on('updateGameList', angularjs.updateGameList)
-		socket.on('updatePlayerList', angularjs.updatePlayerList)
+		socket.on('updatePlayerList', monopoly.updatePlayerList)
 		socket.on('createNewGameSuccess', createNewGameSuccess)
 		socket.on('newPlayerAdded', newPlayerAdded)
 		socket.on('gameListChanged', request)
@@ -24,7 +24,7 @@ var socketio = (function()
 		for(var key in arr)
 		{
 			var event = arr[key]
-			addHandler(event)
+			// addHandler(event)
 		}
 	}	
 

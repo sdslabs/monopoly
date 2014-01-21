@@ -26,7 +26,7 @@ var gMaps = (function(){
 
 		// defineBound();
 		initResizeHandler();
-		// logStats();
+		logStats();
 		gPlaces.init()
 		  
 		return map;
@@ -146,7 +146,8 @@ var gMaps = (function(){
 	}	
 
 	function lN(options){
-		return new google.maps.LatLng(options.lat, options.lng);
+		console.log(options)
+		return new google.maps.LatLng(parseFloat(options.lat+''), parseFloat(options.long+''));
 	}
 
 	function getBounds()
