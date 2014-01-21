@@ -12,37 +12,33 @@ var objects = require('./game/objects.js');
 
 var fs = require('fs');
 
-function send(req, res, file){
-	var mime = require('mime')
-	path = __dirname + '/public/' + file;
-	fs.exists(path, function (exists){
-			if(!exists)
-				send404(res);
-			else{
-				res.contentType(mime.lookup(path))
-				res.sendfile(path);
-				global.log('verbose', 'Sent file: ' + file + ' to client: ' + req.connection.remoteAddress);
-			}
-	});
-}
+// function send(req, res, file){
+// 	var mime = require('mime')
+// 	path = __dirname + '/public/' + file;
+// 	fs.exists(path, function (exists){
+// 			if(!exists)
+// 				send404(res);
+// 			else{
+// 				res.contentType(mime.lookup(path))
+// 				res.sendfile(path);
+// 				global.log('verbose', 'Sent file: ' + file + ' to client: ' + req.connection.remoteAddress);
+// 			}
+// 	});
+// }
 
-function send404(res){
-	fs.readFile(
-		__dirname + '/public/' + '404.html',
-		{encoding: 'utf8'},
-		function (err, data){
-			if(err)
-				throw err;
-			res.send(data, 404);
-	});
-}
+// function send404(res){
+// 	fs.readFile(
+// 		__dirname + '/public/' + '404.html',
+// 		{encoding: 'utf8'},
+// 		function (err, data){
+// 			if(err)
+// 				throw err;
+// 			res.send(data, 404);
+// 	});
+// }
 
 function initialize (app){
 
-	app.configure(function()
-	{
-		app.use(express.static(__dirname + '/public'));
-	})
 	
 	app.use(function (req, res, next) {
 		res.header('Server', 'SDSWS');
@@ -63,9 +59,9 @@ function initialize (app){
 		// next(); 
 	// });
 
-	app.get('/:folder/:file', function(req, res){
-		send(req, res, req.params.folder+'/'+req.params.file);
-	});
+	// app.get('/:folder/:file', function(req, res){
+	// 	send(req, res, req.params.folder+'/'+req.params.file);
+	// });
 
 	app.get('/', function (req, res) {
 		res.render('index',
@@ -123,7 +119,7 @@ function initialize (app){
 	});
 	
 	app.get('*', function(req, res){
-		send404(res);
+		res.redirect('https://sdslabs.co.in/404')
 	});
 }
 

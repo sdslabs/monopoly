@@ -16,27 +16,7 @@ var fs = require('fs');
 //Load the node framework modules
 var express = require('express');
 var app = express();
-
-//Load the stylus module
-var stylus = require('stylus');
-
-//Configure Express to use Jade
-app.set('views', __dirname + '/templates');
-app.set('view engine', 'jade');
-app.locals.pretty = true;
-
-//Configure Express to use Stylus
-app.use(stylus.middleware({
-	debug: true,
-	force: true,
-	src: __dirname + '/views/',
-	dest: __dirname + '/public/css/',
-	// compress: true
-}));
-
-//Tell express to parse the body
-app.use(express.bodyParser());
-
+var e_middle = require('./express_middleware.js');
 
 //Production
 
@@ -76,9 +56,7 @@ server.listen(CONST.G_SERVER_PORT, console.log("\nCurrent server time is "+ new 
 //Open up connection to database
 db.connect(express, app);
 
-//Initialize Router
-var router = require('./router.js');
-router.initialize(app);
+e_middle.init(app, express);
 
 //Initialize Authorization Socket Responses
 authorize.initialize(io, express);
