@@ -50,6 +50,13 @@ var gMaps = (function(){
 		});
 	}
 
+	function getIconURL(color) {
+		if(color != null && color != '')
+			return '/images/icons/'+ color + '-dot.png'
+		else
+			return '/images/icons/red-dot.png'
+	}
+
 	var initResizeHandler = function()
 	{
 		$(window).resize(function(){
@@ -69,20 +76,26 @@ var gMaps = (function(){
 		});
 	}
 
-	function addMarkerCenter() {
-		  var marker = new google.maps.Marker({
-			position: map.getCenter(),
-			map: map,
-			title: 'Click to zoom'
-  		});
-		return marker;
-	}
+	// function addMarkerCenter(options) {
+		  
+	// 	  var marker = new google.maps.Marker({
+	// 		icon: getIconURL(options.color),
+	// 		position: map.getCenter(),
+	// 		map: map,
+	// 		title: 'Click to zoom',
+	// 		animation: google.maps.Animation.DROP
+ //  		});
+	// 	return marker;
+	// }
 
-	function addMarkerAt(latLng, cap) {
+	function addMarkerAt(options) {
+
 		var marker = new google.maps.Marker({
-			position: latLng,
+			icon: getIconURL(options.color),
+			position: options.latLng,
 			map: map,
-			title: cap
+			title: options.cap,
+			animation: google.maps.Animation.DROP
   		});
   		return marker;
 	}
@@ -103,7 +116,8 @@ var gMaps = (function(){
 			map: map,
 			icon:image,
 			shadow:shadow,
-			title: cap
+			title: cap,
+			animation: google.maps.Animation.DROP
   		});
 
   		return marker;
@@ -167,7 +181,7 @@ var gMaps = (function(){
 	return {
 		Map:Map,
 		init:initialize,
-		addMarkerCenter:addMarkerCenter,
+		// addMarkerCenter:addMarkerCenter,
 		addMarkerAt:addMarkerAt,
 		addMarkerImage:addMarkerImage,
 		addListener:addListener,
