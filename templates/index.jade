@@ -5,7 +5,7 @@ html(lang='en' ng-app='monopoly-app')
 		link(rel='icon', type='image/png', href='/icons/lightbulb_icon48.png')
 
 		meta(name = 'viewport', content = 'width=device-width, initial-scale=1.0')  
-		script(src='/js/jquery.min.js')
+		script(src='/js/lib/jquery.min.js')
 
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap.min.css', media = 'screen')
 		link(rel ='stylesheet', type='text/css', href='/css/bootstrap-responsive.min.css', media = 'screen')
@@ -14,16 +14,18 @@ html(lang='en' ng-app='monopoly-app')
 		link(rel ='stylesheet', type='text/css', href='/css/index.css')
 
 		script(src='/socket.io/socket.io.js')
-		script(src='/js/bootstrap.min.js')
-		script(src='/js/angular.js')
-		script(src='/js/angular-route.js')
+		script(src='/js/lib/bootstrap.min.js')
+		script(src='/js/lib/angular.js')
+		script(src='/js/lib/angular-route.js')
 		<!--script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&region=IN')-->
 		<!--Change to minified versions for production-->
 
-		script(src='/js/G.js')
-		script(src='/js/maps.js')
-		script(src='/js/places.js')
-		script(src='/js/main.js')
+		script(src='/js/m_G.js')
+		script(src='/js/m_maps.js')
+		script(src='/js/m_places.js')
+		script(src='/js/m_angular.js')
+		script(src='/js/m_socketio.js')
+		script(src='/js/m_monopoly.js')
 
 	body
 		div(class = 'container game-layer' id='start-screen')
