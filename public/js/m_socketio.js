@@ -18,6 +18,8 @@ var socketio = (function()
 		socket.on('beginGame', monopoly.beginGame)
 		socket.on('placeListReceived', gPlaces.setPlaceList)
 		socket.on('endGame', monopoly.endGame)
+		socket.on('updatePlayerDetails', angularjs.updatePlayerDetails)
+		socket.on('mpBuy', onBuy)
 
 		var arr = ['mpInitBy', 'mpInitSuccess', 'mpMoveSuccess', 'mpMoveOther', 'mpMoveFail', 'mpBuySuccess', 'mpBuyOther', 'mpBuyFail',
 		'PING'];
@@ -98,6 +100,11 @@ var socketio = (function()
 	{
 		socket.emit('addToGame', gameName)
 	}
+
+	var onBuy = function(player, property)
+	{
+		players.getPlayer(player).addProperty(properties.propertyFromIndex(property))
+	})
 
 	var addHandler = function(on)
 	{

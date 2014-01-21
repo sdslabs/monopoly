@@ -230,8 +230,8 @@ function init(G_ames, P_layers, socket){
 						player.money -= game.map.properties[property].value;
 						game.map.properties[property].owner = player.playerName;
 						player.propOwned.push(property);
-						socket.emit("mpBuySuccess");
-						socket.broadcast.to(game.id).emitR("mpBuyOther", player.playerName, property);
+						socket.emit("mpBuy", player.playerName, property);
+						socket.broadcast.to(game.id).emitR("mpBuy", player.playerName, property);
 						global.log('verbose', player.playerName + " has bought " + game.map.properties[property].id);
 			}else{
 				global.log('info', player.playerName + " not allowed to buy");

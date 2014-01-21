@@ -9,8 +9,14 @@ var properties = (function()
 	{
 		return propertyData['properties']['-1'].location;
 	}
+
+	var propertyFromIndex = function(index)
+	{
+		return propertyData['properties'][index+'']
+	}
 	return {
 		init: init,
-		getStartLocation: getStartLocation
+		getStartLocation: getStartLocation,
+		propertyFromIndex: propertyFromIndex
 	}
 })()

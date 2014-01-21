@@ -23,7 +23,7 @@ Player.prototype.removeProperty = function(property)
 
 var players = (function()
 {
-	var all = []
+	var all = {}
 	var init = function()
 	{
 		var list = monopoly.getPlayerList()
@@ -31,7 +31,8 @@ var players = (function()
 		var initialAmount = monopoly.getGameConstants().INITIAL_AMOUNT
 		for(var key in list)
 		{
-			all.push(new Player(list[key].name, startLocation, initialAmount))
+			var playerName = list[key].name
+			all[playerName] = new Player(playerName, startLocation, initialAmount)
 		}
 		draw()
 	}
@@ -44,8 +45,14 @@ var players = (function()
 			player.draw()
 		}
 	}
+
+	var getPlayer = function(playerName)
+	{
+		return all[playerName]
+	}
 	return {
 		init: init,
-		all: all
+		all: all,
+		getPlayer: getPlayer
 	}
 })()
