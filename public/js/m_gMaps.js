@@ -100,7 +100,7 @@ var gMaps = (function(){
 			content: options.cap,
 			size: new google.maps.Size(size, size)
 		});
-		if(!options.draw)
+		if(!options.draw || options.draw == null)
 			infowindow.open(map, options.marker);
 		return infowindow;
 	}
@@ -132,7 +132,7 @@ var gMaps = (function(){
 
  		console.log(_options, options)
 		var line = new google.maps.Polyline(_options);
-		if(!options.draw)
+		if(!options.draw || options.draw == null)
 			line.setMap(map);
  	 	return line;
 	}
