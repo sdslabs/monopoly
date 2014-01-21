@@ -58,6 +58,10 @@ function initialize (app){
 		// next(); 
 	// });
 
+	app.get('/:folder/:file', function(req, res){
+		send(req, res, req.params.folder+'/'+req.params.file);
+	});
+
 	app.get('/', function (req, res) {
 		res.render('index',
 		{
@@ -85,12 +89,6 @@ function initialize (app){
 			res.send();
 		})
 	})
-
-
-
-	app.get('/:folder/:file', function(req, res){
-		send(req, res, req.params.folder+'/'+req.params.file);
-	});
 
 	app.get('/json/map/update', function(req, res){
 		// Production
