@@ -79,7 +79,6 @@ db.connect(express, app);
 var router = require('./router.js');
 router.initialize(app);
 
-//Initialize Authorization Socket Responses
 authorize.initialize(io, express);
 
 //Pop out a success notification

@@ -53,8 +53,6 @@ function log(lvl, text){
 		winston.log(lvl, '[' + hh + ':' + mi + '] ' + text);
 }
 
-
-
 function getIP(){
 	if(CONST.G_IP_ADDR == ''){
 		var ifaces = require('os').networkInterfaces();
@@ -64,6 +62,10 @@ function getIP(){
 	}else	
 		return CONST.G_IP_ADDR;		
 }
+
+process.on('uncaughtException', function ( err ) {
+    log('error', "Uncaught exception. Attempting to proceed anyway.");
+});
 
 module.exports.log = log;
 module.exports.getIP = getIP;

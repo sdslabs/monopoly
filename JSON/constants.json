@@ -3,6 +3,8 @@
 	
 	"G_LOG_CONNECTION_MESSAGES": "0",
 	"G_SERVER_LOG_LEVEL": "verbose",
+
+	"G_LOG_FILE":"",
 	
 	"G_LDB_COUNT": 15,
 	"G_MYSQL_DB": "db",
