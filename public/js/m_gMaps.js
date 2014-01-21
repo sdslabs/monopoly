@@ -24,7 +24,7 @@ var gMaps = (function(){
 		$('#map-canvas').height($(window).height());
 		$('#map-canvas').width($(window).width());
 
-		// defineBound();
+		defineBound();
 		initResizeHandler();
 		logStats();
 		gPlaces.init()

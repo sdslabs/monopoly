@@ -1,6 +1,7 @@
 var monopoly = (function()
 {
 	var playerList = []
+	var gameConstants = {}
 	var showScreen = function(id) 
 	{
 		$('.game-layer').hide()
@@ -53,7 +54,7 @@ var monopoly = (function()
 		showScreen('#game-screen');
 		G.load(gMaps);
 		G.load(gDirections);
-		properties.init()
+		loadGameData()
 		// maps.load(gPlaces);
 	}
 	var endGame = function(data)
@@ -76,6 +77,22 @@ var monopoly = (function()
 		return playerList
 	}
 
+	var loadGameData = function()
+	{
+		$.get('/json/constants/get', function(data)
+		{
+			data = JSON.parse(data)
+			gameConstants = data.constants
+			properties.init(data.map)
+			players.init()
+		})
+	}
+
+	var getGameConstants = function()
+	{
+		return gameConstants
+	}
+
 	return {
 		init:function(address) 
 		{
@@ -94,6 +111,7 @@ var monopoly = (function()
 		getPlaceList:getPlaceList,
 		updatePlayerList: updatePlayerList,
 		getPlayerList: getPlayerList,
+		getGameConstants: getGameConstants
 	}
 })();
 

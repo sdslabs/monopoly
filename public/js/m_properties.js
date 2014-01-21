@@ -1,13 +1,9 @@
 var properties = (function()
 {
 	var propertyData = {}
-	var init = function()
+	var init = function(_propertyData)
 	{
-		$.get('/json/map/get', function(data)
-		{
-			propertyData = JSON.parse(data)
-			players.init()
-		})
+		propertyData = _propertyData
 	}
 	var getStartLocation = function()
 	{
