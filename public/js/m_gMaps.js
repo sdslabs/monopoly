@@ -50,6 +50,7 @@ var gMaps = (function(){
 		});
 	}
 
+	// Internal function
 	function getIconURL(color) {
 		if(color != null && color != '')
 			return '/images/icons/'+ color + '-dot.png'
@@ -76,17 +77,7 @@ var gMaps = (function(){
 		});
 	}
 
-	// function addMarkerCenter(options) {
-		  
-	// 	  var marker = new google.maps.Marker({
-	// 		icon: getIconURL(options.color),
-	// 		position: map.getCenter(),
-	// 		map: map,
-	// 		title: 'Click to zoom',
-	// 		animation: google.maps.Animation.DROP
- //  		});
-	// 	return marker;
-	// }
+	// options - latLng, cap, color (optional)
 
 	function addMarkerAt(options) {
 
@@ -100,39 +91,23 @@ var gMaps = (function(){
   		return marker;
 	}
 
-	function addMarkerImage(latLng, image_url, shadow_url, cap){
-		var image = new google.maps.MarkerImage(image_url,
-      					new google.maps.Size(20, 32),
-      					new google.maps.Point(0,0),
-     					new google.maps.Point(0, 32));
-		var shadow = null;
-		if(shadow_url)
-			shadow = new google.maps.MarkerImage(shadow_url,
-						new google.maps.Size(37, 32),
-      					new google.maps.Point(0,0),
-      					new google.maps.Point(0, 32));
-		var marker = new google.maps.Marker({
-			position: latLng,
-			map: map,
-			icon:image,
-			shadow:shadow,
-			title: cap,
-			animation: google.maps.Animation.DROP
-  		});
-
-  		return marker;
-	}
-
-	function getInfoWindow(marker, cap) {
+	
+	// options - cap, size (optional)
+	function getInfoWindow(options) {
+		var size = options.size || 50;
 		var infowindow = new google.maps.InfoWindow({
-			content: cap,
-			size: new google.maps.Size(50,50)
+			content: options.cap,
+			size: new google.maps.Size(size, size)
 		});
 		// infowindow.open(map, marker);
 		return infowindow;
 	}
 
-	function getPath(latLngList, obj) {	
+	// draws a line
+	// options - latLngList (array of latLng to plot)
+	//           obj(JSON, optional) - color, opacity, weight 
+	function getPath(options) {	
+		var obj = options.obj;
 		if(!obj.color)
 			obj.color = '#000000';
 		
@@ -142,17 +117,17 @@ var gMaps = (function(){
 		if(!obj.weight)
 			obj.weight = 2;
 
-		var options = {
+		var _options = {
    				geodesic: true,
     			strokeColor: obj.color,
     			strokeOpacity: obj.opacity,
     			strokeWeight: obj.weight,
  		 	}
 
- 		if(latLngList)
- 			options.path = latLngList;
+ 		if(options.latLngList)
+ 			_options.path = options.latLngList;
 
-		var line = new google.maps.Polyline(options);
+		var line = new google.maps.Polyline(_options);
  	 	return line;
 	}
 
