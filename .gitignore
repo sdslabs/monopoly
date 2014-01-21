@@ -10,4 +10,5 @@ password.json
 openssl.cnf
 */custom.css
 game/map.json
+logs/
 
