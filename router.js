@@ -13,11 +13,14 @@ var objects = require('./game/objects.js');
 var fs = require('fs');
 
 function send(req, res, file){
+	var mime = require('mime')
 	path = __dirname + '/public/' + file;
+	console.log(mime.lookup(path))
 	fs.exists(path, function (exists){
 			if(!exists)
 				send404(res);
 			else{
+				res.contentType(mime.lookup(path))
 				res.sendfile(path);
 				global.log('verbose', 'Sent file: ' + file + ' to client: ' + req.connection.remoteAddress);
 			}
@@ -58,6 +61,15 @@ function initialize (app){
 
 	app.get('/', function (req, res) {
 		res.render('index',
+		{
+			ip: global.getIP(),
+			port: CONST.G_SERVER_PORT
+		})
+		global.log('verbose', 'Sent homepage to client: ' + req.connection.remoteAddress);
+	});
+
+	app.get('/test', function (req, res) {
+		res.render('index-test',
 		{
 			ip: global.getIP(),
 			port: CONST.G_SERVER_PORT
