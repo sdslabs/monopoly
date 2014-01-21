@@ -17,7 +17,8 @@ module.exports.init =  function(app, express) {
 	}));
 
 	//Tell express to parse the body
-	app.use(express.bodyParser());
+	app.use(express.json());
+	app.use(express.urlencoded());
 
 	// Tell express to serve everything from /public
 	app.use(express.static(__dirname + '/public'));
