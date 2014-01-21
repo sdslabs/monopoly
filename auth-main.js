@@ -9,7 +9,7 @@ var db = require('./db.js');
 //Load the Global Function Module
 var global = require('./global.js');
 
-const MIN_NAME_LEN = 4;
+const MIN_NAME_LEN = 1;
 
 
 function doesGameExist(game){
