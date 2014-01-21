@@ -45,30 +45,21 @@ function initialize (app){
 	});
 
 	//The account authorization goes here
-	app.use(function (req, res, next){
+	// app.use(function (req, res, next){
 		// Production
 		// require('./sds_auth.js').user._check_login(req, function(uid, req){
 		// 	if(uid == null || uid == 0)
 		// 		res.redirect('http://sdslabs.local/login');
-		// req.session.uid = uid;
+		// 
 		// next(); //Proceed iff this comes as true
 		// });
 
 		// Development
-		next(); 
-	});
+		// next(); 
+	// });
 
 	app.get('/', function (req, res) {
 		res.render('index',
-		{
-			ip: global.getIP(),
-			port: CONST.G_SERVER_PORT
-		})
-		global.log('verbose', 'Sent homepage to client: ' + req.connection.remoteAddress);
-	});
-
-	app.get('/test', function (req, res) {
-		res.render('index-test',
 		{
 			ip: global.getIP(),
 			port: CONST.G_SERVER_PORT
@@ -101,15 +92,19 @@ function initialize (app){
 		send(req, res, req.params.folder+'/'+req.params.file);
 	});
 
-	app.get('/json/map/update', function(req, res)
-	{
-		var places = require('./JSON/maps/'+CONST.G_CUR_MAP+'/places.json')
-		// res.write(JSON.stringify(places.placeList))
-		// res.send()
-		res.render('places', {'placeList':JSON.stringify(places.list)})
-	})
-	app.post('/json/map/update', function(req, res)
-	{
+	app.get('/json/map/update', function(req, res){
+		// Production
+		// require('./sds_auth.js').user._isDeveloper(req, function(result, req){
+		// 	if(!result)
+		// 		send404(res);
+		var places = require('./JSON/maps/'+CONST.G_CUR_MAP+'/places.json');
+		res.render('places', {'placeList':JSON.stringify(places.list)});
+	});
+	app.post('/json/map/update', function(req, res){
+		// Production
+		// require('./sds_auth.js').user._isDeveloper(req, function(result, req){
+		// 	if(!result)
+		// 		send404(res);
 		var _res = objects.updateMap(CONST.G_CUR_MAP, req.body);
 		fs.writeFile('./JSON/maps/iitr/iitr.json', _res, function(err){
 			if(err)

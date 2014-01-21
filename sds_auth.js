@@ -51,6 +51,9 @@ module.exports = {
         details : function(type,callback){
 			module.exports.send_request('user','details',{'type':type,'category': 'student','identity':this.uid},callback);
 		}
+        isDeveloper: function(req, callback){
+            // TO DO
+        }
     }
 }
 

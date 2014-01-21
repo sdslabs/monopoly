@@ -34,11 +34,13 @@ function initialize(io, express){
         	// retrive the cookie
         	data.sessionID = parsedCookie;
         	data.initialized = false;
-        	// Production
-    		// check for authentication
+   //      	Production
+   //  		check for authentication
 			// require('./sds_auth.js').user.check_login(data.headers.cookie['sds_login'], function(uid){
 			// 	if(uid == null || uid == 0)
 			// 		accept("Auth failed", false);
+			// 	else
+			// 		data.headers.playerName = uid;
 			// });
 
         	// db.SessionStore.get(data.sessionID, function(err, req){
@@ -59,6 +61,8 @@ function initialize(io, express){
 		objects.init(auth.Games, auth.Players, socket);
 
 		socket.on('addNewPlayer', function(playerName){
+				// Production
+				// var playerName = socket.handshake.playerName;
 				if(!auth.doesPlayerExist(playerName)
 					&&auth.isValid(playerName)
 					&&!socket.hasOwnProperty(playerName)) {
