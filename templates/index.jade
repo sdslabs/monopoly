@@ -79,8 +79,7 @@ html(lang='en' ng-app='monopoly-app')
 						p {{playerDetails.money}}
 					div(id='properties') Properties
 						p(ng-repeat='property in playerDetails.propertyList track by $index')
-							span {{$index+1}}
-							span {{property.name}}
+							span {{property.id}}
 			div(id='map-canvas')		
 			
 		script(type='text/javascript').

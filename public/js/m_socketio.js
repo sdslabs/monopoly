@@ -103,8 +103,11 @@ var socketio = (function()
 
 	var onBuy = function(player, property)
 	{
-		players.getPlayer(player).addProperty(properties.propertyFromIndex(property))
-	})
+		var playerObj = players.getPlayer(player)
+		playerObj.addProperty(properties.propertyFromIndex(property))
+		console.log(playerObj)
+		angularjs.updatePlayerDetails(-1, playerObj.getPropertyList())
+	}
 
 	var addHandler = function(on)
 	{

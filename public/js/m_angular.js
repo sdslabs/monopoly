@@ -10,6 +10,10 @@ var angularjs = (function()
 		$scope.playerList = []
 		$scope.creatorCheck = false
 	});
+	monopolyApp.controller('player-details-controller', function($scope)
+	{
+		$scope.playerDetails = {}
+	});
 
 	return {
 		init: function()
@@ -36,6 +40,18 @@ var angularjs = (function()
 				scope.playerList = JSON.parse(list)
 			})
 
+		},
+
+		updatePlayerDetails: function(money, propertyList)
+		{
+			var scope = angular.element($('#player-details')).scope()
+			scope.$apply(function()
+			{
+				if(money != -1)
+					scope.playerDetails.money = money
+				if(!$.isEmptyObject(propertyList))
+					scope.playerDetails.propertyList = propertyList
+			})
 		},
 
 		initCreatorControls: function(creatorCheck)

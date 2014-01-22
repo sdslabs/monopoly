@@ -20,6 +20,10 @@ Player.prototype.removeProperty = function(property)
 	if(index > -1)
 		this.propertyList.splice(index, 1)
 }
+Player.prototype.getPropertyList = function()
+{
+	return this.propertyList
+}
 
 var players = (function()
 {

@@ -41,7 +41,7 @@ th {
   position: absolute;
   right: 0;
   z-index: 1;
-  background-color: rgba(27,27,27,0.85);
+  background-color: rgba(127,127,127,0.85);
 }
 #player-details div {
   text-align: center;
