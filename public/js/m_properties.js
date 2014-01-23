@@ -14,10 +14,19 @@ var properties = (function()
 	{
 		return propertyData['properties'][index+'']
 	}
+
+	var addressFromIndex = function(index){
+		var property = propertyFromIndex(index);
+		return gMaps.lN({
+			lat: property.location.lat,
+			long: property.location.long,
+		})
+	}
 	return {
 		init: init,
-		all: propertyData
+		all: propertyData,
 		getStartLocation: getStartLocation,
-		propertyFromIndex: propertyFromIndex
+		propertyFromIndex: propertyFromIndex,
+		addressFromIndex: addressFromIndex
 	}
 })()

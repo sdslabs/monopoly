@@ -15,14 +15,16 @@ var gDirections = (function(){
 		directionsService.route(request, function(result, status) {
 			var line;
 			if (status == google.maps.DirectionsStatus.OK) {
-					line = gMaps.getPath(null, {
+					line = gMaps.getPath({
 					color:options.color, 
 					opacity:options.opacity,
 					weight:options.weight
 				});
 	
-				directionsDisplay = new google.maps.DirectionsRenderer(
-					{polylineOptions: line}); 
+				directionsDisplay = new google.maps.DirectionsRenderer({
+					polylineOptions: line,
+					suppressMarkers: options.suppressMarkers || false,
+					suppressInfoWindows: options.suppressInfoWindows || false}); 
 				directionsDisplay.setMap(gMaps.Map());
 				directionsDisplay.setDirections(result);
 				return directionsDisplay;
