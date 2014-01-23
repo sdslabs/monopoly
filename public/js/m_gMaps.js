@@ -41,7 +41,7 @@ var gMaps = (function(){
 
 		var lastValidCenter = map.getCenter();
 		google.maps.event.addListener(map, 'center_changed', function() {
-			console.log(map.getCenter())
+			// console.log(map.getCenter())
 		    if (allowedBounds.contains(map.getCenter())) {
 		        lastValidCenter = map.getCenter();
 		        return; 
@@ -81,13 +81,14 @@ var gMaps = (function(){
 
 	function addMarkerAt(options) {
 
-		var marker = new google.maps.Marker({
+		return new google.maps.Marker({
 			icon: getIconURL(options.color),
 			position: options.latLng,
 			map: map,
 			title: options.cap,
 			animation: google.maps.Animation.DROP
   		});
+
 	}
 
 	
