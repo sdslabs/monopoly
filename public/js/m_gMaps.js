@@ -110,31 +110,31 @@ var gMaps = (function(){
 	//           obj(JSON, optional) - color, opacity, weight 
 	//           draw(optional, boolean)
 	function getPath(options) {	
-		var obj = options.obj || {};
-		if(!obj.color)
-			obj.color = '#000000';
+		if(!options)
+			options = {};
 		
-		if(!obj.opacity)
-			obj.opacity = 1.0;
+		if(!options.color)
+			options.color = '#000000';
 		
-		if(!obj.weight)
-			obj.weight = 2;
+		if(!options.opacity)
+			options.opacity = 1.0;
+		
+		if(!options.weight)
+			options.weight = 2;
 
 		var _options = {
    				geodesic: true,
-    			strokeColor: obj.color,
-    			strokeOpacity: obj.opacity,
-    			strokeWeight: obj.weight,
+    			strokeColor: options.color,
+    			strokeOpacity: options.opacity,
+    			strokeWeight: options.weight,
  		 	}
+
+ 		 console.log(options, _options)
 
  		if(options.latLngList)
  			_options.path = options.latLngList;
 
- 		console.log(_options, options)
-		var line = new google.maps.Polyline(_options);
-		if(!options.draw || options.draw == null)
-			line.setMap(map);
- 	 	return line;
+		return new google.maps.Polyline(_options);
 	}
 
 	function addListener(options) {
