@@ -39,14 +39,9 @@ var graphics = (function(){
 
 	}
 
-	//draw everyone
-
-	//
-
-	//move event enemy
-
-	// move 
-
+	var drawPath = function(key, path) {
+		
+	}
 
 	return {
 		init:init,
