@@ -55,7 +55,6 @@ var monopoly = (function()
 		G.load(gMaps);
 		G.load(gDirections);
 		loadGameData()
-		graphics.init();
 		// maps.load(gPlaces);
 	}
 	var endGame = function(data)
@@ -86,6 +85,7 @@ var monopoly = (function()
 			gameConstants = data.constants
 			properties.init(data.map)
 			players.init()
+			graphics.init();
 		})
 	}
 

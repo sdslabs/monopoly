@@ -1,31 +1,32 @@
 var graphics = (function(){
 
-	var oms, objs, colors;
+	var oms;
 
 	var init = function() {
 		oms =  new OverlappingMarkerSpiderfier(gMaps.Map());
-		colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink'];
-		objs = {};
+		var colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink'];
+		var i = 0;
+		for (var key in players.all){ 
+			players.all[key].color = colors[i++];
+			players.all[key].marker = null;
+		}
+		console.log('a', players.all)
 	}
 
-	var updateAll = function() {
-		var i = 0;
+	var update = function() {
 		for (var key in players.all){
-			objs[key] = {};
-			objs[key].color = colors[i++];
-			objs[key].player = players.all[key];
-			if(objs[key].marker){
-				objs[key].marker.setMap(null);
-				delete objs[key].marker;
+			if(players.all[key].marker){
+				players.all[key].marker.setMap(null);
+				delete players.all[key].marker;
 			}
-			objs[key].marker = gMaps.addMarkerAt({
-				latLng: objs[key].player.location,
-				color: objs[key].color,
+			players.all[key].marker = gMaps.addMarkerAt({
+				latLng: players.all[key].location,
+				color: players.all[key].color,
 				cap: key 
 			});
-			oms.addMarker(objs[key].marker);
+			oms.addMarker(players.all[key].marker);
 		}
-		console.log(objs)
+		console.log('b', players.all)
 	}
 
 	//draw everyone
@@ -39,6 +40,6 @@ var graphics = (function(){
 
 	return {
 		init:init,
-		updateAll:updateAll
+		update:update
 	}
 } ) ();
