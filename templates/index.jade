@@ -17,8 +17,6 @@ html(lang='en' ng-app='monopoly-app')
 		script(src='/js/lib/bootstrap.min.js')
 		script(src='/js/lib/angular.js')
 		script(src='/js/lib/angular-route.js')
-		<!--script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&region=IN')-->
-		<!--Change to minified versions for production-->
 
 		script(src='/js/m_G.js')
 		script(src='/js/m_gMaps.js')
@@ -38,7 +36,7 @@ html(lang='en' ng-app='monopoly-app')
 
 		div(class = 'container game-layer' id='lobby-screen' ng-controller='game-list-controller')
 			div(class = 'row span12 text-center white-wrap')
-				table(class = 'table game-list')			
+				table(class = 'table game-list')
 					tr
 						th #
 						th Name
@@ -59,7 +57,7 @@ html(lang='en' ng-app='monopoly-app')
 
 		div(class = 'container game-layer' id='room-screen' ng-controller='player-list-controller')
 			div(class = 'row span12 text-center white-wrap')
-				table(class = 'table player-list')			
+				table(class = 'table player-list')
 					tr
 						th #
 						th Name
