@@ -9,7 +9,7 @@ var gDirections = (function(){
 	function drawRoute(options) {
 		var request = {
 			origin:options.origin,
-			destination:options.destination,
+			destination:options.dest,
 			travelMode: google.maps.TravelMode.DRIVING
 		};
 		directionsService.route(request, function(result, status) {
