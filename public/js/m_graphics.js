@@ -86,16 +86,18 @@ var graphics = (function(){
 
 		// console.log(_path)
 		var color = colourNameToHex(players.all[key].color);
+		player.all[key].route = [];
 
+		_update_marker(key);
 		for(var i = 0; i<_path.length-1; i++){
-			gDirections.drawRoute()({
+			players.all[key].route.push(gDirections.drawRoute()({
 				origin: _path[i],
 				dest: _path[i+1],
 				color: color,
 				weight: options.weight,
 				opacity: options.opacity,
 				suppressMarkers: true
-			});
+			}));
 		}
 
 		players.all[key].markerE = gMaps.addMarkerAt({
@@ -107,9 +109,19 @@ var graphics = (function(){
 		oms.addMarker(players.all[key].markerE);
 	}
 
+	var clearPath = function(key) {
+		if(players.all[key].route){
+			var route = players.all[key].route
+			for(var i =0; i<route.length; i++)
+				route[i].setMap(null);
+		}
+		_update_marker(key);
+	}
+
 	return {
 		init:init,
 		update:update,
-		drawPath:drawPath
+		drawPath:drawPath,
+		clearPath:clearPath
 	}
 } ) ();
