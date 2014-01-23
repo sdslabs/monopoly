@@ -80,9 +80,13 @@ html(lang='en' ng-app='monopoly-app')
 					div(id='properties') Properties
 						p(ng-repeat='property in playerDetails.propertyList track by $index')
 							span {{property.id}}
-			div(id='map-canvas')		
-			
+			div(id='map-canvas')
+
+		script(src='https://sdslabs.co.in/api/public/api.js')
 		script(type='text/javascript').
 			$(window).load(function(){
 			monopoly.init('http://#{locals.ip}:#{locals.port}');
+				if(typeof topbar != 'undefined' && topbar != null){
+				topbar.showTopbar();
+			}
 			});

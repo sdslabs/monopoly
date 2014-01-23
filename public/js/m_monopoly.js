@@ -99,7 +99,7 @@ var monopoly = (function()
 		{
 			showScreen('#start-screen')
 			addButtonHandlers();
-			asyncScript.fetch();
+			// asyncScript.fetch();
 			socketio.init(address);
 			angularjs.init();
 			G.init();
@@ -120,22 +120,22 @@ var monopoly = (function()
 
 
 
-var asyncScript = (function(){
+// var asyncScript = (function(){
 
-	var fetch = function(){
-		$.getScript('https://sdslabs.co.in/api/public/api.js', onSDSLoad);
-	}
+// 	var fetch = function(){
+// 		$.getScript('https://sdslabs.co.in/api/public/api.js', onSDSLoad);
+// 	}
 
-	var onSDSLoad = function() {
-		if(typeof topbar != 'undefined' && topbar != null){
-			topbar.showTopbar();
-		}
-	}
+// 	var onSDSLoad = function() {
+// 		if(typeof topbar != 'undefined' && topbar != null){
+// 			topbar.showTopbar();
+// 		}
+// 	}
 
-	return {
-		fetch: fetch
-	}
+// 	return {
+// 		fetch: fetch
+// 	}
 
 
-})();
+// })();
 
