@@ -1,37 +1,31 @@
 var graphics = (function(){
 
-	var oms;
+	var oms, objs, colors;
 
 	var init = function() {
 		oms =  new OverlappingMarkerSpiderfier(gMaps.Map());
-		
-		var markers = []
-		markers.push(gMaps.addMarkerAt({
-			latLng: gMaps.Map().getCenter(),
-			cap: "1",
-			color: "red"
-		}))
+		colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink'];
+		objs = {};
+	}
 
-		markers.push(gMaps.addMarkerAt({
-			latLng: gMaps.Map().getCenter(),
-			cap: "2",
-			color: "blue"
-		}))
-
-		markers.push(gMaps.addMarkerAt({
-			latLng: gMaps.Map().getCenter(),
-			cap: "3",
-			color: "green"
-		}))
-
-var iw = new gm.InfoWindow();
-		oms.addListener('click', function(marker, event) {
-  iw.setContent(marker.desc);
-  iw.open(map, marker);
-});
-
-		for (var i =0 ; i<markers.length; i++)
-			oms.addMarker(markers[i])
+	var updateAll = function() {
+		var i = 0;
+		for (var key in players.all){
+			objs[key] = {};
+			objs[key].color = colors[i++];
+			objs[key].player = players.all[key];
+			if(objs[key].marker){
+				objs[key].marker.setMap(null);
+				delete objs[key].marker;
+			}
+			objs[key].marker = gMaps.addMarkerAt({
+				latLng: objs[key].player.location,
+				color: objs[key].color,
+				cap: key 
+			});
+			oms.addMarker(objs[key].marker);
+		}
+		console.log(objs)
 	}
 
 	//draw everyone
@@ -44,6 +38,7 @@ var iw = new gm.InfoWindow();
 
 
 	return {
-		init:init
+		init:init,
+		updateAll:updateAll
 	}
 } ) ();
