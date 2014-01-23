@@ -16,6 +16,7 @@ var properties = (function()
 	}
 	return {
 		init: init,
+		all: propertyData
 		getStartLocation: getStartLocation,
 		propertyFromIndex: propertyFromIndex
 	}

@@ -13,20 +13,30 @@ var graphics = (function(){
 		console.log('a', players.all)
 	}
 
-	var update = function() {
-		for (var key in players.all){
-			if(players.all[key].marker){
+	var _update_marker = function(key) {
+		if(players.all[key].marker){
+				oms.removeMarker(players.all[key].marker)
 				players.all[key].marker.setMap(null);
 				delete players.all[key].marker;
-			}
-			players.all[key].marker = gMaps.addMarkerAt({
-				latLng: players.all[key].location,
-				color: players.all[key].color,
-				cap: key 
-			});
-			oms.addMarker(players.all[key].marker);
 		}
-		console.log('b', players.all)
+		players.all[key].marker = gMaps.addMarkerAt({
+			latLng: players.all[key].location,
+			color: players.all[key].color,
+			cap: key 
+		});
+		oms.addMarker(players.all[key].marker);
+	}
+
+
+	// Updates all markers to their latest positions when no key is give
+	// Otherwise, updates the marker for the given key
+	var update = function(key) {
+		if(!key || key == '')
+			for (var key in players.all)
+				_update_marker(key);
+		else
+			_update_marker(key);
+
 	}
 
 	//draw everyone
