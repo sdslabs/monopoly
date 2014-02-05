@@ -49,7 +49,6 @@ var server = http.createServer(app);
 //Initialize the socketio module
 var io = require('socket.io').listen(server, {log: CONST.G_LOG_CONNECTION_MESSAGES});
 
-
 //Set the server port
 server.listen(CONST.G_SERVER_PORT, console.log("\nCurrent server time is "+ new Date()+'\n'));
 
@@ -62,5 +61,6 @@ authorize.initialize(io, express);
 
 //Pop out a success notification
 global.log('info', "Server running on \033[1m"+global.getIP() + '\033[0m\033[1;31m:' + CONST.G_SERVER_PORT + '\033[0m');
+global.io.init();
 
 
