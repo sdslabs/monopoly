@@ -91,9 +91,11 @@ var io = (function(){
 		events[event] = null
 	}
 
-	function process(event){
-		if(events.hasOwnProperty(event))
-			events[event].callback();
+	function process(_in){
+		var __in = _in.split(' '),
+			_event = __in[0];
+		if(events.hasOwnProperty(_event))
+			events[_event].callback(__in);
 		else
 			console.log('Unrecognized!');
 		rl.question('> ', process);
@@ -111,9 +113,16 @@ var io = (function(){
 	}
 })();
 
-io.on('exit', function(){
-	console.log('Bye!');
-	process.exit();
+io.on('exit', function(args){
+	var time = 0;
+	if(args.length > 1){
+		time = parseInt(args[1])||0  ;
+		console.log("Exiting in "+ time+ " ms!");
+	}
+	setTimeout(function(){
+			console.log("Bye!");
+			process.exit()
+		}, time);
 });
 
 // process.on('uncaughtException', function ( err ) {
