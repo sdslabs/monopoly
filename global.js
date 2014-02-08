@@ -93,7 +93,7 @@ var io = (function(){
 
 	function process(_in){
 		var __in = _in.split(' '),
-			_event = __in[0];
+			_event = __in.splice(0, 1);
 		if(events.hasOwnProperty(_event))
 			events[_event].callback(__in);
 		else
@@ -115,13 +115,13 @@ var io = (function(){
 
 io.on('exit', function(args){
 	var time = 0;
-	if(args.length > 1){
-		time = parseInt(args[1])||0  ;
+	if(args != []){
+		time = parseInt(args[0])||0  ;
 		console.log("Exiting in "+ time+ " ms!");
 	}
 	setTimeout(function(){
 			console.log("Bye!");
-			process.exit()
+			process.exit();
 		}, time);
 });
 
