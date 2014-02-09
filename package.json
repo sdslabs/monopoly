@@ -1,16 +1,32 @@
 {
-     "name": "monopoly",
-     "description": "A Monopoly Board Game based on IITR",
-     "version": "0.0.1",
-     "dependencies": {
-        "express": "",
-        "socket.io": "",
-        "connect-mysql-session":"",
-        "jade": "",
-        "stylus": "",
-        "mysql": "",
-        "cookie": "",
-        "winston":"",
-        "request":""
-     }
+  "name": "monopoly",
+  "description": "A Monopoly Board Game based on IITR",
+  "version": "0.1.0",
+  "dependencies": {
+    "express": "",
+    "socket.io": "",
+    "connect-mysql-session": "",
+    "jade": "",
+    "stylus": "",
+    "mysql": "",
+    "cookie": "",
+    "winston": "",
+    "request": ""
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git@git.sdslabs.co.in:monopoly"
+  },
+  "keywords": [
+    "monopoly",
+    "iitr",
+    "sdslabs"
+  ],
+  "author": "Prakhar Singh, Jayant Jain",
+  "license": "MIT"
 }
