@@ -2,6 +2,12 @@
 var stylus = require('stylus');
 
 module.exports.init =  function(app, express) {
+	
+	app.use(function (req, res, next) {
+		res.header('Server', 'SDSWS');
+  		next();
+	});
+
 	//Configure Express to use Jade
 	app.set('views', __dirname + '/templates');
 	app.set('view engine', 'jade');

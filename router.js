@@ -39,12 +39,6 @@ var fs = require('fs');
 
 function initialize (app){
 
-	
-	app.use(function (req, res, next) {
-		res.header('Server', 'SDSWS');
-  		next();
-	});
-
 	//The account authorization goes here
 	// app.use(function (req, res, next){
 		// Production
