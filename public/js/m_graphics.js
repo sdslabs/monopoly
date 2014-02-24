@@ -37,6 +37,7 @@ var graphics = (function(){
 	}
 
 	var init = function() {
+		console.log('initialized graphics...');
 		oms =  new OverlappingMarkerSpiderfier(gMaps.Map());
 		var colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink'];
 		var i = 0;
@@ -48,6 +49,7 @@ var graphics = (function(){
 	}
 
 	var _update_marker = function(key) {
+		console.log('Updating marker for '+key);
 		if(players.all[key].marker){
 				oms.removeMarker(players.all[key].marker)
 				players.all[key].marker.setMap(null);
@@ -80,17 +82,22 @@ var graphics = (function(){
 
 	var drawPath = function(key, path, options) {
 		var _path = []
+		if(!players.all[key].marker)
+			_update_marker(key);
 		_path.push(players.all[key].marker.getPosition());
+
 		for(var i =0; i < path.length; i++)
 			_path.push(properties.addressFromIndex(path[i]))
 
-		// console.log(_path)
+	 //console.log(_path)
 		var color = colourNameToHex(players.all[key].color);
-		player.all[key].route = [];
+		players.all[key].route = [];
 
-		_update_marker(key);
+		// _update_marker(key);
+		console.log(_path.length, path.length)
 		for(var i = 0; i<_path.length-1; i++){
-			players.all[key].route.push(gDirections.drawRoute()({
+			console.log('path '+ properties.propertyFromIndex(path[i]).id)
+			players.all[key].route.push(gDirections.drawRoute({
 				origin: _path[i],
 				dest: _path[i+1],
 				color: color,
@@ -99,9 +106,11 @@ var graphics = (function(){
 				suppressMarkers: true
 			}));
 		}
-
+//4
+//0 1 2 3
+//0-1, 1-2, 2-3
 		players.all[key].markerE = gMaps.addMarkerAt({
-			latLng: _path[path.length-1],
+			latLng: _path[_path.length-1],
 			color: players.all[key].color,
 			cap: key 
 		});
