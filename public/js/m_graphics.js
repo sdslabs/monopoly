@@ -48,26 +48,34 @@ var graphics = (function(){
 		console.log('a', players.all)
 	}
 
+	function _addMarkerAt(options) {
+		var marker = gMaps.addMarkerAt(options);
+		oms.addMarker(marker);
+		return marker;
+	}
+
+	function _removeMarker(marker) {
+		marker.setMap(null);
+		oms.removeMarker(marker);
+	}
+
 	var _update_marker = function(key, options) {
 		options = options || {};
-		console.log('Updating marker for '+key);
+		// console.log('Updating marker for '+key);
 		if(players.all[key].marker){
-				oms.removeMarker(players.all[key].marker)
-				players.all[key].marker.setMap(null);
-				delete players.all[key].marker;
+			_removeMarker(players.all[key].marker);
+			delete players.all[key].marker;
 		}
 		if(players.all[key].markerE){
-				oms.removeMarker(players.all[key].markerE)
-				players.all[key].markerE.setMap(null);
-				delete players.all[key].markerE;
+			_removeMarker(players.all[key].markerE);
+			delete players.all[key].markerE;
 		}
 		if(!options.clear){
-			players.all[key].marker = gMaps.addMarkerAt({
+			players.all[key].marker = _addMarkerAt({
 				latLng: players.all[key].location,
 				color: players.all[key].color,
 				cap: key 
 			});
-			oms.addMarker(players.all[key].marker);
 		}
 	}
 
@@ -83,6 +91,15 @@ var graphics = (function(){
 
 	}
 
+	/* Draws a path from current positon + the path passed in path array
+		path - array containing properties (addressed by indices)
+		eg: drawPath('playerName', [0, 2, 9], options)
+
+		options.weight sets the line weight
+		options.opacity sets the line opacity
+
+	   Markers are added at the start and end of the resulting path.
+	*/
 	var drawPath = function(key, path, options) {
 		var _path = []
 		if(!players.all[key].marker)
@@ -115,26 +132,29 @@ var graphics = (function(){
 			}, _asyncUpdate);
 		}
 
-		players.all[key].markerE = gMaps.addMarkerAt({
+		players.all[key].markerE = _addMarkerAt({
 			latLng: _path[_path.length-1],
 			color: players.all[key].color,
 			cap: key 
 		});
-
-		oms.addMarker(players.all[key].markerE);
 	}
 
-	var clearPath = function(key) {
+	// Clears a path drawn using drawPath()
+	// Set options.clear to true to remove every marker. Else the starting marker is updated to with the current position.
+	var clearPath = function(key, options) {
 		if(players.all[key].route){
 			var route = players.all[key].route
 			for(var i =0; i<route.length; i++)
 				route[i].setMap(null);
 		}
-		_update_marker(key, {clear: true});
+
+		delete players.all[key].route;
+		_update_marker(key, options);
 	}
 
 	return {
 		init:init,
+		rm: _removeMarker,
 		update:update,
 		drawPath:drawPath,
 		clearPath:clearPath
