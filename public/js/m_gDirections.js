@@ -6,7 +6,7 @@ var gDirections = (function(){
 		directionsService = new google.maps.DirectionsService();
 	}
 
-	function drawRoute(options) {
+	function drawRoute(options, callback) {
 		var request = {
 			origin:options.origin,
 			destination:options.dest,
@@ -27,9 +27,10 @@ var gDirections = (function(){
 					suppressInfoWindows: options.suppressInfoWindows || false}); 
 				directionsDisplay.setMap(gMaps.Map());
 				directionsDisplay.setDirections(result);
-				return directionsDisplay;
+				console.log('pushing value');
+				callback(directionsDisplay);
    			 }else
-   			 	return null;
+   			 	callback(null);
 		});
 	}
 

@@ -48,7 +48,8 @@ var graphics = (function(){
 		console.log('a', players.all)
 	}
 
-	var _update_marker = function(key) {
+	var _update_marker = function(key, options) {
+		options = options || {};
 		console.log('Updating marker for '+key);
 		if(players.all[key].marker){
 				oms.removeMarker(players.all[key].marker)
@@ -60,12 +61,14 @@ var graphics = (function(){
 				players.all[key].markerE.setMap(null);
 				delete players.all[key].markerE;
 		}
-		players.all[key].marker = gMaps.addMarkerAt({
-			latLng: players.all[key].location,
-			color: players.all[key].color,
-			cap: key 
-		});
-		oms.addMarker(players.all[key].marker);
+		if(!options.clear){
+			players.all[key].marker = gMaps.addMarkerAt({
+				latLng: players.all[key].location,
+				color: players.all[key].color,
+				cap: key 
+			});
+			oms.addMarker(players.all[key].marker);
+		}
 	}
 
 
@@ -95,20 +98,23 @@ var graphics = (function(){
 
 		// _update_marker(key);
 		console.log(_path.length, path.length)
+
+		var _asyncUpdate =function(value) {
+			players.all[key].route.push(value);
+		}	
+
 		for(var i = 0; i<_path.length-1; i++){
 			console.log('path '+ properties.propertyFromIndex(path[i]).id)
-			players.all[key].route.push(gDirections.drawRoute({
+			gDirections.drawRoute({
 				origin: _path[i],
 				dest: _path[i+1],
 				color: color,
 				weight: options.weight,
 				opacity: options.opacity,
 				suppressMarkers: true
-			}));
+			}, _asyncUpdate);
 		}
-//4
-//0 1 2 3
-//0-1, 1-2, 2-3
+
 		players.all[key].markerE = gMaps.addMarkerAt({
 			latLng: _path[_path.length-1],
 			color: players.all[key].color,
@@ -124,7 +130,7 @@ var graphics = (function(){
 			for(var i =0; i<route.length; i++)
 				route[i].setMap(null);
 		}
-		_update_marker(key);
+		_update_marker(key, {clear: true});
 	}
 
 	return {
