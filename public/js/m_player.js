@@ -1,6 +1,10 @@
 function Player(name, location, money)
 {
 	this.name = name ||""
+
+	// This contains the current property's index
+	this.currentProperty = -1;
+	
 	this.location = gMaps.lN(location) || {}
 	this.money = money || 0
 	this.propertyList = []
@@ -23,6 +27,10 @@ Player.prototype.removeProperty = function(property)
 Player.prototype.getPropertyList = function()
 {
 	return this.propertyList
+}
+
+Player.prototype.getCurrentPropByIndex = function() {
+	return this.currentProperty;
 }
 
 var players = (function()
