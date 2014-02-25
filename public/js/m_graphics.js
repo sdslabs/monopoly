@@ -146,12 +146,20 @@ var graphics = (function(){
 		}
 	}
 
+	/*
+		Interactively queries a player for a path and return the route (array containing
+		property indices)
+
+
+
+	*/
 	var promptRoute = (function(){
 
 		var _path = [];
 		var turns = 0;
 		var key = 0;
 		var player = null;
+		var options = {};
 		var callback = null;
 		var elapsedTurns = 0;
 		var _curPropIndex = 0;
@@ -160,14 +168,14 @@ var graphics = (function(){
 			'OK': 0,
 			'NO_CHOICE': 1,
 			'TIMEOUT': 2,
-			'TIMEOUT_INTV': 30,
+			'TIMEOUT_INTV': 300000,
 		};
 
 		function update(choice) {
 			
 			console.log('CLICK EVENT.........................', choice, elapsedTurns);
 
-			_path.push(''+_curPropIndex);
+			_path.push(''+choice);
 			if(elapsedTurns < turns){
 				if(choice == CONST.NO_CHOICE)
 					_curPropIndex = 1;
@@ -177,26 +185,24 @@ var graphics = (function(){
 				_promptPath(_curPropIndex);
 				elapsedTurns++;
 			}else
-				callback({
-					status: CONST.OK,
-					route: _path,
-				});
+				_return(CONST.OK);
 		}
 
-		function timeout () {
+		function _return (_status) {
 			clearPath(key, {
 					clear: true,
 					modify: false
 			});
 			callback({
-				status: CONST.TIMEOUT,
-				route: null
+				status: _status,
+				route: _status == CONST.OK ? _path : null 
 			});
 		}
 
-		function begin(_key, _turns, _callback) {
+		function begin(_key, _turns, _options, _callback) {
 			key = _key
 			turns = _turns;
+			options = _options || {};
 			callback = _callback; 
 
 			if(!players.all[key].marker)
@@ -204,7 +210,10 @@ var graphics = (function(){
 
 			player = players.all[key];
 
-			//setTimeout(timeout, CONST.TIMEOUT_INTV);
+			setTimeout(function(){
+					_return(CONST.TIMEOUT);
+				}, 
+				CONST.TIMEOUT_INTV);
 			update(CONST.NO_CHOICE);
 		}
 
@@ -223,7 +232,7 @@ var graphics = (function(){
 			markers.begin = _addMarkerAt({
 					latLng: gMaps.lN(curProp.location),
 					color: player.color,
-					cap: 'Current Position' 
+					cap: 'Current Position (' + curProp.id + ')' 
 				});
 
 			markers.ends = [];
@@ -246,8 +255,8 @@ var graphics = (function(){
 				drawPath(key, path, {
 					clear: true,
 					modify: false,
-					weight: 1.5,
-					opacity: 0.9
+					weight: options.weight,
+					opacity: options.opacity
 				});
 
 				gMaps.addListenerOth({
