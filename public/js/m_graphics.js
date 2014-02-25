@@ -55,6 +55,7 @@ var graphics = (function(){
 	}
 
 	function _removeMarker(marker) {
+		google.maps.event.clearInstanceListeners(marker);
 		marker.setMap(null);
 		oms.removeMarker(marker);
 	}
@@ -101,15 +102,19 @@ var graphics = (function(){
 	   Markers are added at the start and end of the resulting path.
 	*/
 	var drawPath = function(key, path, options) {
-		var _path = []
-		if(!players.all[key].marker)
-			_update_marker(key);
-		_path.push(players.all[key].marker.getPosition());
+		var _path = [];
+		options = options || {};
+
+		if(options.modify){
+			if(!players.all[key].marker)
+				_update_marker(key, options);
+			_path.push(players.all[key].marker.getPosition());
+		}
 
 		for(var i =0; i < path.length; i++)
 			_path.push(properties.addressFromIndex(path[i]))
 
-	 //console.log(_path)
+	 console.log(path)
 		var color = colourNameToHex(players.all[key].color);
 		players.all[key].route = [];
 
@@ -132,12 +137,142 @@ var graphics = (function(){
 			}, _asyncUpdate);
 		}
 
-		players.all[key].markerE = _addMarkerAt({
-			latLng: _path[_path.length-1],
-			color: players.all[key].color,
-			cap: key 
-		});
+		if(options.modify){
+			players.all[key].markerE = _addMarkerAt({
+				latLng: _path[_path.length-1],
+				color: players.all[key].color,
+				cap: key 
+			});
+		}
 	}
+
+	var promptRoute = (function(){
+
+		var _path = [];
+		var turns = 0;
+		var key = 0;
+		var player = null;
+		var callback = null;
+		var elapsedTurns = 0;
+		var _curPropIndex = 0;
+
+		const CONST = {
+			'OK': 0,
+			'NO_CHOICE': 1,
+			'TIMEOUT': 2,
+			'TIMEOUT_INTV': 30,
+		};
+
+		function update(choice) {
+			
+			console.log('CLICK EVENT.........................', choice, elapsedTurns);
+
+			_path.push(''+_curPropIndex);
+			if(elapsedTurns < turns){
+				if(choice == CONST.NO_CHOICE)
+					_curPropIndex = 1;
+				else
+					_curPropIndex = choice;
+
+				_promptPath(_curPropIndex);
+				elapsedTurns++;
+			}else
+				callback({
+					status: CONST.OK,
+					route: _path,
+				});
+		}
+
+		function timeout () {
+			clearPath(key, {
+					clear: true,
+					modify: false
+			});
+			callback({
+				status: CONST.TIMEOUT,
+				route: null
+			});
+		}
+
+		function begin(_key, _turns, _callback) {
+			key = _key
+			turns = _turns;
+			callback = _callback; 
+
+			if(!players.all[key].marker)
+				_update_marker(key);
+
+			player = players.all[key];
+
+			//setTimeout(timeout, CONST.TIMEOUT_INTV);
+			update(CONST.NO_CHOICE);
+		}
+
+		function _promptPath (curPropIndex) {
+
+			clearPath(key, {
+					clear: true,
+					modify: false
+			});
+
+			var curProp = properties.propertyFromIndex(curPropIndex);
+			var ends = curProp.paths;
+			
+			var markers = {};
+
+			markers.begin = _addMarkerAt({
+					latLng: gMaps.lN(curProp.location),
+					color: player.color,
+					cap: 'Current Position' 
+				});
+
+			markers.ends = [];
+
+			console.log(ends);
+			for(var j=0; j<ends.length; j++){
+				var path = [];
+				var property = properties.propertyFromIndex(ends[j]);
+
+				console.log('For: '+property.id);
+				path.push(curPropIndex);
+				path.push(ends[j]);
+
+				markers.ends.push(_addMarkerAt({
+					latLng: gMaps.lN(property.location),
+					color: player.color,
+					cap: j+1 + ': ' + property.id
+				}));
+
+				drawPath(key, path, {
+					clear: true,
+					modify: false,
+					weight: 1.5,
+					opacity: 0.9
+				});
+
+				gMaps.addListenerOth({
+					obj: markers.ends[j],
+					type: 'click',
+					action: (function(_markers, i)
+						{
+							var _update = function(){
+								_removeMarker(markers.begin);
+								for(var k=0; k<_markers.ends.length; k++)
+									_removeMarker(markers.ends[k]);
+								delete markers;
+								update(ends[i]);	
+							}							
+							return _update;
+						})(markers, j)
+				});
+			}
+		}
+
+		return {
+			begin: begin
+		}
+
+	})();
 
 	// Clears a path drawn using drawPath()
 	// Set options.clear to true to remove every marker. Else the starting marker is updated to with the current position.
@@ -156,6 +291,7 @@ var graphics = (function(){
 		init:init,
 		rm: _removeMarker,
 		update:update,
+		promptPath: promptRoute.begin,
 		drawPath:drawPath,
 		clearPath:clearPath
 	}
