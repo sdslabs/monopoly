@@ -45,7 +45,6 @@ var graphics = (function(){
 			players.all[key].color = colors[i++];
 			players.all[key].marker = null;
 		}
-		console.log('a', players.all)
 	}
 
 	function _addMarkerAt(options) {
@@ -114,19 +113,14 @@ var graphics = (function(){
 		for(var i =0; i < path.length; i++)
 			_path.push(properties.addressFromIndex(path[i]))
 
-	 console.log(path)
 		var color = colourNameToHex(players.all[key].color);
 		players.all[key].route = [];
-
-		// _update_marker(key);
-		console.log(_path.length, path.length)
 
 		var _asyncUpdate =function(value) {
 			players.all[key].route.push(value);
 		}	
 
 		for(var i = 0; i<_path.length-1; i++){
-			console.log('path '+ properties.propertyFromIndex(path[i]).id)
 			gDirections.drawRoute({
 				origin: _path[i],
 				dest: _path[i+1],
@@ -163,8 +157,17 @@ var graphics = (function(){
 		Interactively queries a player for a path and return the route (array containing
 		property indices)
 
+		Call graphics.promptPath
 
+		_key - player name
+		_turns - turns to scan for
+		_options - options for lines drawn with draw route
+		_callback - exectues when a complete path is generated, or the player times out
 
+		set INTERNAL variable CONST for prompt Route to set constant values
+			- OK - status code for correct path
+			- TIMEOUT - status code when timeout executes
+			- TIMEOUT_INTV - Time out for callback execution (in ms)
 	*/
 	var promptRoute = (function(){
 
@@ -186,8 +189,6 @@ var graphics = (function(){
 		};
 
 		function update(choice) {
-			
-			console.log('CLICK EVENT.........................', choice, elapsedTurns);
 
 			_path.push(''+choice);
 			if(elapsedTurns < turns){
@@ -256,12 +257,10 @@ var graphics = (function(){
 
 			markers.ends = [];
 
-			console.log(ends);
 			for(var j=0; j<ends.length; j++){
 				var path = [];
 				var property = properties.propertyFromIndex(ends[j]);
 
-				console.log('For: '+property.id);
 				path.push(curPropIndex);
 				path.push(ends[j]);
 
