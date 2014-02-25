@@ -146,6 +146,19 @@ var graphics = (function(){
 		}
 	}
 
+	// Clears a path drawn using drawPath()
+	// Set options.clear to true to remove every marker. Else the starting marker is updated to with the current position.
+	var clearPath = function(key, options) {
+		if(players.all[key].route){
+			var route = players.all[key].route
+			for(var i =0; i<route.length; i++)
+				route[i].setMap(null);
+		}
+
+		delete players.all[key].route;
+		_update_marker(key, options);
+	}
+
 	/*
 		Interactively queries a player for a path and return the route (array containing
 		property indices)
@@ -160,6 +173,7 @@ var graphics = (function(){
 		var key = 0;
 		var player = null;
 		var options = {};
+		var _markers = null;
 		var callback = null;
 		var elapsedTurns = 0;
 		var _curPropIndex = 0;
@@ -168,7 +182,7 @@ var graphics = (function(){
 			'OK': 0,
 			'NO_CHOICE': 1,
 			'TIMEOUT': 2,
-			'TIMEOUT_INTV': 300000,
+			'TIMEOUT_INTV': 7000,
 		};
 
 		function update(choice) {
@@ -181,18 +195,25 @@ var graphics = (function(){
 					_curPropIndex = 1;
 				else
 					_curPropIndex = choice;
-
 				_promptPath(_curPropIndex);
 				elapsedTurns++;
+
 			}else
 				_return(CONST.OK);
 		}
 
 		function _return (_status) {
+			if(_markers){
+				_removeMarker(_markers.begin);
+				for(var k=0; k<_markers.ends.length; k++)
+					_removeMarker(_markers.ends[k]);
+				delete _markers;
+			}
 			clearPath(key, {
 					clear: true,
 					modify: false
-			});
+				});
+
 			callback({
 				status: _status,
 				route: _status == CONST.OK ? _path : null 
@@ -218,12 +239,10 @@ var graphics = (function(){
 		}
 
 		function _promptPath (curPropIndex) {
-
 			clearPath(key, {
 					clear: true,
 					modify: false
-			});
-
+				});
 			var curProp = properties.propertyFromIndex(curPropIndex);
 			var ends = curProp.paths;
 			
@@ -268,13 +287,13 @@ var graphics = (function(){
 								_removeMarker(markers.begin);
 								for(var k=0; k<_markers.ends.length; k++)
 									_removeMarker(markers.ends[k]);
-								delete markers;
 								update(ends[i]);	
 							}							
 							return _update;
 						})(markers, j)
 				});
 			}
+			_markers = markers;
 		}
 
 		return {
@@ -282,19 +301,6 @@ var graphics = (function(){
 		}
 
 	})();
-
-	// Clears a path drawn using drawPath()
-	// Set options.clear to true to remove every marker. Else the starting marker is updated to with the current position.
-	var clearPath = function(key, options) {
-		if(players.all[key].route){
-			var route = players.all[key].route
-			for(var i =0; i<route.length; i++)
-				route[i].setMap(null);
-		}
-
-		delete players.all[key].route;
-		_update_marker(key, options);
-	}
 
 	return {
 		init:init,
