@@ -7,12 +7,11 @@ var winston = require('winston');
 //Load the filesystem module
 var fs = require('fs');
 
-
-	var readline = require('readline');
+var readline = require('readline');
 
 var rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
+	input: process.stdin,
+	output: process.stdout
 });
 
 winston.remove(winston.transports.Console);
@@ -130,7 +129,7 @@ io.on('exit', function(args){
 //     error(err);
 // });
 
-module.exports.io = io;
+module.exports.on = io.on;
 module.exports.error = error;
 module.exports.log = log;
 module.exports.getIP = getIP;
