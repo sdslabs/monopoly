@@ -17,10 +17,8 @@ var monopoly = (function()
 		$('body').on('click','#begin-btn', onBeginClick);
 
 		$('body').on('click', '#get-route', function() {
-			function x(data) {
-				console.log(data);
-			}
-			graphics.promptPath(playerName, 3, {weight:2, opacity:0.9}, x);
+			graphics.promptPath(playerName, 3, {weight:2, opacity:0.9}, function(data){
+				alert(JSON.stringify(data))});
 		})
 
 		$('body').on('click', '#plot-route', function() {

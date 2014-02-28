@@ -11,7 +11,7 @@ var gMaps = (function(){
 			center: new google.maps.LatLng(29.86535, 77.89475),
 			panControl: true,
 			zoomControl: true,
-			mapTypeControl: false,
+			mapTypeControl: true,
 			scaleControl: false,
 			streetViewControl: false,
 			overviewMapControl: true,
