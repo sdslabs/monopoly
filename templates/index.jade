@@ -78,6 +78,9 @@ html(lang='en' ng-app='monopoly-app')
 					div(id='properties') Properties
 						p(ng-repeat='property in playerDetails.propertyList track by $index')
 							span {{property.id}}
+					button(type = 'button', class = 'btn btn-primary btn-lg', id='get-route') Get-Route
+					button(type = 'button', class = 'btn btn-primary btn-lg', id='plot-route') Plot-Route
+
 			div(id='map-canvas')
 
 		script(src='https://sdslabs.co.in/api/public/api.js')

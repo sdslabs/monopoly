@@ -15,6 +15,27 @@ var monopoly = (function()
 		$('body').on('click','.join-btn', onJoinClick);
 		$('body').on('click','#leave-btn', onLeaveClick);
 		$('body').on('click','#begin-btn', onBeginClick);
+
+		$('body').on('click', '#get-route', function() {
+			function x(data) {
+				console.log(data);
+			}
+			graphics.promptPath(playerName, 3, {weight:2, opacity:0.9}, x);
+		})
+
+		$('body').on('click', '#plot-route', function() {
+			graphics.drawPath(playerName, (function(){
+				var str = prompt('Enter Path eg: 1 3 9');
+				var _p = str.split(' ');
+				for (var i=0; i<_p.length; i++)
+					_p[i] = parseInt(_p[i]);
+				console.log(_p);
+				return _p
+			})(), {weight:4, opacity: 0.9, modify:true})
+			// graphics.promptPath(playerName, 3, {weight:2, opacity:0.9}, x);
+		})
+
+
 	};
 
 	var onStartClick = function()

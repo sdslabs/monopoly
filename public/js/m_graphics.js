@@ -130,6 +130,11 @@ var graphics = (function(){
 				suppressMarkers: true
 			}, _asyncUpdate);
 		}
+		console.log(_path)
+		// gMaps.panTo(gMaps.lN(properties.propertyFromIndex(
+		// 		_path[_path.length-1]).location
+		// 	));
+				
 
 		if(options.modify){
 			players.all[key].markerE = _addMarkerAt({
@@ -185,7 +190,7 @@ var graphics = (function(){
 			'OK': 0,
 			'NO_CHOICE': 1,
 			'TIMEOUT': 2,
-			'TIMEOUT_INTV': 7000,
+			'TIMEOUT_INTV': 7777000,
 		};
 
 		function update(choice) {
@@ -244,6 +249,7 @@ var graphics = (function(){
 					clear: true,
 					modify: false
 				});
+
 			var curProp = properties.propertyFromIndex(curPropIndex);
 			var ends = curProp.paths;
 			

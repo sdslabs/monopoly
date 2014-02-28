@@ -141,6 +141,10 @@ var gMaps = (function(){
 		google.maps.event.addListener(map, options.type, options.action);
 	}
 
+	function panTo(location) {
+		map.panTo(location);
+	}
+
 	function addListenerOth(options) {
 		google.maps.event.addListener(options.obj, options.type, options.action);
 	}	
@@ -162,6 +166,7 @@ var gMaps = (function(){
 	return {
 		Map:Map,
 		init:initialize,
+		panTo: panTo,
 		addMarkerAt:addMarkerAt,
 		addListener:addListener,
 		addListenerOth:addListenerOth,
