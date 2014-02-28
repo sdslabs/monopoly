@@ -49,6 +49,10 @@ var graphics = (function(){
 
 	function _addMarkerAt(options) {
 		var marker = gMaps.addMarkerAt(options);
+		marker._infoWindow = gMaps.getInfoWindow({
+			cap: marker.getTitle(),
+			marker: marker
+		});
 		oms.addMarker(marker);
 		return marker;
 	}
@@ -56,6 +60,7 @@ var graphics = (function(){
 	function _removeMarker(marker) {
 		google.maps.event.clearInstanceListeners(marker);
 		marker.setMap(null);
+		marker._infoWindow.close();
 		oms.removeMarker(marker);
 	}
 
@@ -74,7 +79,7 @@ var graphics = (function(){
 			players.all[key].marker = _addMarkerAt({
 				latLng: players.all[key].location,
 				color: players.all[key].color,
-				cap: key 
+				cap: options.cap || key
 			});
 		}
 	}
@@ -105,8 +110,11 @@ var graphics = (function(){
 		options = options || {};
 
 		if(options.modify){
-			if(!players.all[key].marker)
+			if(!players.all[key].marker){
+				options.cap = properties.propertyFromIndex(
+					players.all[key].getCurrentPropByIndex()).id;
 				_update_marker(key, options);
+			}
 			_path.push(players.all[key].marker.getPosition());
 		}
 
@@ -140,7 +148,7 @@ var graphics = (function(){
 			players.all[key].markerE = _addMarkerAt({
 				latLng: _path[_path.length-1],
 				color: players.all[key].color,
-				cap: key 
+				cap: properties.propertyFromIndex(path[path.length-1]).id || key 
 			});
 		}
 	}
