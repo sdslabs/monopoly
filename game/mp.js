@@ -265,7 +265,7 @@ function init(G_ames, P_layers, socket){
 			_game.id = game.id;
 			_game.creator = game.creator;
 			// socket.emit('updateData', {
-			socket.emit({
+			socket.emit('updateData', {
 				game: _game,
 				players: _players
 			});
