@@ -61,6 +61,3 @@ authorize.initialize(io, express);
 
 //Pop out a success notification
 global.log('info', "Server running on \033[1m"+global.getIP() + '\033[0m\033[1;31m:' + CONST.G_SERVER_PORT + '\033[0m');
-global.io.init();
-
-

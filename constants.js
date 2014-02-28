@@ -15,6 +15,7 @@ module.exports.G_LOG_ERR_FILE            = constant.G_LOG_ERR_FILE;
 module.exports.G_MYSQL_HOST              = constant.G_MYSQL_HOST;
 module.exports.G_SERVER_LOG_LEVEL        = constant.G_SERVER_LOG_LEVEL;
 module.exports.G_IFACE					 = constant.G_IFACE;
+module.exports.G_SERVER_LOG_LEVEL_FILE   = constant.G_SERVER_LOG_LEVEL_FILE
 module.exports.G_IP_ADDR                 = constant.G_IP_ADDR;
 module.exports.G_DB_SYNC_TIME            = parseInt(constant.G_DB_SYNC_TIME);
 

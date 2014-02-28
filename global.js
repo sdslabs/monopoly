@@ -4,8 +4,8 @@ var CONST = require('./constants.js');
 //Load the winston module
 var winston = require('winston');
 
-//Load the filesystem module
-var fs = require('fs');
+// //Load the filesystem module
+// var fs = require('fs');
 
 var readline = require('readline');
 
@@ -14,34 +14,15 @@ var rl = readline.createInterface({
 	output: process.stdout
 });
 
-winston.remove(winston.transports.Console);
-winston.add(winston.transports.Console, {
-	//silent: !CONST.G_LOG_REQUESTS,
-	level: CONST.G_SERVER_LOG_LEVEL,
-	colorize: true,
-	timestamp: false});
-
-if(CONST.G_LOG_FILE!=null && CONST.G_LOG_FILE!='')
-	winston.add(winston.transports.File, {
-		filename: CONST.G_LOG_FILE,
-	//	silent: !CONST.G_LOG_REQUESTS,
-		level: CONST.G_SERVER_LOG_LEVEL,
-		colorize: true,
-		timestamp: false
-	});
-
-function log(lvl, text){
+function _timestamp(){
 	var today = new Date();
-
 	var dd = today.getDate();
 	var mm = today.getMonth() + 1;
-	var yy = today.getFullYear();
-
+	var yy = today.getFullYear();	
 	var ml = today.getMilliseconds();
 	var ss = today.getSeconds();
 	var mi = today.getMinutes();
 	var hh = today.getHours();
-
 	if(ml < 10)
 		ml = '00' + ml;
 	else if(ml <100)
@@ -56,15 +37,28 @@ function log(lvl, text){
 		mi = '0' + mi;
 	if(hh < 10)
 		hh = '0' + hh;
-
-		// winston.log(lvl, '[' + hh + ':' + mi + ':' + ss +':' + ml + ' ' + dd +'/'+ mm+ '] ' + text);
-		winston.log(lvl, '[' + hh + ':' + mi + '] ' + text);
-		if(lvl == 'error')
-			error(text);
+		return '[' + hh + ':' + mi + '] ';
 }
 
-function error(text){
-	fs.appendFile('logs/' + CONST.G_LOG_ERR_FILE, '\n' + new Date()+ text)
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+	//silent: !CONST.G_LOG_REQUESTS,
+	level: CONST.G_SERVER_LOG_LEVEL,
+	colorize: true,
+	timestamp: _timestamp});
+
+if(CONST.G_LOG_FILE!=null && CONST.G_LOG_FILE!='')
+	winston.add(winston.transports.File, {
+		filename: CONST.G_LOG_FILE,
+	//	silent: !CONST.G_LOG_REQUESTS,
+		level: CONST.G_SERVER_LOG_LEVEL_FILE,
+		colorize: true,
+		timestamp: false
+	});
+
+function log(lvl, text){
+	
+	winston.log(lvl, text);
 }
 
 function getIP(){
@@ -87,7 +81,7 @@ var io = (function(){
 	}
 
 	function remove(event){
-		events[event] = null
+		events[event] = null;
 	}
 
 	function process(_in){
@@ -97,16 +91,12 @@ var io = (function(){
 			events[_event].callback(__in);
 		else
 			console.log('Unrecognized!');
-		rl.question('> ', process);
+		rl.prompt();
 	}
-
-	function init(){
-
-		rl.question('>', process);
-	}
+	rl.on('line', process);
+	rl.prompt();
 
 	return {
-		init: init,
 		on: on,
 		remove: remove
 	}
@@ -129,7 +119,7 @@ io.on('exit', function(args){
 //     error(err);
 // });
 
+module.exports.io = io
 module.exports.on = io.on;
-module.exports.error = error;
 module.exports.log = log;
 module.exports.getIP = getIP;
