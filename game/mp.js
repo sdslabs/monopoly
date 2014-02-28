@@ -247,6 +247,31 @@ function init(G_ames, P_layers, socket){
 			game.mp.end();
 	});
 
+	socket.on('queryData', function(){
+		var game = findGame(socket);
+		if(game&&game.mp.started){
+			var _players = [];
+			for (var i=0; i < game.players.length; i++){
+				var _player = Players[game.players[i]];
+				var player = {};
+				player.playerName = _player.playerName;
+				player.currentGame = _player.currentGame;
+				player.money = _player.money;
+				player.propOwned = _player.propOwned;
+				_players.push(player);
+			}
+
+			var _game = {};
+			_game.id = game.id;
+			_game.creator = game.creator;
+			// socket.emit('updateData', {
+			socket.emit({
+				game: _game,
+				players: _players
+			});
+		}
+	});
+
 	socket.on('getPlaceList', function()
 	{
 		var places = require('../JSON/maps/'+'iitr'+'/places.json');
