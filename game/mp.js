@@ -247,7 +247,7 @@ function init(G_ames, P_layers, socket){
 			game.mp.end();
 	});
 
-	socket.on('queryData', function(){
+	socket.on('queryAllData', function(){
 		var game = findGame(socket);
 		if(game&&game.mp.started){
 			var _players = [];
@@ -264,13 +264,35 @@ function init(G_ames, P_layers, socket){
 			var _game = {};
 			_game.id = game.id;
 			_game.creator = game.creator;
-			// socket.emit('updateData', {
-			socket.emit('updateData', {
+			
+			socket.emit('updateGameData', {
 				game: _game,
 				players: _players
 			});
 		}
 	});
+
+	socket.on('queryPlayerData', function(playerName)
+	{
+		var _player = {}, player = {};
+
+		if(typeof(playerName) == undefined)
+			_player = Players[playerName];
+		else
+			_player = Players[socket.playerName]
+
+		if(_player == {})
+			socket.emit('playerNotFound')
+		else
+		{
+			player.playerName = _player.playerName;
+			player.currentGame = _player.currentGame;
+			player.money = _player.money;
+			player.propOwned = _player.propOwned;
+
+			socket.emit('updatePlayerData', player);
+		}
+	})
 
 	socket.on('getPlaceList', function()
 	{

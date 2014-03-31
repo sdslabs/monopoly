@@ -102,6 +102,7 @@ var monopoly = (function()
 		{
 			data = JSON.parse(data)
 			gameConstants = data.constants
+			socketio.request('queryPlayerData')
 			properties.init(data.map)
 			players.init()
 			graphics.init();

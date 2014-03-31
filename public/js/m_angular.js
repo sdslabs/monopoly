@@ -42,15 +42,27 @@ var angularjs = (function()
 
 		},
 
-		updatePlayerDetails: function(money, propertyList)
+		updateGameData: function(gameData)
 		{
 			var scope = angular.element($('#player-details')).scope()
 			scope.$apply(function()
 			{
-				if(money != -1)
+
+				if(money != -1)a
 					scope.playerDetails.money = money
 				if(!$.isEmptyObject(propertyList))
 					scope.playerDetails.propertyList = propertyList
+			})
+		},
+
+		updatePlayerData: function(playerData)
+		{
+			var scope = angular.element($('#player-details')).scope()
+			scope.$apply(function()
+			{
+				scope.playerDetails.money = playerData.money
+				if(!$.isEmptyObject(playerData.propOwned))
+					scope.playerDetails.propertyList = playerData.propOwned
 			})
 		},
 

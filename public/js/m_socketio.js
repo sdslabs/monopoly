@@ -18,8 +18,9 @@ var socketio = (function()
 		socket.on('beginGame', monopoly.beginGame)
 		socket.on('placeListReceived', gPlaces.setPlaceList)
 		socket.on('endGame', monopoly.endGame)
-		socket.on('updatePlayerDetails', angularjs.updatePlayerDetails)
 		socket.on('mpBuy', onBuy)
+		socket.on('updateGameData', angularjs.updateGameData)
+		socket.on('updatePlayerData', angularjs.updatePlayerData)
 
 		var arr = ['mpInitBy', 'mpInitSuccess', 'mpMoveSuccess', 'mpMoveOther', 'mpMoveFail', 'mpBuySuccess', 'mpBuyOther', 'mpBuyFail',
 		'PING'];
