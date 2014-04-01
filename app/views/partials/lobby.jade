@@ -1,0 +1,20 @@
+div(class = 'container game-layer' id='lobby-screen' ng-controller='game-list-controller')
+	div(class = 'row span12 text-center white-wrap')
+		table(class = 'table game-list')
+			tr
+				th #
+				th Name
+				th Created By
+				th Players
+				th Join
+
+			tr(ng-repeat='game in gameList track by $index')
+				td {{$index+1}}
+				td {{game.name}}
+				td {{game.creator}}
+				td {{game.numPlayers}}
+				td 
+					button(type = 'button', class = 'btn btn-primary btn-lg join-btn' id='{{game.name}}') Join
+
+		button(type = 'button', class = 'btn btn-primary btn-lg', id='create-btn') Create
+		button(type = 'button', class = 'btn btn-primary btn-lg', id='back-btn') Back

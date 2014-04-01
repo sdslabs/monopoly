@@ -9,7 +9,7 @@ module.exports.init =  function(app, express) {
 	});
 
 	//Configure Express to use Jade
-	app.set('views', __dirname + '/templates');
+	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 	app.locals.pretty = true;
 
@@ -17,7 +17,7 @@ module.exports.init =  function(app, express) {
 	app.use(stylus.middleware({
 	debug: true,
 	force: true,
-	src: __dirname + '/views/',
+	src: __dirname + '/stylesheets/',
 	dest: __dirname + '/public/css/',
 	// compress: true
 	}));
@@ -31,7 +31,8 @@ module.exports.init =  function(app, express) {
 
 	// Tell express to enable routing
 	app.use(app.router);
-
 	//Initialize Router
+	console.log(1111)
+	console.log(require('./router.js').initialize)
 	var router = require('./router.js').initialize(app);
 }

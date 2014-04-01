@@ -11,7 +11,7 @@ function Player(name, location, money)
 }
 Player.prototype.draw = function()
 {
-	// gMaps.addMarkerAt({'latLng':this.location, 'cap':this.name})
+	this.marker = graphics.addMarkerAt({'latLng':this.location, 'cap':this.name})
 }
 
 Player.prototype.addProperty = function(property)
@@ -46,7 +46,6 @@ var players = (function()
 			var playerName = list[key].name
 			all[playerName] = new Player(playerName, startLocation, initialAmount)
 		}
-		draw()
 	}
 
 	var draw = function()
@@ -65,6 +64,7 @@ var players = (function()
 	return {
 		init: init,
 		all: all,
+		draw: draw,
 		getPlayer: getPlayer
 	}
 })()

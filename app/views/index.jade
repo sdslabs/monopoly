@@ -1,0 +1,46 @@
+doctype html
+html(lang='en' ng-app='monopoly-app')
+	head
+		title Monopoly
+		link(rel='icon', type='image/png', href='images/icons/lightbulb_icon48.png')
+
+		meta(name = 'viewport', content = 'width=device-width, initial-scale=1.0')  
+		//- script(src='/js/lib/jquery.min.js')
+
+		link(rel ='stylesheet', type='text/css', href='/css/bootstrap.min.css', media = 'screen')
+		link(rel ='stylesheet', type='text/css', href='/css/bootstrap-responsive.min.css', media = 'screen')
+		link(rel ='stylesheet', type='text/css', href='https://sdslabs.co.in/lollipop/topbarwide.css', media = 'screen')
+
+		link(rel ='stylesheet', type='text/css', href='/css/index.css')
+
+		//- script(src='/socket.io/socket.io.js')
+		//- script(src='/js/lib/bootstrap.min.js')
+		script(src='/js/lib/angular.js')
+		script(src='/js/lib/angular-route.js')
+
+		script(src='/js/app.js')
+		script(src='/js/controllers.js')
+
+		//- script(src='/js/m_G.js')
+		//- script(src='/js/m_gMaps.js')
+		//- script(src='/js/m_gDirections.js')
+		//- script(src='/js/m_properties.js')
+		//- script(src='/js/m_player.js')
+		//- script(src='/js/m_graphics.js')
+		//- script(src='/js/m_places.js')
+		//- script(src='/js/m_angular.js')
+		//- script(src='/js/m_socketio.js')
+		//- script(src='/js/m_monopoly.js')
+
+	body
+		div(class='view-container')
+			div(ng-view)
+
+		//- script(src='https://sdslabs.co.in/api/public/api.js')
+		//- script(type='text/javascript').
+		//- 	$(window).load(function(){
+		//- 	monopoly.init('http://#{locals.ip}:#{locals.port}');
+		//- 		if(typeof topbar != 'undefined' && topbar != null){
+		//- 		topbar.showTopbar();
+		//- 	}
+		//- 	});

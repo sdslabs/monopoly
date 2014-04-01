@@ -45,6 +45,7 @@ var graphics = (function(){
 			players.all[key].color = colors[i++];
 			players.all[key].marker = null;
 		}
+		players.draw()
 	}
 
 	function _addMarkerAt(options) {
@@ -321,6 +322,7 @@ var graphics = (function(){
 		update:update,
 		promptPath: promptRoute.begin,
 		drawPath:drawPath,
+		addMarkerAt: _addMarkerAt,
 		clearPath:clearPath
 	}
 } ) ();
