@@ -14,7 +14,10 @@ div(class = 'container game-layer' id='lobby-screen' ng-controller='game-list-co
 				td {{game.creator}}
 				td {{game.numPlayers}}
 				td 
-					button(type = 'button', class = 'btn btn-primary btn-lg join-btn' id='{{game.name}}') Join
+					a(href = "room")
+						button(type = 'button', class = 'btn btn-primary btn-lg join-btn' id='{{game.name}}') Join
 
-		button(type = 'button', class = 'btn btn-primary btn-lg', id='create-btn') Create
-		button(type = 'button', class = 'btn btn-primary btn-lg', id='back-btn') Back
+		a(href = "room")
+			button(type = 'button', class = 'btn btn-primary btn-lg', id='create-btn') Create
+		a(href = "/")
+			button(type = 'button', class = 'btn btn-primary btn-lg', id='back-btn') Back

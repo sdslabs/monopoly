@@ -2,10 +2,12 @@
 
 /* App Module */
 
-var mplyApp = angular.module('monopoly-app', ['ngRoute']);
+var mplyApp = angular.module('monopoly-app', [
+  'ngRoute',
+  'mplyApp.controllers'
+  ]);
 
-mplyApp.config(['$routeProvider',
-  function($routeProvider) {
+mplyApp.config(function ($routeProvider, $locationProvider) {
     $routeProvider.
       when('/', {
         templateUrl: 'partials/start',
@@ -19,7 +21,16 @@ mplyApp.config(['$routeProvider',
         templateUrl: 'partials/room',
         controller: 'roomCtrl'
       }).
+      when('/game', {
+        templateUrl: 'partials/game',
+        controller: 'gameCtrl'
+      }).
+      when('/leaderboard', {
+        templateUrl: 'partials/leaderboard',
+        controller: 'leaderboardCtrl'
+      }).
       otherwise({
         redirectTo: '/'
       });
-  }]);
+  $locationProvider.html5Mode(true);
+  });

@@ -71,6 +71,13 @@ function initialize (app){
 
 	});
 
+	app.get('*', function (req, res) { 
+		res.render('index',
+		{
+			ip: global.getIP(),
+			port: CONST.G_SERVER_PORT
+		});
+	});
 
 	// app.get('/maps', function (req, res) {
 	// 	res.render('maps')

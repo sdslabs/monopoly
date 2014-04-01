@@ -1,7 +1,6 @@
 'use strict';
 
 /* Controllers */
-
 angular.module('mplyApp.controllers', [])
   .controller('startCtrl', [function() {
 
@@ -12,4 +11,12 @@ angular.module('mplyApp.controllers', [])
   .controller('roomCtrl', [function()
   	{
   		
+  }])
+  .controller('gameCtrl',[function()
+  	{
+
+  }])
+  .controller('leaderboardCtrl'[function()
+  	{
+
   }]);
