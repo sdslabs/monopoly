@@ -91,12 +91,12 @@ function initialize (app){
 	// 	})
 	// })
 
-	// app.post('/leaderboard', function(req, res){
-	// 	db.fetchLeaderboard(req.body, function(results){
-	// 		res.write(JSON.stringify(results));
-	// 		res.send();
-	// 	})
-	// })
+	app.post('/leaderboard', function(req, res){
+		db.fetchLeaderboard(req.body, function(results){
+			res.write(JSON.stringify(results));
+			res.send();
+		})
+	})
 
 	// // app.get('/:folder/:file', function(req, res){
 	// // 	console.log(req.params.folder, req.params.file)
