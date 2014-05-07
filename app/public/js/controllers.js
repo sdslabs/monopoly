@@ -1,22 +1,26 @@
-'use strict';
+  'use strict';
 
 /* Controllers */
 angular.module('mplyApp.controllers', [])
-  .controller('startCtrl', [function() {
+  .controller('startCtrl', function() {
 
-  }])
-  .controller('lobbyCtrl', [function() {
+  })
+  .controller('lobbyCtrl', function() {
 
-  }])
-  .controller('roomCtrl', [function()
+  })
+  .controller('roomCtrl', function($scope)
   	{
-  		
-  }])
-  .controller('gameCtrl',[function()
-  	{
-
-  }])
-  .controller('leaderboardCtrl'[function()
+  		$scope.creatorCheck = true;
+  })
+  .controller('gameCtrl',function()
   	{
 
-  }]);
+  })
+  .controller('leaderboardCtrl', function ($scope, $http)
+  	{
+      $http.post('/leaderboard').
+        success(function(data) {
+          console.log(data)
+          // $scope.post = data.post;
+        });
+    });
