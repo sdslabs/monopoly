@@ -1,16 +1,29 @@
-html {
-  height: 100%;
-}
 body {
-  height: 100%;
-}
-.game-layer {
-  padding-top: 30%;
-}
-.view-container {
   background: url("/images/main-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
+  height: 100%;
+}
+body div#start-screen {
+  padding-top: 500px;
+}
+body div#start-screen a {
+  display: block;
+  margin-bottom: 20px;
+}
+body div.white-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 400px;
+  padding-bottom: 10px;
+}
+body div#lobby-screen a {
+  margin-right: 10px;
+}
+body div#room-screen a {
+  margin-right: 10px;
+}
+.view-container {
   height: 100%;
 }
 .white-wrap {
@@ -49,4 +62,7 @@ th {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+}
+.container {
+  margin-top: 12%;
 }

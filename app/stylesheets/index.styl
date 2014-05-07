@@ -3,17 +3,32 @@ border-radius()
 	-moz-border-radius arguments
 	border-radius arguments
 
-html 
-	height 100%
 body
-	height 100%
-
-.game-layer
-	padding-top 30%
-.view-container
 	background url('/images/main-bg.jpg')
 	background-size cover
 	background-repeat no-repeat
+	height 100%
+
+	div#start-screen
+		padding-top 500px
+		a
+			display block
+			margin-bottom 20px
+
+	div.white-wrap
+		max-width 1200px
+		margin 0 auto
+		margin-top 400px
+		padding-bottom 10px
+
+	div#lobby-screen
+		a
+			margin-right 10px
+	div#room-screen
+		a
+			margin-right 10px
+
+.view-container
 	height 100%
 .white-wrap
 	background-color rgba(255,255,255,0.9)
@@ -47,3 +62,6 @@ body
 	text-align center
 	font-size 18px
 	font-weight bold
+
+.container
+	margin-top 12%

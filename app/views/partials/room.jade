@@ -1,5 +1,5 @@
-div(class = 'container game-layer' id='room-screen' ng-controller='player-list-controller')
-	div(class = 'row span12 text-center white-wrap')
+div(class = 'game-layer' id='room-screen' ng-controller='roomCtrl')
+	div(class = 'text-center white-wrap')
 		table(class = 'table player-list')
 			tr
 				th #
@@ -10,6 +10,6 @@ div(class = 'container game-layer' id='room-screen' ng-controller='player-list-c
 				td {{player.name}}
 
 		a(href = "game")
-			button(type = 'button', class = 'btn btn-primary btn-lg', id='begin-btn', ng-show='creatorCheck') Begin
+			button(type = 'button', class = 'btn btn-danger btn-lg', id='begin-btn', ng-show='creatorCheck') Begin
 		a(href = "lobby")
-			button(type = 'button', class = 'btn btn-primary btn-lg', id='leave-btn') Leave
+			button(type = 'button', class = 'btn btn-danger btn-lg', id='leave-btn') Leave

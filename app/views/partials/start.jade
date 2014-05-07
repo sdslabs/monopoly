@@ -1,6 +1,6 @@
-div(class = 'container game-layer' id='start-screen')
-	div(id = 'start-game', class = 'span12 text-center splash-column')
+div(class = 'game-layer' id='start-screen' ng-controller='roomCtrl')
+	div(id = 'start-game', class = 'text-center')
 		a(href = "lobby")
-			button(type = 'button', class = 'btn btn-primary btn-lg', id='start-btn') Start
+			button(type = 'button', class = 'btn btn-danger btn-lg', id='start-btn') Start
 		a(href = "leaderboard")
-			button(type = 'button', class = 'btn btn-primary btn-lg', id='leaderboard-btn') Leaderboard
+			button(type = 'button', class = 'btn btn-danger btn-lg', id='leaderboard-btn') Leaderboard
