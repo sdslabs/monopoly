@@ -1,4 +1,4 @@
-div(class = 'game-layer' id='game-screen' ng-controller='gameCtrl')
+div(class = 'game-layer' id='game-screen')
 	div(id='side-bar')
 		div(id='player-controls')
 		div(id='player-details')
@@ -7,7 +7,7 @@ div(class = 'game-layer' id='game-screen' ng-controller='gameCtrl')
 			div(id='properties') Properties
 				p(ng-repeat='property in playerDetails.propertyList track by $index')
 					span {{property.id}}
-			button(type = 'button', class = 'btn btn-danger btn-lg', id='get-route') Get-Route
+			button(type = 'button', class = 'btn btn-danger	btn-lg', id='get-route') Get-Route
 			button(type = 'button', class = 'btn btn-danger btn-lg', id='plot-route') Plot-Route
 
 	div(id='map-canvas')
